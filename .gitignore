@@ -218,3 +218,42 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Node and frontend dependencies/build output
+node_modules/
+*.tsbuildinfo
+.vite/
+out/
+
+# Local environment files, credentials, and API keys
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+credentials.json
+secrets.json
+
+# Temporary and editor files
+tmp/
+temp/
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+.idea/
+
+# Large generated geographic datasets (keep explicitly approved data tracked)
+data/generated/
+data/cache/
+*.pbf
+*.osm
+*.osm.pbf
+*.gpkg
+
+# Browser test output and local map retrieval caches
+playwright-report/
+test-results/
+backend/data/cache/

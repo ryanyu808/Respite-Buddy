@@ -1,0 +1,38 @@
+{
+  "source": "OpenStreetMap contributors / Overpass API",
+  "license": "ODbL 1.0",
+  "retrieved_at": "2026-10-17T00:21:48.343304+00:00",
+  "bounds": [
+    -118.2979997,
+    34.0100015,
+    -118.2770006,
+    34.0319992
+  ],
+  "requested_bounds": [
+    -118.298,
+    34.01,
+    -118.277,
+    34.032
+  ],
+  "nodes": 2750,
+  "edges": 7550,
+  "components": 31,
+  "excluded_edges": 102,
+  "locations": 8,
+  "rest_stops": 25,
+  "features": {
+    "noise": true,
+    "traffic": true,
+    "green": true,
+    "crowds": false,
+    "live_conditions": false
+  },
+  "green_features": 63,
+  "major_road_segments": 299,
+  "notes": [
+    "Noise and traffic are correlated geographic proxies, not live measurements. Major-road context includes vehicle roadways excluded from pedestrian routing.",
+    "Crowd, lighting, construction and indoor conditions unavailable.",
+    "Mapped access can be incomplete; follow signs. Building representative points are snapped to outdoor walking nodes.",
+    "Small disconnected components are retained; unreachable selections return an error."
+  ]
+}

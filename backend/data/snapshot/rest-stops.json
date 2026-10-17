@@ -1,0 +1,227 @@
+[
+  {
+    "id": "node-11918540189",
+    "name": "Mapped bench",
+    "kind": "bench",
+    "lat": 34.0175367,
+    "lon": -118.28884,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/node/11918540189"
+  },
+  {
+    "id": "node-11918540190",
+    "name": "Mapped bench",
+    "kind": "bench",
+    "lat": 34.0175242,
+    "lon": -118.2888043,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/node/11918540190"
+  },
+  {
+    "id": "node-11979067862",
+    "name": "Mapped bench",
+    "kind": "bench",
+    "lat": 34.0154807,
+    "lon": -118.2866885,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/node/11979067862"
+  },
+  {
+    "id": "node-11979067867",
+    "name": "Mapped bench",
+    "kind": "bench",
+    "lat": 34.0115915,
+    "lon": -118.2828881,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/node/11979067867"
+  },
+  {
+    "id": "node-11979067868",
+    "name": "Mapped bench",
+    "kind": "bench",
+    "lat": 34.0115609,
+    "lon": -118.2828862,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/node/11979067868"
+  },
+  {
+    "id": "node-11979136075",
+    "name": "Mapped bench",
+    "kind": "bench",
+    "lat": 34.0111747,
+    "lon": -118.2876932,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/node/11979136075"
+  },
+  {
+    "id": "node-13741208559",
+    "name": "Mapped bench",
+    "kind": "bench",
+    "lat": 34.0170098,
+    "lon": -118.2886604,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/node/13741208559"
+  },
+  {
+    "id": "node-14239970880",
+    "name": "Mapped bench",
+    "kind": "bench",
+    "lat": 34.0174355,
+    "lon": -118.2913029,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/node/14239970880"
+  },
+  {
+    "id": "way-79876375",
+    "name": "Jesse A. Brewer Jr. Park",
+    "kind": "park",
+    "lat": 34.0174942,
+    "lon": -118.29076410967131,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/79876375"
+  },
+  {
+    "id": "way-80063415",
+    "name": "W. M. Keck Foundation Amphitheatre",
+    "kind": "park",
+    "lat": 34.0114775,
+    "lon": -118.28930231574586,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/80063415"
+  },
+  {
+    "id": "way-154906676",
+    "name": "Alumni Park",
+    "kind": "park",
+    "lat": 34.02063805,
+    "lon": -118.28452027335682,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/154906676"
+  },
+  {
+    "id": "way-154906721",
+    "name": "Hutton Park",
+    "kind": "park",
+    "lat": 34.021703,
+    "lon": -118.28524279681056,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/154906721"
+  },
+  {
+    "id": "way-154906727",
+    "name": "McCarthy Quad",
+    "kind": "park",
+    "lat": 34.020936899999995,
+    "lon": -118.283145701975,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/154906727"
+  },
+  {
+    "id": "way-154906796",
+    "name": "Nearby park",
+    "kind": "park",
+    "lat": 34.0198782,
+    "lon": -118.28285082849067,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/154906796"
+  },
+  {
+    "id": "way-154906798",
+    "name": "Associates Park",
+    "kind": "park",
+    "lat": 34.021184899999994,
+    "lon": -118.28594651643832,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/154906798"
+  },
+  {
+    "id": "way-221557193",
+    "name": "Nearby park",
+    "kind": "park",
+    "lat": 34.0206754,
+    "lon": -118.28275417426332,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/221557193"
+  },
+  {
+    "id": "way-244106573",
+    "name": "Richardson Family Park",
+    "kind": "park",
+    "lat": 34.03021595,
+    "lon": -118.29563125142485,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/244106573"
+  },
+  {
+    "id": "way-244106604",
+    "name": "Hoover Recreation Center",
+    "kind": "park",
+    "lat": 34.03221535,
+    "lon": -118.28338405221703,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/244106604"
+  },
+  {
+    "id": "way-244106639",
+    "name": "Saint James Park",
+    "kind": "park",
+    "lat": 34.031486799999996,
+    "lon": -118.27970352648103,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/244106639"
+  },
+  {
+    "id": "way-443668564",
+    "name": "Exposition Park",
+    "kind": "park",
+    "lat": 34.01365405,
+    "lon": -118.2872080189313,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/443668564"
+  },
+  {
+    "id": "way-570106155",
+    "name": "Nearby park",
+    "kind": "park",
+    "lat": 34.01463495,
+    "lon": -118.29082604961928,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/570106155"
+  },
+  {
+    "id": "way-583428804",
+    "name": "Nearby park",
+    "kind": "park",
+    "lat": 34.025333,
+    "lon": -118.28643376034796,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/583428804"
+  },
+  {
+    "id": "way-727000078",
+    "name": "Great Lawn",
+    "kind": "park",
+    "lat": 34.02672235,
+    "lon": -118.28521476957701,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/727000078"
+  },
+  {
+    "id": "way-1274300046",
+    "name": "Parkside Field",
+    "kind": "park",
+    "lat": 34.0189332,
+    "lon": -118.28991068941531,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/1274300046"
+  },
+  {
+    "id": "way-1486440821",
+    "name": "Nearby park",
+    "kind": "park",
+    "lat": 34.0193975,
+    "lon": -118.28228576939708,
+    "opening_hours": null,
+    "osm_url": "https://www.openstreetmap.org/way/1486440821"
+  }
+]
