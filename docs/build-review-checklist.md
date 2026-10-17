@@ -18,7 +18,7 @@ Ten of the PRD's requirements are missing or partial. Already met and worth keep
 
 - [ ] **P0 · Time to rest and "leave by".** Wrong: there is no next-class or minutes input at all. Fix: add a next-class picker and 5/10/12/15/20 minute chips; compute time to rest = minutes − walk to spot − walk from spot to class; show "leave by" on every card and recalculate when the gap changes.
 - [ ] **P0 · A ranked list of places.** Wrong: rest stops are only an optional map overlay. Fix: make places the main result, ranked by time to rest, then expected crowd, with a "Tight on time" tag at 1 to 3 minutes.
-- [ ] **P0 · Enterable, real spots.** Wrong: all 25 rest stops are outdoor OSM features; 8 are named only "Mapped bench", 5 only "Nearby park", none has hours and none is indoors. Fix: seed scouted indoor spots (see Features, item 2) and give every spot a real name, hours and an access note.
+- [ ] **P0 · Enterable, real spots.** Wrong: all 25 rest stops are outdoor OSM features; 8 are named only "Mapped bench", 5 only "Nearby park", none has hours and none is indoors. Fix: seed scouted indoor spots (see Features, item 4) and give every spot a real name, hours and an access note.
 - [ ] **P1 · Needs chips that filter.** Wrong: the build uses noise/traffic/green sliders instead. Fix: add quiet, seated, dim light, few people, indoor and outdoor chips that filter the list.
 - [ ] **P1 · Source-labeled crowd level with its age.** Wrong: crowd is "unavailable". Fix: label every card Verified by scouts, Estimate, Reported or Measured, with age ("Reported 12 min ago"); never show a crowd level without a source.
 - [ ] **P1 · "Somewhere calm, now" button.** Wrong: missing. Fix: one large button that reuses the last needs and next class, stored on the device, clearable in one tap.
@@ -30,13 +30,14 @@ Ten of the PRD's requirements are missing or partial. Already met and worth keep
 ## Changes and improvements
 
 - [ ] **P1 · Too many decisions before the first result.** Wrong: about ten choices (4 presets, 4 sliders, a priority toggle, a detour dropdown, the assistant) sit above the button; the PRD says an overloaded student answers no questions. Fix: lead with presets and tuck the sliders under "Fine-tune".
-- [ ] **P1 · Dead crowd slider.** Wrong: it shows 50/100 and is saved but changes nothing, which reads as working. Fix: remove it, or replace it with the class-change estimate (Features, item 3).
+- [ ] **P1 · Dead crowd slider.** Wrong: it shows 50/100 and is saved but changes nothing, which reads as working. Fix: remove it, or replace it with the class-change estimate (Features, item 5).
 - [ ] **P1 · False-precision scores.** Wrong: "32/100 est. exposure" and "26.8% lower estimate" are exact-looking numbers on a road-type proxy (PRD Section 9: R² about 0.70). Fix: use plain counts such as "2 fewer busy-road crossings" and label them as modeled.
 - [ ] **P1 · Calmer route doesn't show its value.** Wrong: the demo's calmer route is +0.6 min and 47 m, but nothing says what it avoids, so judges won't feel a difference. Fix: show what's avoided on the card, for example "avoids 120 m of Exposition Blvd".
 - [ ] **P2 · "Neuro" in the name may label users.** Wrong: the PRD's social job is "not be labeled or have to explain myself". Fix: use Respite Finder or another neutral name.
 - [ ] **P2 · High contrast resets on every visit.** Wrong: the setting isn't saved. Fix: save it on the device with the other preferences.
 - [ ] **P2 · "Or choose a point on the map" only sets the start.** Fix: let it set the destination too.
 - [ ] **P2 · README is Windows-only.** Wrong: paths like `C:\Users\ryany` and PowerShell-only steps. Fix: add Mac setup steps so every teammate can run it.
+- [ ] **P1 · Set a hard question limit (team idea, Oct 17).** Wrong: the build asks for a start, a destination, 4 sliders, a priority and a detour cap before showing anything; someone already overwhelmed won't fill in 10 fields. Fix: zero questions when a calendar is connected, at most one (minutes, as chips) without one; remember needs and default everything else, with the rest under "Fine-tune".
 
 ## Features to add
 
@@ -44,16 +45,17 @@ Build these in order for the demo; items 1 to 3 together show the PRD's thinking
 
 **Demo-critical**
 
-- [ ] **1. "Reset before class" mode.** Input: where I am, my next class, minutes I have. Run Ryan's router twice per candidate spot (here → spot, spot → class) to get time to rest and leave-by, then pick calmer or fastest to get there.
-- [ ] **2. Scouted indoor spot library (sensing rung 0).** 5 to 10 spots with fixed tags: lighting, seating, noise, who can enter, indoor or outdoor, hours. Label them "Verified by scouts".
-- [ ] **3. Class-change crowd estimate (sensing rung 1).** Busy around class-change times, labeled "Estimate". Needs no data and replaces the dead crowd slider.
-- [ ] **4. One-tap "Somewhere calm, now".** Reuses remembered needs and next class.
-- [ ] **5. Leave-by timer.** Silent or soft vibration, off by default.
-- [ ] **6. "Need more support?" link.** Static and untracked.
-- [ ] **7. Full low-sensory mode.** Muted palette, no motion, large text, saved on the device.
+- [ ] **1. "Reset before class" mode.** Input: where I am, my next class or commitment, minutes I have. Run Ryan's router twice per candidate spot (here → spot, spot → class) to get time to rest and leave-by, then pick calmer or fastest to get there.
+- [ ] **2. Three ways to know my free time (team idea, Oct 17).** Connect Google Calendar or Outlook so the gap counts classes and personal plans; or paste a class schedule once; or skip both. A calendar is optional, never a gate. Read free/busy only, not event titles, and keep it on the device. Demo: show the connect step with a sample calendar.
+- [ ] **3. One-tap "Somewhere calm, now" that works with zero setup.** For anyone with no calendar, no schedule, or who just wants an impromptu spot: one tap, at most one question (5/10/15/20 minutes, default 15). Reuses remembered needs when there are any.
+- [ ] **4. Scouted indoor spot library (sensing rung 0).** 5 to 10 spots with fixed tags: lighting, seating, noise, who can enter, indoor or outdoor, hours. Label them "Verified by scouts".
+- [ ] **5. Class-change crowd estimate (sensing rung 1).** Busy around class-change times, labeled "Estimate". Needs no data and replaces the dead crowd slider.
+- [ ] **6. Leave-by timer.** Silent or soft vibration, off by default.
+- [ ] **7. "Need more support?" link.** Static and untracked.
+- [ ] **8. Full low-sensory mode.** Muted palette, no motion, large text, saved on the device.
 
 **Next (after the demo)**
 
-- [ ] **8. "It was calm / it was packed" check-ins (sensing rung 2).** One tap, no account, no free text; reports fade after 30 to 60 minutes.
-- [ ] **9. Hours and access notes.** Every card shows open hours and an access note; unknown access reads "Access unconfirmed".
-- [ ] **10. Class schedule pasted once.** Stored on the device only, deletable in one tap.
+- [ ] **9. Real Google Calendar and Outlook sign-in.** Read-only free/busy access, disconnect in one tap, nothing stored on a server.
+- [ ] **10. "It was calm / it was packed" check-ins (sensing rung 2).** One tap, no account, no free text; reports fade after 30 to 60 minutes.
+- [ ] **11. Hours and access notes.** Every card shows open hours and an access note; unknown access reads "Access unconfirmed".
