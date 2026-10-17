@@ -1,8 +1,9 @@
 export async function api<T>(path: string, body?: unknown): Promise<T> {
+  const baseUrl = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '')
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 25000)
   try {
-    const response = await fetch(`/api${path}`, {
+    const response = await fetch(`${baseUrl}/api${path}`, {
       signal: controller.signal,
       ...(body === undefined
         ? {}

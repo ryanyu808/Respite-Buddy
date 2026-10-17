@@ -125,8 +125,42 @@ Configure these only in the root `.env` or the backend process environment. No c
 | `OPENAI_MODEL` | `gpt-4.1-mini` | Structured-output-capable model for preference interpretation/emphasis |
 | `WALKING_SPEED_KPH` | `4.8` | Assumed walking speed, valid range 1–10 |
 | `OVERPASS_URL` | `https://overpass-api.de/api` | Data-preparation endpoint; optional mirror |
+| `FRONTEND_URL` | local origins | Backend CORS allowlist; comma-separated production origins |
 
 Never put keys in frontend environment variables or commit `.env`. Live paid OpenAI calls were not exercised without a key; provider failure and output validation are covered by tests.
+
+## Deploy to Render Free and Vercel
+
+The repository includes `render.yaml` for FastAPI and `frontend/vercel.json` for Vite. Render uses `backend` as its root directory. Uvicorn requires the ASGI attribute, so the valid start command is `uvicorn app.main:app --host 0.0.0.0 --port $PORT`. The committed `backend/data/snapshot/` directory includes the verified OSM GraphML snapshot and supporting files; no build-time download is required.
+
+Render settings:
+
+```text
+Service type: Web Service
+Root directory: backend
+Runtime: Python
+Build command: pip install --upgrade pip && pip install -r requirements-lock.txt
+Start command: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+Plan: Free
+Health check path: /api/health
+```
+
+Set `FRONTEND_URL` to the Vercel deployment origin, such as `https://neuroroute.vercel.app`. It accepts comma-separated origins. `OPENAI_API_KEY` is optional; leaving it blank enables the tested deterministic fallback. After deployment, `/api/health` should return `status: "ok"` and `graph_loaded: true`.
+
+Vercel settings:
+
+```text
+Project root: frontend
+Framework preset: Vite
+Build command: npm run build
+Install command: npm ci
+Output directory: dist
+Environment variable: VITE_API_BASE_URL=https://<your-render-service>.onrender.com
+```
+
+`VITE_API_BASE_URL` is the exact frontend variable used by `frontend/src/services/api.ts`. Set it for Production, Preview and Development as appropriate. Do not put `OPENAI_API_KEY` in Vercel. Redeploy after changing it because Vite embeds `VITE_*` values at build time. Local development leaves it blank and uses the Vite `/api` proxy.
+
+The graph is loaded once at startup. Its compressed file is about 350 KB and the full snapshot is under 500 KB. Local startup and tests fit comfortably within ordinary developer memory, but hosted Render memory under the 512 MB cgroup was not directly observable here; monitor deploy logs for actual hosted usage. Render Free may spin down when idle, so the first request can be slow. The remaining external setup blockers are the real Render and Vercel URLs needed for `FRONTEND_URL` and `VITE_API_BASE_URL`.
 
 ## Tests and production build
 
