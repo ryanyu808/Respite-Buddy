@@ -252,3 +252,8 @@ data/cache/
 *.osm
 *.osm.pbf
 *.gpkg
+
+# Browser test output and local map retrieval caches
+playwright-report/
+test-results/
+backend/data/cache/

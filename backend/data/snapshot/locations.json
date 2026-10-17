@@ -1,0 +1,58 @@
+[
+  {
+    "id": "way-541642577",
+    "name": "USC Village",
+    "lat": 34.0258826,
+    "lon": -118.28523242780798,
+    "osm_url": "https://www.openstreetmap.org/way/541642577"
+  },
+  {
+    "id": "way-406923908",
+    "name": "Leavey Library",
+    "lat": 34.0217845,
+    "lon": -118.28294018728783,
+    "osm_url": "https://www.openstreetmap.org/way/406923908"
+  },
+  {
+    "id": "way-154906751",
+    "name": "Tutor Campus Center",
+    "lat": 34.02039675,
+    "lon": -118.28634612607036,
+    "osm_url": "https://www.openstreetmap.org/way/154906751"
+  },
+  {
+    "id": "node-2305853438",
+    "name": "Tommy Trojan",
+    "lat": 34.0205678,
+    "lon": -118.2854346,
+    "osm_url": "https://www.openstreetmap.org/node/2305853438"
+  },
+  {
+    "id": "way-154906676",
+    "name": "Alumni Park",
+    "lat": 34.02063805,
+    "lon": -118.28452027335682,
+    "osm_url": "https://www.openstreetmap.org/way/154906676"
+  },
+  {
+    "id": "way-154906727",
+    "name": "McCarthy Quad",
+    "lat": 34.020936899999995,
+    "lon": -118.283145701975,
+    "osm_url": "https://www.openstreetmap.org/way/154906727"
+  },
+  {
+    "id": "way-172470301",
+    "name": "Exposition Park Rose Garden",
+    "lat": 34.0171422,
+    "lon": -118.2861138757074,
+    "osm_url": "https://www.openstreetmap.org/way/172470301"
+  },
+  {
+    "id": "node-4399693647",
+    "name": "USC Fisher Museum",
+    "lat": 34.0186092,
+    "lon": -118.2873476,
+    "osm_url": "https://www.openstreetmap.org/node/4399693647"
+  }
+]
