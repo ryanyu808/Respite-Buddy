@@ -23,7 +23,8 @@ import type {
   RouteRequest,
   RouteResponse,
 } from './types'
-import { api } from './services/api'
+import { api, OFFLINE_MESSAGE, OfflineError } from './services/api'
+import { FALLBACK, savedRoute } from './data/fallback'
 import { loadPreferences } from './preferences'
 import { LocationSelector } from './components/LocationSelector'
 import { PreferencesPanel } from './components/PreferencesPanel'
@@ -36,14 +37,24 @@ function point(location: Point): Point {
   return { lat: location.lat, lon: location.lon, name: location.name }
 }
 
+function defaultPlace(places: Location[], name: string, index: number) {
+  return places.find((p) => p.name === name) ?? places[index] ?? null
+}
+
 export default function App() {
-  const [locations, setLocations] = useState<Location[]>([])
-  const [metadata, setMetadata] = useState<Metadata | null>(null)
-  const [stops, setStops] = useState<RestStop[]>([])
-  const [features, setFeatures] = useState<FeatureCollection | null>(null)
-  const [demos, setDemos] = useState<Demo[]>([])
-  const [origin, setOrigin] = useState<Point | null>(null)
-  const [destination, setDestination] = useState<Point | null>(null)
+  // Start on bundled data so the page is usable immediately; live data replaces it.
+  const [locations, setLocations] = useState<Location[]>(FALLBACK.locations)
+  const [metadata, setMetadata] = useState<Metadata | null>(FALLBACK.metadata)
+  const [stops, setStops] = useState<RestStop[]>(FALLBACK.stops)
+  const [features, setFeatures] = useState<FeatureCollection | null>(FALLBACK.features)
+  const [demos, setDemos] = useState<Demo[]>(FALLBACK.demos)
+  const [origin, setOrigin] = useState<Point | null>(() =>
+    defaultPlace(FALLBACK.locations, 'USC Village', 0),
+  )
+  const [destination, setDestination] = useState<Point | null>(() =>
+    defaultPlace(FALLBACK.locations, 'Leavey Library', 1),
+  )
+  const [connection, setConnection] = useState<'connecting' | 'live' | 'offline'>('connecting')
   const [preferences, setPreferences] = useState<Preferences>(loadPreferences)
   const [result, setResult] = useState<RouteResponse | null>(null)
   const [selected, setSelected] = useState('')
@@ -51,7 +62,6 @@ export default function App() {
   const [pickMode, setPickMode] = useState<'origin' | 'destination' | null>(null)
   const [page, setPage] = useState<'about' | 'methodology' | null>(null)
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
   const [showStops, setShowStops] = useState(false)
   const [highContrast, setHighContrast] = useState(false)
@@ -60,8 +70,7 @@ export default function App() {
 
   useEffect(() => {
     let cancelled = false
-    setLoading(true)
-    setError('')
+    setConnection('connecting')
     Promise.all([
       api<Location[]>('/locations'),
       api<Metadata>('/map/metadata'),
@@ -71,20 +80,21 @@ export default function App() {
     ])
       .then(([places, meta, rest, green, demo]) => {
         if (cancelled) return
+        if (!meta.available) throw new OfflineError()
         setLocations(places)
         setMetadata(meta)
         setStops(rest)
         setFeatures(green)
         setDemos(demo)
-        setOrigin(places.find((p) => p.name === 'USC Village') ?? places[0] ?? null)
-        setDestination(places.find((p) => p.name === 'Leavey Library') ?? places[1] ?? null)
-        if (!meta.available) setError(meta.setup_error ?? 'Map setup required.')
+        // Keep any start/destination the user already chose while live data loaded.
+        setOrigin((current) => current ?? defaultPlace(places, 'USC Village', 0))
+        setDestination((current) => current ?? defaultPlace(places, 'Leavey Library', 1))
+        setConnection('live')
+        setError((current) => (current === OFFLINE_MESSAGE ? '' : current))
       })
-      .catch((e) => {
-        if (!cancelled) setError((e as Error).message)
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
+      .catch(() => {
+        // Bundled data stays in place; saved demo routes still work.
+        if (!cancelled) setConnection('offline')
       })
     return () => {
       cancelled = true
@@ -133,15 +143,22 @@ export default function App() {
     setBusy(true)
     setError('')
     setResult(null)
-    try {
-      const response = await api<RouteResponse>('/routes', request)
+    const saved = savedRoute(request)
+    const show = (response: RouteResponse) => {
       if (sequence !== requestSequence.current) return
       setResult(response)
       setSelected(response.recommended_id)
       setLastRequest(request)
       setPickMode(null)
+    }
+    try {
+      // While the backend is asleep or unreachable, answer saved routes instantly.
+      show(saved && connection !== 'live' ? saved : await api<RouteResponse>('/routes', request))
     } catch (e) {
-      if (sequence === requestSequence.current) setError((e as Error).message)
+      if (sequence !== requestSequence.current) return
+      if (e instanceof OfflineError) setConnection('offline')
+      if (e instanceof OfflineError && saved) show(saved)
+      else setError((e as Error).message)
     } finally {
       if (sequence === requestSequence.current) setBusy(false)
     }
@@ -269,7 +286,10 @@ export default function App() {
                 <Info size={16} />
                 <span>
                   {error}
-                  {!metadata?.available && (
+                  {error === OFFLINE_MESSAGE && demos.length > 0 && (
+                    <button onClick={demo}>Try the campus demo</button>
+                  )}
+                  {error === OFFLINE_MESSAGE && connection !== 'connecting' && (
                     <button onClick={() => setRetry(retry + 1)}>Retry connection</button>
                   )}
                 </span>
@@ -284,16 +304,12 @@ export default function App() {
             )}
             <button
               className="primary-button find-route"
-              disabled={loading || busy || !metadata?.available}
+              disabled={busy}
               onClick={() => void calculate()}
             >
-              {loading || busy ? (
-                <LoaderCircle className="spin" size={18} />
-              ) : (
-                <Compass size={19} />
-              )}
-              {loading ? 'Loading campus map…' : busy ? 'Finding your way…' : 'Find My Route'}
-              {!loading && !busy && <ArrowRight size={17} />}
+              {busy ? <LoaderCircle className="spin" size={18} /> : <Compass size={19} />}
+              {busy ? 'Finding your way…' : 'Find My Route'}
+              {!busy && <ArrowRight size={17} />}
             </button>
             <p>No account. Just your preferences.</p>
           </div>
@@ -357,10 +373,12 @@ export default function App() {
       </main>
       <footer className="app-footer">
         <span>
-          <span className={`status-dot ${metadata?.available ? '' : 'offline'}`} />
-          {metadata?.available
+          <span className={`status-dot ${connection === 'live' ? '' : 'offline'}`} />
+          {connection === 'live'
             ? 'Real OpenStreetMap walking network'
-            : 'Connecting to campus data…'}
+            : connection === 'connecting'
+              ? 'Connecting to campus data… saved demo routes work now'
+              : 'Showing saved demo data'}
         </span>
         <p>Estimated conditions may differ. Follow posted signs and use your judgment.</p>
         <button onClick={() => setPage('methodology')}>
