@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NeuroRoute respite spot",
+  "type": "object",
+  "required": ["id", "name", "status", "source"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "status": { "enum": ["scouted", "mapped-potential", "unverified"] },
+    "kind": { "type": "string" },
+    "description": { "type": "string" },
+    "accessibility": { "type": "string" },
+    "opening_hours": { "type": ["string", "null"] },
+    "sensory_notes": { "type": "string" },
+    "latitude": { "type": "number" },
+    "longitude": { "type": "number" },
+    "source": { "type": "string", "format": "uri" },
+    "last_verified": { "type": ["string", "null"], "format": "date" },
+    "scouted_by": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "",
+    "name": "",
+    "status": "unverified",
+    "kind": "",
+    "description": "",
+    "accessibility": "Unknown — scout required",
+    "opening_hours": null,
+    "sensory_notes": "",
+    "latitude": 0,
+    "longitude": 0,
+    "source": "https://www.openstreetmap.org/",
+    "last_verified": null,
+    "scouted_by": null
+  }
+]

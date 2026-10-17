@@ -11,6 +11,7 @@ import {
   Trees,
   X,
   Contrast,
+  HeartHandshake,
 } from 'lucide-react'
 import type { FeatureCollection } from 'geojson'
 import type {
@@ -31,6 +32,7 @@ import { Assistant } from './components/Assistant'
 import { MapView } from './components/MapView'
 import { Results } from './components/Results'
 import { InfoDialog } from './components/InfoDialog'
+import { RespiteBuddy } from './components/RespiteBuddy'
 
 function point(location: Point): Point {
   return { lat: location.lat, lon: location.lon, name: location.name }
@@ -49,7 +51,7 @@ export default function App() {
   const [selected, setSelected] = useState('')
   const [lastRequest, setLastRequest] = useState<RouteRequest | null>(null)
   const [pickMode, setPickMode] = useState<'origin' | 'destination' | null>(null)
-  const [page, setPage] = useState<'about' | 'methodology' | null>(null)
+  const [page, setPage] = useState<'about' | 'methodology' | 'respite' | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
@@ -174,6 +176,7 @@ export default function App() {
             <Compass size={16} />
             Plan a walk
           </button>
+          <button className="nav-item" onClick={() => setPage('respite')}><HeartHandshake size={16} /> Respite Buddy</button>
           <button className="nav-item" onClick={() => setPage('about')}>
             Our approach
           </button>
@@ -263,6 +266,7 @@ export default function App() {
               </button>
             </span>
           </div>
+          <button className="respite-cta" onClick={() => setPage('respite')}><HeartHandshake size={17} /><span><strong>Need a reset?</strong><small>Open Respite Buddy before class</small></span><ArrowRight size={15} /></button>
           <div className="find-route-area">
             {error && (
               <div className="error-message" role="alert">
@@ -372,7 +376,7 @@ export default function App() {
           ? `${result.routes.length} route options found. ${result.routes.find((r) => r.id === selected)?.name} selected.`
           : ''}
       </div>
-      {page && <InfoDialog page={page} metadata={metadata} onClose={() => setPage(null)} />}
+      {page === 'respite' ? <RespiteBuddy stops={stops} onClose={() => setPage(null)} /> : page && <InfoDialog page={page} metadata={metadata} onClose={() => setPage(null)} />}
     </div>
   )
 }
