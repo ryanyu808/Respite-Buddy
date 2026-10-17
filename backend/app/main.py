@@ -14,6 +14,11 @@ from .services.ai_service import interpret, route_explanation
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 
+def frontend_origins() -> list[str]:
+    configured = [origin.strip().rstrip("/") for origin in os.getenv("FRONTEND_URL", "").split(",") if origin.strip()]
+    return list(dict.fromkeys(["http://localhost:5173", "http://127.0.0.1:5173", *configured]))
+
+
 @asynccontextmanager
 async def lifespan(app):
     app.state.data = MapData()
@@ -21,7 +26,7 @@ async def lifespan(app):
 
 
 app = FastAPI(title="NeuroRoute", version="0.1.0", lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], allow_methods=["GET", "POST"], allow_headers=["Content-Type"])
+app.add_middleware(CORSMiddleware, allow_origins=frontend_origins(), allow_methods=["GET", "POST"], allow_headers=["Content-Type"])
 
 
 class Health(BaseModel):
