@@ -5,7 +5,7 @@ import { PreferencesPanel } from './PreferencesPanel'
 import { RouteCard } from './RouteCard'
 import { LocationSelector } from './LocationSelector'
 import { DEFAULTS, loadPreferences } from '../preferences'
-import { api } from '../services/api'
+import { api, OFFLINE_MESSAGE } from '../services/api'
 import type { Point, Route } from '../types'
 
 afterEach(() => {
@@ -92,8 +92,33 @@ describe('API', () => {
     )
     await expect(api('/routes', {})).rejects.toThrow('No walking path nearby.')
   })
-  it('gives useful connection errors', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('fetch failed')))
-    await expect(api('/routes', {})).rejects.toThrow('backend is running')
+  it('gives a friendly message when the backend is unreachable, after one retry', async () => {
+    const fetch = vi.fn().mockRejectedValue(new TypeError('fetch failed'))
+    vi.stubGlobal('fetch', fetch)
+    await expect(api('/routes', {})).rejects.toThrow(OFFLINE_MESSAGE)
+    expect(fetch).toHaveBeenCalledTimes(2)
+  })
+  it('never surfaces a raw JSON parse error from a text response', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 404,
+        json: async () => {
+          throw new SyntaxError(`Unexpected token 'T', "The page c"... is not valid JSON`)
+        },
+      }),
+    )
+    await expect(api('/locations')).rejects.toThrow(OFFLINE_MESSAGE)
+  })
+  it('recovers when the retry succeeds, as after a cold start', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValueOnce({ ok: false, status: 502, json: async () => ({}) })
+        .mockResolvedValueOnce({ ok: true, json: async () => ['ok'] }),
+    )
+    await expect(api('/locations')).resolves.toEqual(['ok'])
   })
 })

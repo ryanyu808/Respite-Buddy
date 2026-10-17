@@ -160,7 +160,7 @@ Environment variable: VITE_API_BASE_URL=https://<your-render-service>.onrender.c
 
 `VITE_API_BASE_URL` is the exact frontend variable used by `frontend/src/services/api.ts`. Set it for Production, Preview and Development as appropriate. Do not put `OPENAI_API_KEY` in Vercel. Redeploy after changing it because Vite embeds `VITE_*` values at build time. Local development leaves it blank and uses the Vite `/api` proxy.
 
-The graph is loaded once at startup. Its compressed file is about 350 KB and the full snapshot is under 500 KB. Local startup and tests fit comfortably within ordinary developer memory, but hosted Render memory under the 512 MB cgroup was not directly observable here; monitor deploy logs for actual hosted usage. Render Free may spin down when idle, so the first request can be slow. The remaining external setup blockers are the real Render and Vercel URLs needed for `FRONTEND_URL` and `VITE_API_BASE_URL`.
+The graph is loaded once at startup. Its compressed file is about 350 KB and the full snapshot is under 500 KB. Local startup and tests fit comfortably within ordinary developer memory, but hosted Render memory under the 512 MB cgroup was not directly observable here; monitor deploy logs for actual hosted usage. Render Free may spin down when idle, so the first request can be slow. The frontend opens on bundled fallback data in the meantime, and a cron-job.org ping keeps the service warm; see [deployment](docs/deployment.md#keep-the-backend-awake-cron-joborg). The remaining external setup blockers are the real Render and Vercel URLs needed for `FRONTEND_URL` and `VITE_API_BASE_URL`.
 
 ## Tests and production build
 
