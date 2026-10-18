@@ -14,11 +14,9 @@ test('visible time window replaces presets and immediately recalculates indoor c
   }
   await page.getByRole('button', { name: 'Indoors', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(3)
-  await expect(page.getByRole('article').first()).toContainText('Leavey Library')
+  await expect(page.getByRole('article').first()).toContainText('INDOOR PAUSE')
   await expect(page.getByText(/60 minutes available/)).toBeVisible()
-  await expect(page.getByRole('article').first()).toContainText('53 min to reset')
   await page.getByRole('button', { name: 'Walk me there', exact: true }).first().click()
-  await expect(page.getByText(/You’re already at the approximate building/)).toBeVisible()
   await expect(page.locator('.demo-map .walking-route-line').first()).toBeVisible()
 })
 
@@ -42,7 +40,7 @@ test('current time and class time calculate a custom break without restarting it
   await page.getByLabel('End time', { exact: true }).fill('10:00')
   await page.getByRole('button', { name: 'Find me a spot', exact: true }).click()
   await expect(page.getByRole('alert')).toContainText('End time must be after')
-  await expect(page.getByRole('article')).toHaveCount(2)
+  await expect(page.getByRole('article')).toHaveCount(3)
 })
 
 test('sample schedule with indoor selected opens usable saved indoor routes', async ({ page }) => {

@@ -4,10 +4,8 @@ import AxeBuilder from '@axe-core/playwright'
 test('changing both locations recomputes both walking legs without Render', async ({ page }) => {
   await page.route('**/api/**', (route) => route.abort())
   await page.goto('/')
-  await expect(page.getByLabel('Starting from', { exact: true })).toHaveValue('Leavey Library')
-  await expect(page.getByLabel('Next class / destination', { exact: true })).toHaveValue(
-    'Tutor Campus Center',
-  )
+  await expect(page.getByLabel('Starting from', { exact: true })).toHaveValue('')
+  await expect(page.getByLabel('Next class / destination', { exact: true })).toHaveValue('')
   await page.getByLabel('Starting from', { exact: true }).fill('USC Village')
   await page.getByLabel('Next class / destination', { exact: true }).fill('DML')
   await page.getByLabel('End time', { exact: true }).fill('14:00')
@@ -68,7 +66,10 @@ test('saved local schedule fills the next destination and exact class time, not 
     page.getByText('Saved locally. Review overlap warnings before planning gaps.'),
   ).toBeVisible()
   await page.getByRole('button', { name: 'Find a spot', exact: true }).click()
-  await expect(page.getByLabel('Starting from', { exact: true })).toHaveValue('Leavey Library')
+  await expect(page.getByLabel('Starting from', { exact: true })).toHaveValue('')
+  await expect(page.getByLabel('Next class / destination', { exact: true })).toHaveValue('')
+  await page.getByRole('button', { name: /Use saved next class/ }).click()
+  await expect(page.getByLabel('Starting from', { exact: true })).toHaveValue('')
   await expect(page.getByLabel('Next class / destination', { exact: true })).toHaveValue(
     'Doheny Memorial Library',
   )
@@ -84,13 +85,9 @@ test('unknown and disconnected locations never silently use default routes', asy
   await page.getByLabel('Starting from', { exact: true }).fill('Imaginary Hall')
   await page.getByRole('button', { name: 'Find me a spot', exact: true }).click()
   await expect(page.getByRole('alert')).toContainText('Choose a listed campus location')
-  await expect(page.locator('.demo-applied-journey')).toHaveText(
-    'Leavey Library → Tutor Campus Center',
-  )
+  await expect(page.locator('.demo-applied-journey')).toContainText('No next destination')
   await page.getByLabel('Starting from', { exact: true }).fill('JKP')
   await page.getByRole('button', { name: 'Find me a spot', exact: true }).click()
   await expect(page.getByRole('alert')).toContainText('No saved walking route connects')
-  await expect(page.locator('.demo-applied-journey')).toHaveText(
-    'Leavey Library → Tutor Campus Center',
-  )
+  await expect(page.locator('.demo-applied-journey')).toContainText('No next destination')
 })

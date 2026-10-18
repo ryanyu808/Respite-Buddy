@@ -8,7 +8,7 @@ from app.services.geographic_data import MapData
 from app.services.respite import RespiteEngine
 from app.respite_models import ResetRequest
 from app.models import Point, Preferences
-from app.services.spot_library import building_library
+from app.services.spot_library import building_library, demo_library
 
 OUT = Path(__file__).resolve().parents[2] / 'frontend' / 'src' / 'data' / 'respite-demo.json'
 LEGS_OUT = OUT.with_name('demo-route-legs.json')
@@ -17,11 +17,12 @@ LEGS_OUT = OUT.with_name('demo-route-legs.json')
 def build_legs(engine):
     """Each directed leg is calculated once by the real router, never reversed/guessed."""
     locations = building_library(engine.data)
+    spots = demo_library(engine.data, indoor=True, expanded=True)
     legs = {}
     for location in locations:
         point = Point(lat=location['lat'], lon=location['lon'], name=location['name'])
         legs[location['id']] = {}
-        for spot in engine.library(demo=True):
+        for spot in spots:
             target = Point(lat=spot.lat, lon=spot.lng, name=spot.name)
             paths = {}
             for direction, origin, destination in [('outward', point, target), ('onward', target, point)]:
@@ -32,7 +33,7 @@ def build_legs(engine):
                     # Missing path is distinct from a genuine zero-distance leg.
                     continue
             legs[location['id']][spot.id] = paths
-    return {'locations': locations, 'legs': legs,
+    return {'locations': locations, 'legs': legs, 'spots': [spot.model_dump(mode='json') for spot in spots],
             'provenance': 'Directed walking legs from the real snapshot and unchanged router, with default walking preferences. Missing legs are not routable. Null legs mean exactly coincident building anchors, not indoor directions.'}
 
 

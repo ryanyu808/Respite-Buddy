@@ -39,11 +39,15 @@ def load_library(path=SPOT_FILE):
     return validate_library(json.loads(path.read_text(encoding='utf-8')))
 
 
-def demo_library(data, indoor=False):
+def demo_library(data, indoor=False, expanded=False):
     """Synthetic attributes on real OSM coordinates; never a scout observation."""
     by_name = {spot['name']: spot for spot in data.stops}
     spots = []
-    for name in ['Alumni Park', 'Hutton Park', 'Associates Park']:
+    names = ['Alumni Park', 'Hutton Park', 'Associates Park']
+    if expanded:
+        names += ['McCarthy Quad', 'W. M. Keck Foundation Amphitheatre',
+                  'Richardson Family Park', 'Great Lawn', 'Parkside Field']
+    for name in names:
         mapped = by_name.get(name)
         if not mapped:
             continue
@@ -59,8 +63,11 @@ def demo_library(data, indoor=False):
         spots.append(Spot.model_validate(raw))
     if indoor:
         from .campus_directory import candidates
+        indoor_ids = ['lvl-weingart', 'dml-times', 'kortschak-quiet']
+        if expanded:
+            indoor_ids += ['thh-lounge4', 'rgl-lounge1']
         for candidate in candidates():
-            if candidate.id not in ['lvl-weingart', 'dml-times', 'kortschak-quiet']:
+            if candidate.id not in indoor_ids:
                 continue
             raw = {key: None for key in Spot.model_fields}
             raw.update(id=f'demo-{candidate.id}', name=f'{candidate.building}: {candidate.name} (sample)',

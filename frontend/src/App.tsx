@@ -82,6 +82,7 @@ export default function App() {
   const [surface, setSurface] = useState<'demo' | 'reset' | 'walk' | 'schedule' | 'directory'>(
     () => {
       if (window.location.hash === '#walk') return 'walk'
+      if (new URLSearchParams(window.location.search).get('home') === '1') return 'demo'
       if (
         new URLSearchParams(window.location.search).get('live') === '1' ||
         parseDeepLink(window.location.search).auto
