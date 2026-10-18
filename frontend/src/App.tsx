@@ -33,37 +33,61 @@ import { MapView } from './components/MapView'
 import { Results } from './components/Results'
 import { InfoDialog } from './components/InfoDialog'
 import { RespiteBuddy } from './components/RespiteBuddy'
+import { FALLBACK, savedRoute, SAVED_NOTE } from './data/fallback'
+import { DEFAULTS } from './preferences'
+import {
+  DEVICE_DEFAULTS,
+  loadDevicePreferences,
+  parseDeepLink,
+  saveDevicePreferences,
+} from './respite'
+import { SupportFooter } from './components/SupportFooter'
 
 function point(location: Point): Point {
   return { lat: location.lat, lon: location.lon, name: location.name }
 }
 
 export default function App() {
-  const [locations, setLocations] = useState<Location[]>([])
-  const [metadata, setMetadata] = useState<Metadata | null>(null)
-  const [stops, setStops] = useState<RestStop[]>([])
-  const [features, setFeatures] = useState<FeatureCollection | null>(null)
-  const [demos, setDemos] = useState<Demo[]>([])
-  const [origin, setOrigin] = useState<Point | null>(null)
-  const [destination, setDestination] = useState<Point | null>(null)
-  const [preferences, setPreferences] = useState<Preferences>(loadPreferences)
+  const [locations, setLocations] = useState<Location[]>(FALLBACK.locations)
+  const [metadata, setMetadata] = useState<Metadata | null>(FALLBACK.metadata)
+  const [stops, setStops] = useState<RestStop[]>(FALLBACK.stops)
+  const [features, setFeatures] = useState<FeatureCollection | null>(FALLBACK.features)
+  const [demos, setDemos] = useState<Demo[]>(FALLBACK.demos)
+  const [origin, setOrigin] = useState<Point | null>(
+    FALLBACK.locations.find((place) => place.name === 'USC Village') ??
+      FALLBACK.locations[0] ??
+      null,
+  )
+  const [destination, setDestination] = useState<Point | null>(
+    FALLBACK.locations.find((place) => place.name === 'Leavey Library') ??
+      FALLBACK.locations[1] ??
+      null,
+  )
+  const [preferences, setPreferences] = useState<Preferences>(
+    () => parseDeepLink(window.location.search).preferences ?? loadPreferences(),
+  )
   const [result, setResult] = useState<RouteResponse | null>(null)
   const [selected, setSelected] = useState('')
   const [lastRequest, setLastRequest] = useState<RouteRequest | null>(null)
   const [pickMode, setPickMode] = useState<'origin' | 'destination' | null>(null)
-  const [page, setPage] = useState<'about' | 'methodology' | 'respite' | null>(null)
+  const [page, setPage] = useState<'about' | 'methodology' | null>(null)
+  const [surface, setSurface] = useState<'reset' | 'walk'>(() =>
+    window.location.hash === '#walk' ? 'walk' : 'reset',
+  )
+  const [deviceSettings, setDeviceSettings] = useState(loadDevicePreferences)
+  const [campusSource, setCampusSource] = useState<'connecting' | 'live' | 'saved'>('connecting')
+  const [savedResult, setSavedResult] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
   const [showStops, setShowStops] = useState(false)
-  const [highContrast, setHighContrast] = useState(false)
   const [retry, setRetry] = useState(0)
   const requestSequence = useRef(0)
 
   useEffect(() => {
     let cancelled = false
     setLoading(true)
-    setError('')
+    setCampusSource('connecting')
     Promise.all([
       api<Location[]>('/locations'),
       api<Metadata>('/map/metadata'),
@@ -78,12 +102,14 @@ export default function App() {
         setStops(rest)
         setFeatures(green)
         setDemos(demo)
-        setOrigin(places.find((p) => p.name === 'USC Village') ?? places[0] ?? null)
-        setDestination(places.find((p) => p.name === 'Leavey Library') ?? places[1] ?? null)
+        setCampusSource('live')
         if (!meta.available) setError(meta.setup_error ?? 'Map setup required.')
       })
       .catch((e) => {
-        if (!cancelled) setError((e as Error).message)
+        if (!cancelled) {
+          setCampusSource('saved')
+          setError((e as Error).message)
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false)
@@ -100,6 +126,9 @@ export default function App() {
       /* Browser storage is optional. */
     }
   }, [preferences])
+  useEffect(() => {
+    saveDevicePreferences(deviceSettings)
+  }, [deviceSettings])
 
   function invalidate() {
     requestSequence.current += 1
@@ -107,6 +136,7 @@ export default function App() {
     setResult(null)
     setLastRequest(null)
     setError('')
+    setSavedResult(false)
   }
   function changePreferences(p: Preferences) {
     invalidate()
@@ -121,7 +151,7 @@ export default function App() {
     setDestination(p)
   }
 
-  async function calculate(p = preferences, start = origin, end = destination) {
+  async function calculate(p = preferences, start = origin, end = destination, replay = false) {
     if (!start || !end) {
       setError('Choose both a start and a destination to find your walk.')
       return
@@ -136,9 +166,25 @@ export default function App() {
     setError('')
     setResult(null)
     try {
-      const response = await api<RouteResponse>('/routes', request)
+      const saved = savedRoute(request)
+      const useSaved = saved && (replay || campusSource !== 'live')
+      let response: RouteResponse
+      let fromSaved = false
+      if (useSaved) {
+        response = saved
+        fromSaved = true
+      } else {
+        try {
+          response = await api<RouteResponse>('/routes', request)
+        } catch (e) {
+          if (!saved) throw e
+          response = saved
+          fromSaved = true
+        }
+      }
       if (sequence !== requestSequence.current) return
       setResult(response)
+      setSavedResult(fromSaved)
       setSelected(response.recommended_id)
       setLastRequest(request)
       setPickMode(null)
@@ -155,28 +201,40 @@ export default function App() {
     setOrigin(d.origin)
     setDestination(d.destination)
     setPreferences(d.preferences)
-    void calculate(d.preferences, d.origin, d.destination)
+    void calculate(d.preferences, d.origin, d.destination, true)
   }
 
   return (
-    <div className={`app-shell ${highContrast ? 'high-contrast' : ''}`}>
-      <a className="skip-link" href="#route-controls">
-        Skip to route controls
+    <div
+      className={`app-shell ${surface === 'reset' ? 'reset-shell' : ''} ${deviceSettings.highContrast ? 'high-contrast' : ''} ${deviceSettings.lowSensory ? 'low-sensory' : ''}`}
+    >
+      <a className="skip-link" href={surface === 'reset' ? '#reset-controls' : '#route-controls'}>
+        {surface === 'reset' ? 'Skip to reset controls' : 'Skip to route controls'}
       </a>
       <header className="app-header">
-        <a className="brand" href="/" aria-label="NeuroRoute home">
+        <a className="brand" href="/" aria-label="Respite Buddy home">
           <img src="/favicon.svg" alt="" width="38" height="38" />
           <span>
-            Neuro<span>Route</span>
-            <small>FIND YOUR CALMER WAY.</small>
+            Respite <span>Buddy</span>
+            <small>A LITTLE ROOM IN YOUR DAY.</small>
           </span>
         </a>
         <nav aria-label="Main navigation">
-          <button className="nav-item active" onClick={() => setPage(null)}>
+          <button
+            className={`nav-item ${surface === 'reset' ? 'active' : ''}`}
+            aria-current={surface === 'reset' ? 'page' : undefined}
+            onClick={() => setSurface('reset')}
+          >
+            <HeartHandshake size={16} /> Reset before class
+          </button>
+          <button
+            className={`nav-item ${surface === 'walk' ? 'active' : ''}`}
+            aria-current={surface === 'walk' ? 'page' : undefined}
+            onClick={() => setSurface('walk')}
+          >
             <Compass size={16} />
             Plan a walk
           </button>
-          <button className="nav-item" onClick={() => setPage('respite')}><HeartHandshake size={16} /> Respite Buddy</button>
           <button className="nav-item" onClick={() => setPage('about')}>
             Our approach
           </button>
@@ -192,179 +250,219 @@ export default function App() {
           <button
             className="icon-button"
             aria-label="Toggle high contrast"
-            aria-pressed={highContrast}
-            onClick={() => setHighContrast(!highContrast)}
+            aria-pressed={deviceSettings.highContrast}
+            onClick={() =>
+              setDeviceSettings({ ...deviceSettings, highContrast: !deviceSettings.highContrast })
+            }
           >
             <Contrast size={19} />
           </button>
         </div>
       </header>
-      <main className={`workspace ${result ? 'has-results' : ''}`}>
-        <aside className="sidebar" id="route-controls" aria-label="Plan your walking route">
-          <div className="sidebar-intro">
-            <div className="eyebrow">
-              <Leaf size={13} /> A WALK THAT FEELS LIKE YOU
+      {surface === 'reset' ? (
+        <RespiteBuddy
+          locations={locations}
+          features={features}
+          settings={deviceSettings}
+          onSettings={setDeviceSettings}
+          preferences={preferences}
+          onPreferences={setPreferences}
+          onClear={() => {
+            setDeviceSettings({ ...DEVICE_DEFAULTS })
+            setPreferences({ ...DEFAULTS })
+            try {
+              localStorage.removeItem('neuroroute-preferences')
+            } catch {
+              /* Optional storage. */
+            }
+          }}
+        />
+      ) : (
+        <main className={`workspace ${result ? 'has-results' : ''}`}>
+          <aside className="sidebar" id="route-controls" aria-label="Plan your walking route">
+            <div className="sidebar-intro">
+              <div className="eyebrow">
+                <Leaf size={13} /> A WALK THAT FEELS LIKE YOU
+              </div>
+              <h1>Find your calmer way.</h1>
+              <p>
+                The best route isn't always the fastest.
+                <br />
+                Let's find one that fits you.
+              </p>
             </div>
-            <h1>Find your calmer way.</h1>
-            <p>
-              The best route isn't always the fastest.
-              <br />
-              Let's find one that fits you.
-            </p>
-          </div>
-          <section className="journey" aria-label="Start and destination">
-            <div className="section-heading">
-              <h2>Where are we heading?</h2>
-              <button
-                className="icon-button"
-                aria-label="Swap start and destination"
-                onClick={() => {
-                  invalidate()
-                  setOrigin(destination)
-                  setDestination(origin)
-                }}
-              >
-                <ArrowDownUp size={16} />
-              </button>
-            </div>
-            <div className="location-pair">
-              <LocationSelector
-                id="origin"
-                label="Start"
-                value={origin}
-                locations={locations}
-                onChange={changeOrigin}
-              />
-              <div className="location-line" />
-              <LocationSelector
-                id="destination"
-                label="Destination"
-                value={destination}
-                locations={locations}
-                onChange={changeDestination}
-              />
-            </div>
-            <button className="map-selection-hint" onClick={() => setPickMode('origin')}>
-              <MapPin size={12} />
-              Or choose a point on the map <ArrowRight size={12} />
-            </button>
-          </section>
-          <PreferencesPanel value={preferences} onChange={changePreferences} />
-          <Assistant
-            current={preferences}
-            onApply={(p) => {
-              changePreferences(p)
-              void calculate(p)
-            }}
-          />
-          <div className="sidebar-footnote">
-            <Info size={15} />
-            <span>
-              Real walking paths. Estimated sensory conditions.
-              <button onClick={() => setPage('methodology')}>
-                See how we estimate <ArrowUpRightIcon />
-              </button>
-            </span>
-          </div>
-          <button className="respite-cta" onClick={() => setPage('respite')}><HeartHandshake size={17} /><span><strong>Need a reset?</strong><small>Open Respite Buddy before class</small></span><ArrowRight size={15} /></button>
-          <div className="find-route-area">
-            {error && (
-              <div className="error-message" role="alert">
-                <Info size={16} />
-                <span>
-                  {error}
-                  {!metadata?.available && (
-                    <button onClick={() => setRetry(retry + 1)}>Retry connection</button>
-                  )}
-                </span>
+            <section className="journey" aria-label="Start and destination">
+              <div className="section-heading">
+                <h2>Where are we heading?</h2>
                 <button
                   className="icon-button"
-                  aria-label="Dismiss error"
-                  onClick={() => setError('')}
+                  aria-label="Swap start and destination"
+                  onClick={() => {
+                    invalidate()
+                    setOrigin(destination)
+                    setDestination(origin)
+                  }}
                 >
-                  <X size={14} />
+                  <ArrowDownUp size={16} />
                 </button>
               </div>
-            )}
-            <button
-              className="primary-button find-route"
-              disabled={loading || busy || !metadata?.available}
-              onClick={() => void calculate()}
-            >
-              {loading || busy ? (
-                <LoaderCircle className="spin" size={18} />
-              ) : (
-                <Compass size={19} />
-              )}
-              {loading ? 'Loading campus map…' : busy ? 'Finding your way…' : 'Find My Route'}
-              {!loading && !busy && <ArrowRight size={17} />}
-            </button>
-            <p>No account. Just your preferences.</p>
-          </div>
-        </aside>
-        <div className="map-workspace">
-          <MapView
-            origin={origin}
-            destination={destination}
-            result={result}
-            selected={selected}
-            onSelect={setSelected}
-            pickMode={pickMode}
-            setPickMode={setPickMode}
-            onPick={(p) => {
-              if (pickMode === 'origin') changeOrigin(p)
-              else if (pickMode === 'destination') changeDestination(p)
-              setPickMode(null)
-            }}
-            stops={stops}
-            showStops={showStops}
-            features={features}
-          />
-          <div className="map-bottom-controls">
-            <label className="rest-toggle">
-              <Trees size={16} />
-              <span>Potential rest stops</span>
-              <input
-                type="checkbox"
-                checked={showStops}
-                onChange={(e) => setShowStops(e.target.checked)}
-              />
-              <i aria-hidden="true" />
-            </label>
-            {!result && demos.length > 0 && (
-              <button className="demo-button" onClick={demo} disabled={busy}>
-                <Play size={13} fill="currentColor" />
-                Try a campus demo
-                <ArrowRight size={14} />
+              <div className="location-pair">
+                <LocationSelector
+                  id="origin"
+                  label="Start"
+                  value={origin}
+                  locations={locations}
+                  onChange={changeOrigin}
+                />
+                <div className="location-line" />
+                <LocationSelector
+                  id="destination"
+                  label="Destination"
+                  value={destination}
+                  locations={locations}
+                  onChange={changeDestination}
+                />
+              </div>
+              <button className="map-selection-hint" onClick={() => setPickMode('origin')}>
+                <MapPin size={12} />
+                Or choose a point on the map <ArrowRight size={12} />
               </button>
-            )}
-          </div>
-          {result && lastRequest && (
-            <Results
+            </section>
+            <details className="walk-fine-tune" open>
+              <summary>Fine-tune your walk</summary>
+              <PreferencesPanel value={preferences} onChange={changePreferences} />
+            </details>
+            <Assistant
+              current={preferences}
+              onApply={(p) => {
+                changePreferences(p)
+                void calculate(p)
+              }}
+            />
+            <div className="sidebar-footnote">
+              <Info size={15} />
+              <span>
+                Real walking paths. Estimated sensory conditions.
+                <button onClick={() => setPage('methodology')}>
+                  See how we estimate <ArrowUpRightIcon />
+                </button>
+              </span>
+            </div>
+            <button className="respite-cta" onClick={() => setSurface('reset')}>
+              <HeartHandshake size={17} />
+              <span>
+                <strong>Need a reset?</strong>
+                <small>Find a pause before class</small>
+              </span>
+              <ArrowRight size={15} />
+            </button>
+            <div className="find-route-area">
+              {error && (
+                <div className="error-message" role="alert">
+                  <Info size={16} />
+                  <span>
+                    {error}
+                    {campusSource !== 'live' && (
+                      <button onClick={() => setRetry(retry + 1)}>Retry connection</button>
+                    )}
+                  </span>
+                  <button
+                    className="icon-button"
+                    aria-label="Dismiss error"
+                    onClick={() => setError('')}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              )}
+              <button
+                className="primary-button find-route"
+                disabled={busy || !metadata?.available}
+                onClick={() => void calculate()}
+              >
+                {busy ? <LoaderCircle className="spin" size={18} /> : <Compass size={19} />}
+                {busy ? 'Finding your way…' : 'Find My Route'}
+                {!busy && <ArrowRight size={17} />}
+              </button>
+              <p>
+                {loading
+                  ? 'Using bundled map data while campus services connect.'
+                  : 'No account. Just your preferences.'}
+              </p>
+              <SupportFooter />
+            </div>
+          </aside>
+          <div className="map-workspace">
+            <MapView
+              origin={origin}
+              destination={destination}
               result={result}
               selected={selected}
               onSelect={setSelected}
-              request={lastRequest}
-              onClose={() => {
-                invalidate()
+              pickMode={pickMode}
+              setPickMode={setPickMode}
+              onPick={(p) => {
+                if (pickMode === 'origin') changeOrigin(p)
+                else if (pickMode === 'destination') changeDestination(p)
+                setPickMode(null)
               }}
+              stops={stops}
+              showStops={showStops}
+              features={features}
             />
-          )}
-          {busy && (
-            <div className="map-loading" role="status">
-              <LoaderCircle className="spin" size={23} />
-              <strong>Finding a little more calm…</strong>
-              <span>Comparing paths with your preferences.</span>
+            <div className="map-bottom-controls">
+              <label className="rest-toggle">
+                <Trees size={16} />
+                <span>Potential rest stops</span>
+                <input
+                  type="checkbox"
+                  checked={showStops}
+                  onChange={(e) => setShowStops(e.target.checked)}
+                />
+                <i aria-hidden="true" />
+              </label>
+              {!result && demos.length > 0 && (
+                <button className="demo-button" onClick={demo} disabled={busy}>
+                  <Play size={13} fill="currentColor" />
+                  Try a campus demo
+                  <ArrowRight size={14} />
+                </button>
+              )}
             </div>
-          )}
-        </div>
-      </main>
+            {result && lastRequest && (
+              <>
+                <span className="sr-only" role="status">
+                  {savedResult ? SAVED_NOTE : 'Route calculated by campus service.'}
+                </span>
+                <Results
+                  result={result}
+                  selected={selected}
+                  onSelect={setSelected}
+                  request={lastRequest}
+                  onClose={() => {
+                    invalidate()
+                  }}
+                />
+              </>
+            )}
+            {busy && (
+              <div className="map-loading" role="status">
+                <LoaderCircle className="spin" size={23} />
+                <strong>Finding a little more calm…</strong>
+                <span>Comparing paths with your preferences.</span>
+              </div>
+            )}
+          </div>
+        </main>
+      )}
       <footer className="app-footer">
         <span>
           <span className={`status-dot ${metadata?.available ? '' : 'offline'}`} />
-          {metadata?.available
+          {campusSource === 'live'
             ? 'Real OpenStreetMap walking network'
-            : 'Connecting to campus data…'}
+            : campusSource === 'connecting'
+              ? 'Bundled map · connecting to campus services'
+              : 'Saved campus snapshot · offline'}
         </span>
         <p>Estimated conditions may differ. Follow posted signs and use your judgment.</p>
         <button onClick={() => setPage('methodology')}>
@@ -376,7 +474,7 @@ export default function App() {
           ? `${result.routes.length} route options found. ${result.routes.find((r) => r.id === selected)?.name} selected.`
           : ''}
       </div>
-      {page === 'respite' ? <RespiteBuddy stops={stops} onClose={() => setPage(null)} /> : page && <InfoDialog page={page} metadata={metadata} onClose={() => setPage(null)} />}
+      {page && <InfoDialog page={page} metadata={metadata} onClose={() => setPage(null)} />}
     </div>
   )
 }

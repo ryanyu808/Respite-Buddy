@@ -1,0 +1,31 @@
+[
+  {
+    "id": "illustrative-alumni-park",
+    "name": "Alumni Park (ILLUSTRATIVE ONLY)",
+    "building": null,
+    "building_code": null,
+    "floor": null,
+    "lat": 34.02063805,
+    "lng": -118.28452027335682,
+    "photo_url": null,
+    "indoor": null,
+    "hours": null,
+    "access": null,
+    "access_note": "Unknown. This example does not establish access.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "ILLUSTRATIVE RECORD SHAPE ONLY: coordinates come from the committed OSM snapshot; no conditions or amenities are verified. Do not import as scouted data.",
+    "source_url": "https://www.openstreetmap.org/way/154906676",
+    "data_kind": "illustrative",
+    "purpose": "general"
+  }
+]

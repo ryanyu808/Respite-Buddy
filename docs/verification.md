@@ -1,5 +1,7 @@
 # Verification record
 
+The latest Respite Buddy implementation results (83 backend, 29 frontend, 8 browser tests) are recorded in the [current handoff](respite-buddy.md#verified-in-this-implementation). The record below describes the original NeuroRoute baseline.
+
 Verified October 16, 2026 (America/Los_Angeles), on Windows with Python 3.12 and project-local Node 22.23.3. Exact dependency versions are in the Python and npm lockfiles.
 
 | Check | Result |

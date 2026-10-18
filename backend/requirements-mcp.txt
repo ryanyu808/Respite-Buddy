@@ -1,0 +1,3 @@
+# MCP adapter; included by both standard backend requirements files.
+# FastMCP's requested mount/lifecycle API is on the SDK's supported v1 line.
+mcp==1.30.0

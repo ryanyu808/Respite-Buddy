@@ -16,15 +16,7 @@ export const PRESETS: Record<string, Preferences> = {
 export function loadPreferences(): Preferences {
   try {
     const p = JSON.parse(localStorage.getItem('neuroroute-preferences') || 'null')
-    if (
-      !p ||
-      !['noise', 'crowds', 'traffic', 'green'].every(
-        (k) => Number.isInteger(p[k]) && p[k] >= 0 && p[k] <= 100,
-      ) ||
-      !['fastest', 'balanced', 'calmest'].includes(p.pace) ||
-      ![10, 20, 30, null].includes(p.max_detour)
-    )
-      return { ...DEFAULTS }
+    if (!isPreferences(p)) return { ...DEFAULTS }
     return p
   } catch {
     return { ...DEFAULTS }
@@ -32,4 +24,19 @@ export function loadPreferences(): Preferences {
 }
 export function distance(meters: number) {
   return meters >= 1000 ? `${(meters / 1000).toFixed(2)} km` : `${Math.round(meters)} m`
+}
+export function isPreferences(value: unknown): value is Preferences {
+  if (!value || typeof value !== 'object') return false
+  const p = value as Record<string, unknown>
+  return (
+    ['noise', 'crowds', 'traffic', 'green'].every(
+      (key) =>
+        typeof p[key] === 'number' &&
+        Number.isInteger(p[key]) &&
+        (p[key] as number) >= 0 &&
+        (p[key] as number) <= 100,
+    ) &&
+    ['fastest', 'balanced', 'calmest'].includes(p.pace as string) &&
+    [10, 20, 30, null].includes(p.max_detour as number | null)
+  )
 }

@@ -42,14 +42,6 @@ export function RouteCard({
           <Footprints size={14} />
           {distance(route.distance_m)}
         </span>
-        <span className="exposure-value">
-          {route.exposure}
-          <small>
-            /100
-            <br />
-            est. exposure
-          </small>
-        </span>
       </div>
       <div className="route-card-bottom">
         <span>
@@ -58,7 +50,7 @@ export function RouteCard({
             ? `+${route.extra_minutes.toFixed(1)} min`
             : 'Shortest walking distance'}
         </span>
-        {route.reduction_pct > 0 && <span>{Math.round(route.reduction_pct)}% lower estimate</span>}
+        <span>{Math.round(route.major_road_m)} m on major-road segments</span>
       </div>
     </button>
   )

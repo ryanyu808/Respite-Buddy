@@ -1,4 +1,4 @@
-import { AudioLines, Users, CarFront, Trees, RotateCcw } from 'lucide-react'
+import { AudioLines, CarFront, Trees, RotateCcw } from 'lucide-react'
 import { DEFAULTS, PRESETS } from '../preferences'
 import type { Preferences } from '../types'
 
@@ -8,12 +8,6 @@ const controls = [
     label: 'Noise sensitivity',
     description: 'Prefer paths farther from major roads.',
     icon: AudioLines,
-  },
-  {
-    key: 'crowds',
-    label: 'Crowd sensitivity',
-    description: 'Data unavailable · saved for future coverage.',
-    icon: Users,
   },
   {
     key: 'traffic',
@@ -32,9 +26,11 @@ const controls = [
 export function PreferencesPanel({
   value,
   onChange,
+  showPresets = true,
 }: {
   value: Preferences
   onChange: (p: Preferences) => void
+  showPresets?: boolean
 }) {
   return (
     <section className="preferences" aria-labelledby="preferences-title">
@@ -50,19 +46,23 @@ export function PreferencesPanel({
         </button>
       </div>
       <p className="section-description">A little quieter. A little greener. Up to you.</p>
-      <div className="preset-list">
-        {Object.entries(PRESETS).map(([name, settings]) => (
-          <button
-            key={name}
-            className={JSON.stringify(value) === JSON.stringify(settings) ? 'chip active' : 'chip'}
-            onClick={() => onChange({ ...settings })}
-          >
-            {name}
-          </button>
-        ))}
-      </div>
+      {showPresets && (
+        <div className="preset-list">
+          {Object.entries(PRESETS).map(([name, settings]) => (
+            <button
+              key={name}
+              className={
+                JSON.stringify(value) === JSON.stringify(settings) ? 'chip active' : 'chip'
+              }
+              onClick={() => onChange({ ...settings })}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+      )}
       {controls.map(({ key, label, description, icon: Icon }) => (
-        <div className={`slider-control ${key === 'crowds' ? 'unavailable' : ''}`} key={key}>
+        <div className="slider-control" key={key}>
           <div className="slider-heading">
             <label htmlFor={`preference-${key}`}>
               <Icon size={17} />

@@ -1,5 +1,11 @@
-# NeuroRoute
-AI-powered sensory-aware navigation for more accessible walking routes.
+# Respite Buddy (built on NeuroRoute)
+Find somewhere to reset on campus before your next class, with existing sensory-aware walking navigation.
+
+The primary experience now ranks reset spots by time left to rest, using the existing NeuroRoute engine for both walking legs. The website and four MCP tools share the same FastAPI service. Advanced walking preferences and the original fastest/calmer/balanced comparison remain available under **Plan a walk** and **Fine-tune**.
+
+The live scout library is currently empty. Import real records using the [scouting guide](docs/scouting.md), [JSON schema](backend/data/respite-spots.schema.json), and [blank template](backend/data/respite-spots.scouting-template.json). The sample demo uses real OSM coordinates and router-computed paths with explicitly simulated spot attributes; it does not establish actual access, hours, quietness, crowd levels or safety. No location is labeled scout-verified without a real name and date.
+
+See the [Respite Buddy handoff](docs/respite-buddy.md) for deployment, API, demo instructions and limitations, and [MCP setup](docs/mcp.md) for the Claude connector. Protocol tests do not establish a successful Claude account connection.
 
 **Find your calmer way.** A working USC walking-navigation prototype for the USC AI Product Showdown. Compare real walking paths using your preferences for road exposure, noise-related geographic proxies and proximity to green spaces.
 
@@ -17,7 +23,7 @@ The shortest route is not always the most comfortable route. NeuroRoute gives pe
 - Keyboard controls, visible focus, reduced motion, high contrast, text summaries and responsive desktop/mobile layouts.
 - Methodology, source freshness, missing-data notes and privacy information in the app.
 
-Crowd data is **unavailable**: its slider is saved but does not affect routing. Noise/traffic scores are static geographic estimates, not measured conditions. This is a hackathon prototype, not production navigation or a medical device.
+Live crowd data is **unavailable**. The inactive crowd slider has been removed; dated typical-condition scout notes, when supplied, include source and age. Noise/traffic scores remain internally available geographic estimates. The interface emphasizes walking time and mapped road characteristics.
 
 ## Stack and structure
 
@@ -69,6 +75,24 @@ $env:PATH = "$PWD\tmp\node-v22.23.3-win-x64;$env:PATH"
 ```
 
 ## Run the app
+
+### macOS / Linux setup
+
+Preserve any existing `.env`. From a fresh checkout with Python 3.12 and Node 22 installed:
+
+```sh
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r backend/requirements-lock.txt
+cd frontend
+npm ci
+cd ..
+.venv/bin/python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000
+# In another terminal:
+cd frontend
+npm run dev
+```
+
+No external API key is needed. The geographic snapshot is already tracked in Git. To run tests use `.venv/bin/python -m pytest backend/tests -q` and, in `frontend`, `npm test` and `npm run build`.
 
 In PowerShell terminal 1, from the root:
 
@@ -160,7 +184,7 @@ Environment variable: VITE_API_BASE_URL=https://<your-render-service>.onrender.c
 
 `VITE_API_BASE_URL` is the exact frontend variable used by `frontend/src/services/api.ts`. Set it for Production, Preview and Development as appropriate. Do not put `OPENAI_API_KEY` in Vercel. Redeploy after changing it because Vite embeds `VITE_*` values at build time. Local development leaves it blank and uses the Vite `/api` proxy.
 
-The graph is loaded once at startup. Its compressed file is about 350 KB and the full snapshot is under 500 KB. Local startup and tests fit comfortably within ordinary developer memory, but hosted Render memory under the 512 MB cgroup was not directly observable here; monitor deploy logs for actual hosted usage. Render Free may spin down when idle, so the first request can be slow. The remaining external setup blockers are the real Render and Vercel URLs needed for `FRONTEND_URL` and `VITE_API_BASE_URL`.
+The graph is loaded once at startup. Its compressed file is about 350 KB and the full snapshot is under 500 KB. Local startup and tests fit comfortably within ordinary developer memory, but hosted Render memory under the 512 MB cgroup was not directly observable here; monitor deploy logs for actual hosted usage. Render Free may spin down when idle, so the first request can be slow. The existing service URLs and production CORS have been verified; use the exact current settings in the [Respite Buddy deployment handoff](docs/respite-buddy.md#update-the-existing-deployments).
 
 ## Tests and production build
 

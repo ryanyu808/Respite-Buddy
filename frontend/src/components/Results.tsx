@@ -3,6 +3,7 @@ import { ArrowUpRight, Info, Leaf, LoaderCircle, Sparkles, X } from 'lucide-reac
 import type { RouteRequest, RouteResponse } from '../types'
 import { RouteCard } from './RouteCard'
 import { api } from '../services/api'
+import { routeDescription } from '../respite'
 
 export function Results({
   result,
@@ -78,7 +79,22 @@ export function Results({
           No substantially different calmer alternative was found within your detour limit.
         </p>
       )}
-      <section className="route-breakdown">
+      <section className="explanation">
+        <h3>Mapped route characteristics</h3>
+        <p>
+          {routeDescription(
+            route,
+            result.routes.find((item) => item.roles.includes('fastest')),
+          )}
+        </p>
+        <p>Road exposure is modeled from map geography, not measured sensory conditions.</p>
+      </section>
+      <details className="route-breakdown">
+        <summary>Model details · geographic proxies</summary>
+        <p>
+          Relative modeled indices, not measured sound, stress or live conditions. These values
+          depend on your preferences.
+        </p>
         <h3>
           A closer look <span>Modeled indices</span>
         </h3>
@@ -102,7 +118,7 @@ export function Results({
           </div>
         ))}
         <p>Crowd data unavailable · not included in scores.</p>
-      </section>
+      </details>
       <section className="explanation">
         <div className="section-heading">
           <h3>
@@ -111,7 +127,14 @@ export function Results({
           </h3>
           <span className="mode-label">{mode}</span>
         </div>
-        <p>{explanation}</p>
+        <p>
+          {mode === 'rule-based'
+            ? routeDescription(
+                route,
+                result.routes.find((item) => item.roles.includes('fastest')),
+              )
+            : explanation}
+        </p>
         <button disabled={busy} className="text-button" onClick={() => void explain()}>
           {busy ? <LoaderCircle size={14} className="spin" /> : <ArrowUpRight size={14} />}Explain
           the tradeoff
