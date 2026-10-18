@@ -131,7 +131,7 @@ test('directory strict outlet and food filters show documented matches without p
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Campus spaces', exact: true }).click()
-  await expect(page.getByRole('article')).toHaveCount(34)
+  await expect(page.getByRole('article')).toHaveCount(36)
   await page.getByText('Adjust · optional filters', { exact: true }).click()
   await page.getByRole('button', { name: 'Need an outlet', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(6)

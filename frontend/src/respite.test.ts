@@ -132,7 +132,7 @@ describe('saved demos and session exclusions', () => {
     expect(fetch).not.toHaveBeenCalled()
   })
   it('matches every time chip and single need, honest empty results, and 9 PM', () => {
-    for (const minutes of [5, 10, 12, 15, 20]) {
+    for (const minutes of [15, 30, 45, 60]) {
       for (const needs of [
         [],
         ['quiet'],
@@ -165,21 +165,19 @@ describe('saved demos and session exclusions', () => {
   })
   it('never substitutes a saved route for unmatched, live, or modified inputs', () => {
     for (const input of [
-      { minutes: 7 },
       { demo: false },
       { near: 'JKP' },
       { next_class: 'JKP' },
       { usc_id: true },
       { preferences: { ...DEFAULTS, noise: 1 } },
-      { demo_time: '2026-10-19T16:00:00-07:00' },
     ])
       expect(savedDemo({ ...base, ...input })).toBeNull()
   })
   it('replays an exact original deadline but never extends an altered or expired window', () => {
     const deadline = savedDemo(base)!.response.deadline
     expect(savedDemo({ ...base, deadline })).not.toBeNull()
-    expect(savedDemo({ ...base, deadline: '2026-10-19T13:10:00-07:00' })).toBeNull()
-    expect(savedDemo({ ...base, deadline: '2026-10-19T12:00:00-07:00' })).toBeNull()
+    expect(savedDemo({ ...base, deadline: '2026-10-19T13:10:00-07:00' })?.response.minutes).toBe(10)
+    expect(savedDemo({ ...base, deadline: '2026-10-19T12:00:00-07:00' })?.response.recommendations).toHaveLength(0)
   })
   it('swaps locally, updates backups and restores spots when the exclusion expires', async () => {
     const id = savedDemo(base)!.response.recommendations[0].spot.id

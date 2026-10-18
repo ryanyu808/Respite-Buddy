@@ -43,6 +43,7 @@ type Gap = {
   end: string
   recommendation: Recommendation | null
   recommendations?: Recommendation[]
+  documented_options?: Recommendation[]
   notes: string[]
   reset_request: ResetRequest
 }
@@ -491,6 +492,15 @@ export function MySchedule({
                   <p>
                     We're still confirming campus spaces. You can explore documented locations or
                     try the sample demo.
+                  </p>
+                )}
+                {!!gap.documented_options?.length && (
+                  <p>
+                    Documented indoor options (entry and hours unconfirmed):{' '}
+                    {gap.documented_options
+                      .map((item) => item.spot.building ?? item.spot.name)
+                      .join(' · ')}
+                    . Open this break to see provisional walking and rest times.
                   </p>
                 )}
                 <div className="action-row">

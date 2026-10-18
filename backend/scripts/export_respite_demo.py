@@ -18,7 +18,10 @@ def build():
     supported = ['quiet','seated','outdoor']
     need_sets = [list(group) for size in range(4) for group in combinations(supported,size)]
     need_sets += [['dim'],['few_people'],['indoor']]
-    for minutes in [5,10,12,15,20]:
+    need_sets += [['quiet','indoor'], ['seated','indoor'], ['quiet','seated','indoor']]
+    # Retain older deep links, but the UI only offers 15/30/45/60. The 240-minute
+    # seed supports arbitrary selected-clock demo windows from the same real routes.
+    for minutes in [5,10,12,15,20,30,45,60,240]:
         for needs in need_sets:
             for next_class in [None,'TCC']:
                 for demo_time in [None, datetime.fromisoformat('2026-10-19T21:00:00-07:00')]:

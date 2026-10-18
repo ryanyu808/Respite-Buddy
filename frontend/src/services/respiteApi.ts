@@ -9,6 +9,7 @@ import {
 } from '../respite'
 import { FALLBACK } from '../data/fallback'
 import { DEFAULT_FILTERS, matchesFilters } from '../smartFilters'
+import { inZone, localInstant } from '../calendar/model'
 
 type DemoBundle = {
   request: ResetRequest
@@ -74,10 +75,74 @@ function sameRequest(a: ResetRequest, b: ResetRequest, response: ResetResponse) 
 export function savedDemo(request: ResetRequest): ResetResult | null {
   const bundle = Object.values(bundles)[0]
   if (!bundle) return null
-  const scenario = [
+  const lookup =
+    request.filters?.indoor && !request.needs.includes('indoor')
+      ? { ...request, needs: [...request.needs, 'indoor' as const] }
+      : request
+  const scenarios = [
     { request: bundle.request, response: bundle.response },
     ...(bundle.scenarios ?? []),
-  ].find((item) => sameRequest(request, item.request, item.response))
+  ]
+  let scenario = scenarios.find((item) => sameRequest(lookup, item.request, item.response))
+  if (
+    !scenario &&
+    lookup.demo &&
+    !lookup.now &&
+    Number.isInteger(lookup.minutes) &&
+    lookup.minutes >= 1 &&
+    lookup.minutes <= 240
+  ) {
+    const seed = scenarios.find((item) =>
+      sameRequest(
+        { ...lookup, minutes: 240, demo_time: DEMO_TIME, deadline: undefined },
+        item.request,
+        item.response,
+      ),
+    )
+    if (seed) {
+      const clock = lookup.demo_time ?? DEMO_TIME
+      const at = Date.parse(clock)
+      if (!Number.isFinite(at)) return null
+      const deadline = Math.min(
+        at + lookup.minutes * 60000,
+        Date.parse(lookup.deadline ?? new Date(at + lookup.minutes * 60000).toISOString()),
+      )
+      if (!Number.isFinite(deadline)) return null
+      const date = inZone(clock).toPlainDate().toString()
+      const hour = inZone(clock).hour
+      const closing = Date.parse(localInstant(date, '19:00'))
+      const recommendations = seed.response.recommendations
+        .flatMap((item) => {
+          const leave = Math.min(deadline - (item.walk_to_class_min ?? 0) * 60000, closing)
+          const rest = Math.floor((leave - at) / 60000) - item.walk_to_min
+          if (hour < 7 || hour >= 19 || rest <= 0) return []
+          const link = new URL(item.deep_link)
+          link.searchParams.set('minutes', String(lookup.minutes))
+          const context = JSON.parse(decodeURIComponent(link.hash.slice(7)))
+          link.hash = `reset=${encodeURIComponent(JSON.stringify({ ...context, demo_time: clock, deadline: new Date(deadline).toISOString() }))}`
+          return [
+            {
+              ...item,
+              rest_min: rest,
+              leave_by: new Date(leave).toISOString(),
+              tight_on_time: rest <= 3,
+              deep_link: link.toString(),
+            },
+          ]
+        })
+        .sort((a, b) => b.rest_min - a.rest_min || a.spot.id.localeCompare(b.spot.id))
+      scenario = {
+        request: lookup,
+        response: {
+          ...seed.response,
+          evaluated_at: clock,
+          deadline: new Date(deadline).toISOString(),
+          minutes: Math.max(0, Math.floor((deadline - at) / 60000)),
+          recommendations,
+        },
+      }
+    }
+  }
   if (!scenario) return null
   const exclusions = activeExclusions(request.exclusions ?? [])
   const recommendations = scenario.response.recommendations.filter(

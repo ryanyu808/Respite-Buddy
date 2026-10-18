@@ -92,6 +92,7 @@ export function knownAttribute(spot: DirectorySpot, field: keyof Spot) {
   return (
     spot[field] != null &&
     Boolean(
+      spot.data_kind === 'illustrative' ||
       isScouted(spot) ||
       spot.evidence?.[field] ||
       spot.provenance?.some(

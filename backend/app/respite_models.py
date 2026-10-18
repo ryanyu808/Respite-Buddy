@@ -193,6 +193,8 @@ class ResetResponse(StrictModel):
     origin: Point
     next_class: Point | None
     recommendations: list[Recommendation]
+    # Separate exploration candidates, never counted as verified recommendations.
+    documented_options: list[Recommendation] = Field(default_factory=list)
     notes: list[str]
     exclusions: list[Exclusion]
 

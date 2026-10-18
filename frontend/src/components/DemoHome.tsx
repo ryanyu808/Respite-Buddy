@@ -14,22 +14,28 @@ import { DEFAULTS } from '../preferences'
 import { DEMO_TIME, timeLabel, type Recommendation } from '../respite'
 import { savedDemo } from '../services/respiteApi'
 import { MapView } from './MapView'
+import { BreakTimeControls } from './BreakTimeControls'
 import '../demo-home.css'
 
 // Replay the existing engine's saved two-leg routes, not invented campus observations.
-const DEMO = savedDemo({
-  near: 'Leavey',
-  next_class: 'TCC',
-  minutes: 15,
-  needs: [],
-  demo: true,
-  demo_time: DEMO_TIME,
-  usc_id: false,
-  preferences: { ...DEFAULTS },
-})?.response
+function demoResult(minutes: number, clock: string, deadline: string | undefined, indoor: boolean) {
+  return savedDemo({
+    near: 'Leavey',
+    next_class: 'TCC',
+    minutes,
+    needs: indoor ? ['indoor'] : [],
+    demo: true,
+    demo_time: clock,
+    deadline,
+    usc_id: false,
+    preferences: { ...DEFAULTS },
+  })?.response
+}
 
 const nameOf = (item: Recommendation) => item.spot.name.replace(/\s*\(sample\)$/, '')
 function description(item: Recommendation) {
+  if (item.spot.indoor)
+    return 'An indoor option for your pause. Entry and conditions are simulated in this demo.'
   if (item.spot.name.includes('Hutton')) return 'A little green space for a pause between classes.'
   if (item.spot.name.includes('Associates'))
     return 'A change of scenery, with your next stop close by.'
@@ -43,6 +49,11 @@ export function DemoHome({
   features: FeatureCollection | null
   onLive: () => void
 }) {
+  const [minutes, setMinutes] = useState(15)
+  const [clock, setClock] = useState(DEMO_TIME)
+  const [deadline, setDeadline] = useState<string | undefined>()
+  const [indoor, setIndoor] = useState(false)
+  const DEMO = demoResult(minutes, clock, deadline, indoor)
   const [skipped, setSkipped] = useState<string[]>([])
   const [offset, setOffset] = useState(0)
   const [walking, setWalking] = useState<Recommendation | null>(null)
@@ -68,8 +79,8 @@ export function DemoHome({
   }
   function startWalk(item: Recommendation) {
     setWalking(item)
-    setLeg('spot')
-    setRouteId(item.route_to_spot?.recommended_id ?? '')
+    setLeg(item.route_to_spot ? 'spot' : 'class')
+    setRouteId(item.route_to_spot?.recommended_id ?? item.route_to_class?.recommended_id ?? '')
     requestAnimationFrame(() => {
       routeRef.current?.focus({ preventScroll: true })
       routeRef.current?.scrollIntoView({ block: 'start', behavior: 'instant' })
@@ -108,7 +119,15 @@ export function DemoHome({
             className="primary-button demo-find"
             onClick={() => {
               setWalking(null)
-              if (!options.length) setSkipped([])
+              if (!options.length) {
+                setSkipped([])
+                if (!DEMO?.recommendations.length) {
+                  setMinutes(15)
+                  setClock(DEMO_TIME)
+                  setDeadline(undefined)
+                  setNotice('Restarted the 15-minute afternoon sample.')
+                }
+              }
               focusOptions()
             }}
           >
@@ -124,12 +143,15 @@ export function DemoHome({
             <Trees size={35} aria-hidden="true" />
           </div>
           <p className="demo-eyebrow">LET’S TRY A CAMPUS BREAK</p>
-          <strong>15 minutes, just for you.</strong>
+          <strong>{minutes} minutes, just for you.</strong>
           <p>
             <MapPin size={16} aria-hidden="true" /> Starting at Leavey Library
           </p>
           <p>
-            <Clock3 size={16} aria-hidden="true" /> Next stop: Tutor Campus Center at 1:15 PM
+            <Clock3 size={16} aria-hidden="true" /> Next stop: Tutor Campus Center at{' '}
+            {timeLabel(
+              DEMO?.deadline ?? new Date(Date.parse(clock) + minutes * 60000).toISOString(),
+            )}
           </p>
           <small>Sample starting point and class. Not your location or calendar.</small>
         </aside>
@@ -154,6 +176,12 @@ export function DemoHome({
           <h2 id="demo-route-title">
             {leg === 'spot' ? `Let’s walk to ${nameOf(walking)}.` : 'On to Tutor Campus Center.'}
           </h2>
+          {walking.walk_to_min === 0 && (
+            <p>
+              You’re already at the approximate building location for {nameOf(walking)}. Indoor
+              travel is not included. The map below shows your next-class walk.
+            </p>
+          )}
           <p>
             {leg === 'spot'
               ? `Start at Leavey Library. About ${walking.walk_to_min} minutes on foot.`
@@ -256,6 +284,46 @@ export function DemoHome({
             </button>
           )}
         </div>
+        <details className="demo-adjust">
+          <summary>Change preferences · time &amp; indoor options</summary>
+          <BreakTimeControls
+            minutes={minutes}
+            clock={clock}
+            onPreset={(value) => {
+              setMinutes(value)
+              setDeadline(undefined)
+              setWalking(null)
+              setNotice('Time updated. Sample options are ready.')
+            }}
+            onWindow={(window) => {
+              setMinutes(window.minutes)
+              setClock(window.now)
+              setDeadline(window.deadline)
+              setWalking(null)
+              setNotice('Break calculated from your selected times. Sample conditions still apply.')
+            }}
+          />
+          <div className="reset-chips" role="group" aria-label="Sample setting">
+            <button
+              aria-pressed={!indoor}
+              onClick={() => {
+                setIndoor(false)
+                setWalking(null)
+              }}
+            >
+              Outdoors
+            </button>
+            <button
+              aria-pressed={indoor}
+              onClick={() => {
+                setIndoor(true)
+                setWalking(null)
+              }}
+            >
+              Indoors
+            </button>
+          </div>
+        </details>
         <p className="demo-status" role="status">
           {notice}
         </p>
@@ -274,7 +342,9 @@ export function DemoHome({
                 <span>{index === 0 ? 'Your best pick' : 'Another lovely option'}</span>
               </div>
               <div className="demo-spot-body">
-                <p className="demo-spot-type">OUTDOOR PAUSE · SAMPLE</p>
+                <p className="demo-spot-type">
+                  {item.spot.indoor ? 'INDOOR' : 'OUTDOOR'} PAUSE · SAMPLE
+                </p>
                 <h3 id={`demo-${item.spot.id}`}>{nameOf(item)}</h3>
                 <p className="demo-spot-description">{description(item)}</p>
                 <div className="demo-metrics">
@@ -307,7 +377,9 @@ export function DemoHome({
           <div className="demo-restart">
             <p>
               {DEMO
-                ? 'All three sample spots have been skipped. You can replay the demo in one tap.'
+                ? DEMO.recommendations.length
+                  ? 'All three sample spots have been skipped. You can replay the demo in one tap.'
+                  : 'No sample spot fits this time window. Try more time or a daytime break.'
                 : 'The saved demo is unavailable in this build. The live tools are still available below.'}
             </p>
             {DEMO && (
@@ -316,11 +388,17 @@ export function DemoHome({
                 onClick={() => {
                   setSkipped([])
                   setOffset(0)
+                  if (!DEMO.recommendations.length) {
+                    setMinutes(15)
+                    setClock(DEMO_TIME)
+                    setDeadline(undefined)
+                  }
                   setNotice('Demo restarted. All three sample spots are ready.')
                   focusOptions()
                 }}
               >
-                Restart demo <RotateCcw size={17} aria-hidden="true" />
+                {DEMO.recommendations.length ? 'Restart demo' : 'Reset to 15-minute demo'}{' '}
+                <RotateCcw size={17} aria-hidden="true" />
               </button>
             )}
           </div>

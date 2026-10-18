@@ -11,7 +11,7 @@ export const NEEDS = [
   { id: 'outdoor', label: 'Outdoor' },
 ] as const
 export type Need = (typeof NEEDS)[number]['id']
-export const TIME_CHIPS = [5, 10, 12, 15, 20]
+export { BREAK_INTERVALS as TIME_CHIPS } from './breakTime'
 export const DEMO_TIME = '2026-10-19T13:00:00-07:00'
 export const SETTINGS_KEY = 'respite-buddy-preferences'
 export type DevicePreferences = {
@@ -99,13 +99,14 @@ export type ResetResponse = {
   origin: Point
   next_class: Point | null
   recommendations: Recommendation[]
+  documented_options?: Recommendation[]
   notes: string[]
   exclusions: Exclusion[]
 }
 export type ResetResult = { response: ResetResponse; saved: boolean }
 
 const isNeed = (value: unknown): value is Need => NEEDS.some((need) => need.id === value)
-const validMinutes = (value: number) => Number.isInteger(value) && value >= 1 && value <= 180
+const validMinutes = (value: number) => Number.isInteger(value) && value >= 1 && value <= 240
 export function loadDevicePreferences(): DevicePreferences {
   try {
     const value = JSON.parse(localStorage.getItem(SETTINGS_KEY) || 'null')

@@ -1,0 +1,1053 @@
+{
+  "kind": "submitted_research",
+  "submitted_date": "2026-10-18",
+  "origin": "usc_respite_spots.md (team-provided research compilation)",
+  "notice": "Reported descriptions only, not independently verified scout observations. No noise/crowd estimates or reported hours are imported as confirmed attributes. Entries without verified building anchors have no map routing.",
+  "spots": [
+    {
+      "id": "submitted-restsc-nap-area-in-lipa",
+      "name": "RestSC nap area (in LIPA)",
+      "category": "Rest & nap spaces",
+      "existing_ids": [],
+      "reported_location": "Section of the Library for International & Public Affairs set aside for rest, separated by dividers.",
+      "reported_setting": "indoor",
+      "description": "Dedicated rest zone with 'moon pod' loungers, partitioned from the study area.",
+      "caveats": "Opened Feb 2024 as a pilot; hours assume it follows LIPA's hours. Confirm it is still in place before relying on it.",
+      "reported_access": "USC students (student-government program).",
+      "sources": [
+        {
+          "id": "dt_restsc_lipa",
+          "url": "https://dailytrojan.com/?p=199731"
+        },
+        {
+          "id": "lib_restsc_event",
+          "url": "https://libraries.usc.edu/node/99984"
+        },
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        }
+      ]
+    },
+    {
+      "id": "submitted-urc-student-lounge-meditation-lounge",
+      "name": "URC Student Lounge & Meditation Lounge",
+      "category": "Rest & nap spaces",
+      "existing_ids": [],
+      "reported_location": "University Religious Center: Student Lounge (room 106F, ground floor) and Meditation Lounge (room 202B).",
+      "reported_setting": "indoor",
+      "description": "Meditation Lounge has meditation cushions, couches and chairs. Students mention free tea in the downstairs lounge.",
+      "caveats": "ORSL still lists a 'RestSC Lounge' here, but the Daily Trojan reported RestSC moved to LIPA in 2024. Student Lounge is reservable after 5pm by groups. Confirm what is open before sending someone.",
+      "reported_access": "You don't have to be religious. ORSL office in room 106 can help with access.",
+      "sources": [
+        {
+          "id": "orsl_places",
+          "url": "https://orsl.usc.edu/life/places/"
+        },
+        {
+          "id": "orsl_reservations",
+          "url": "https://orsl.usc.edu/reservations/"
+        },
+        {
+          "id": "t360_askatrojan",
+          "url": "https://trojans360.com/our-responses-source/ask-a-trojan-whats-your-favourite-spot-on-campus-and-why"
+        },
+        {
+          "id": "dt_restsc_urc",
+          "url": "https://dailytrojan.com/?p=178524"
+        },
+        {
+          "id": "dt_restsc_lipa",
+          "url": "https://dailytrojan.com/?p=199731"
+        }
+      ]
+    },
+    {
+      "id": "submitted-little-chapel-of-silence",
+      "name": "Little Chapel of Silence",
+      "category": "Reflection, meditation & prayer",
+      "existing_ids": [],
+      "reported_location": "Northwest corner of Town and Gown, just behind the SAS building.",
+      "reported_setting": "indoor",
+      "description": "Tiny (about 225 sq ft) octagonal, nondenominational room, built for silence. Carved mural above the altar.",
+      "caveats": "Very small; if someone is already there it may feel occupied.",
+      "reported_access": "Open to the whole USC community, any or no faith.",
+      "sources": [
+        {
+          "id": "orsl_places",
+          "url": "https://orsl.usc.edu/life/places/"
+        },
+        {
+          "id": "usctoday_chapel",
+          "url": "https://today.usc.edu/the-little-chapel-of-silence-usc-campus-church-meditation/"
+        },
+        {
+          "id": "usctoday_faves",
+          "url": "https://today.usc.edu/best-usc-study-spots-relax-university-park-campus/"
+        }
+      ]
+    },
+    {
+      "id": "submitted-fishbowl-university-religious-center",
+      "name": "Fishbowl (University Religious Center)",
+      "category": "Reflection, meditation & prayer",
+      "existing_ids": [],
+      "reported_location": "Inside the University Religious Center.",
+      "reported_setting": "indoor",
+      "description": "Adaptable multifaith worship space that also hosts wellness-focused classes.",
+      "caveats": "May be in use for a class or service; check with the ORSL office (URC room 106).",
+      "reported_access": "Welcomes visitors; multifaith.",
+      "sources": [
+        {
+          "id": "orsl_places",
+          "url": "https://orsl.usc.edu/life/places/"
+        }
+      ]
+    },
+    {
+      "id": "submitted-urc-muslim-hindu-prayer-spaces",
+      "name": "URC Muslim & Hindu prayer spaces",
+      "category": "Reflection, meditation & prayer",
+      "existing_ids": [],
+      "reported_location": "University Religious Center, second floor: Muslim Prayer Space (room 204), Hindu Prayer Space (room 202A).",
+      "reported_setting": "indoor",
+      "description": "Dedicated prayer rooms. Wudu facilities in the second-floor bathrooms.",
+      "caveats": "Suggest only to users who want a prayer space.",
+      "reported_access": "Dedicated to those faith communities. If locked, ask at the ORSL office, room 106.",
+      "sources": [
+        {
+          "id": "orsl_places",
+          "url": "https://orsl.usc.edu/life/places/"
+        }
+      ]
+    },
+    {
+      "id": "submitted-hoose-library-of-philosophy",
+      "name": "Hoose Library of Philosophy",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [],
+      "reported_location": "Upper floor of Mudd Hall of Philosophy, at the Exposition Blvd end of Trousdale Parkway.",
+      "reported_setting": "indoor",
+      "description": "Cathedral-height reading room, stained glass, natural window light, chandeliers, dim/moody lighting, near-total silence. Some visitors come to take photos.",
+      "caveats": "Small, short hours, closed weekends. Services stop 15 min before close.",
+      "reported_access": "Open to USC students during library hours.",
+      "sources": [
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        },
+        {
+          "id": "lib_hoose_room",
+          "url": "https://libraries.usc.edu/locations/hoose-philosophy-library/main-reading-room"
+        },
+        {
+          "id": "chan_avery_2025",
+          "url": "https://chan.usc.edu/people/student-blog/avery/my-favorite-hidden-study-spots-at-university-park-campus"
+        },
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        },
+        {
+          "id": "dt_sorta_niche",
+          "url": "https://dailytrojan.com/?p=257023"
+        },
+        {
+          "id": "usctoday_faves",
+          "url": "https://today.usc.edu/best-usc-study-spots-relax-university-park-campus/"
+        }
+      ]
+    },
+    {
+      "id": "submitted-doheny-library-bookstacks",
+      "name": "Doheny Library Bookstacks",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [
+        "dml-stacks"
+      ],
+      "reported_location": "Inside Doheny Memorial Library; enter through the door just past the front desk (up the stairs from the main entrance).",
+      "reported_setting": "indoor",
+      "description": "Low ceilings, rows of shelves, old-book smell, air conditioned, very quiet. Maze-like layout.",
+      "caveats": "Low ceilings and maze-like aisles can feel enclosed or disorienting; easy to get turned around. Sources disagree on number of stack levels.",
+      "reported_access": "Open to USC students during Doheny hours.",
+      "sources": [
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        },
+        {
+          "id": "chan_avery_2025",
+          "url": "https://chan.usc.edu/people/student-blog/avery/my-favorite-hidden-study-spots-at-university-park-campus"
+        },
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        },
+        {
+          "id": "t360_askatrojan",
+          "url": "https://trojans360.com/our-responses-source/ask-a-trojan-whats-your-favourite-spot-on-campus-and-why"
+        }
+      ]
+    },
+    {
+      "id": "submitted-doheny-los-angeles-times-reference-room",
+      "name": "Doheny - Los Angeles Times Reference Room",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [
+        "dml-times"
+      ],
+      "reported_location": "Doheny Memorial Library.",
+      "reported_setting": "indoor",
+      "description": "Grand traditional reading room. Officially a quiet, individual-study space.",
+      "caveats": "USC Libraries describes it as one of the most popular study spaces, so seats can be scarce and the room feels busy even when quiet.",
+      "reported_access": "Open to USC students during Doheny hours.",
+      "sources": [
+        {
+          "id": "lib_doheny_ltrr",
+          "url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/los-angeles-times-reference-room"
+        },
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        }
+      ]
+    },
+    {
+      "id": "submitted-doheny-hall-of-honor-card-catalog-room",
+      "name": "Doheny - Hall of Honor (Card Catalog Room)",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [
+        "dml-hall-honor"
+      ],
+      "reported_location": "Doheny Memorial Library.",
+      "reported_setting": "indoor",
+      "description": "Designated quiet, individual study.",
+      "caveats": "",
+      "reported_access": "Open to USC students during Doheny hours.",
+      "sources": [
+        {
+          "id": "lib_doheny_ltrr",
+          "url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/los-angeles-times-reference-room"
+        },
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        }
+      ]
+    },
+    {
+      "id": "submitted-east-asian-library-entrance-couches-in-doheny",
+      "name": "East Asian Library entrance couches (in Doheny)",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [
+        "dml-east-asian"
+      ],
+      "reported_location": "Entrance to the East Asian Library inside Doheny, away from the main first-floor study areas.",
+      "reported_setting": "indoor",
+      "description": "Soft couches, cozy, little foot traffic.",
+      "caveats": "",
+      "reported_access": "Open to USC students during library hours.",
+      "sources": [
+        {
+          "id": "t360_nap",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-places-to-nap-on-campus"
+        },
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        }
+      ]
+    },
+    {
+      "id": "submitted-doheny-treasure-room",
+      "name": "Doheny - Treasure Room",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [
+        "dml-treasure"
+      ],
+      "reported_location": "Doheny Memorial Library.",
+      "reported_setting": "indoor",
+      "description": "Officially a talking-allowed space, so expect soft conversation.",
+      "caveats": "Not the place for silence; good when someone wants company without a loud room.",
+      "reported_access": "Open to USC students during Doheny hours.",
+      "sources": [
+        {
+          "id": "lib_doheny_ltrr",
+          "url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/los-angeles-times-reference-room"
+        },
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        }
+      ]
+    },
+    {
+      "id": "submitted-leavey-library-upper-floors",
+      "name": "Leavey Library (upper floors)",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [
+        "lvl-east3",
+        "lvl-study2"
+      ],
+      "reported_location": "Leavey Library, on McCarthy Quad. Third-floor desks overlook the quad.",
+      "reported_setting": "indoor",
+      "description": "Fluorescent, busy library; harder chairs; many seats near outlets. Early mornings are calm.",
+      "caveats": "Often full during the day and in exam season; students describe it as the default rather than a calm option. Best used early morning or late night.",
+      "reported_access": "USC students.",
+      "sources": [
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        },
+        {
+          "id": "usctoday_faves",
+          "url": "https://today.usc.edu/best-usc-study-spots-relax-university-park-campus/"
+        },
+        {
+          "id": "t360_underrated",
+          "url": "https://www.trojans360.com/trojans360posts/underrated-usc-campus-study-spots"
+        },
+        {
+          "id": "t360_nap",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-places-to-nap-on-campus"
+        }
+      ]
+    },
+    {
+      "id": "submitted-library-for-international-public-affairs-lipa",
+      "name": "Library for International & Public Affairs (LIPA)",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [],
+      "reported_location": "Ground floor of the Dr. Joseph Medicine Crow Center for International and Public Affairs (formerly VKC), the tower building off McCarthy Quad, northeast part of campus.",
+      "reported_setting": "indoor",
+      "description": "Smaller and calmer than Leavey or Doheny; smells like books; plush armchairs and sofas; carrels hidden in the stacks.",
+      "caveats": "Closed weekends.",
+      "reported_access": "USC students.",
+      "sources": [
+        {
+          "id": "lib_lipa",
+          "url": "https://libraries.usc.edu/locations/library-international-and-public-affairs"
+        },
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        },
+        {
+          "id": "t360_nap",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-places-to-nap-on-campus"
+        },
+        {
+          "id": "t360_comprehensive",
+          "url": "https://www.trojans360.com/trojans360posts/a-comprehensive-list-of-the-best-campus-study"
+        },
+        {
+          "id": "t360_5best",
+          "url": "https://www.trojans360.com/trojans360posts/5-best-places-to-study-on-campus"
+        }
+      ]
+    },
+    {
+      "id": "submitted-cinematic-arts-library-book-stacks",
+      "name": "Cinematic Arts Library book stacks",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [
+        "dml-cin-study"
+      ],
+      "reported_location": "USC Cinematic Arts Library.",
+      "reported_setting": "indoor",
+      "description": "Quiet stacks; not a group space.",
+      "caveats": "Recommendation is from 2015; the description may be dated.",
+      "reported_access": "USC students.",
+      "sources": [
+        {
+          "id": "dt_productivity_2015",
+          "url": "https://dailytrojan.com/2015/09/14/study-spaces-5-places-that-promote-productivity/"
+        },
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        }
+      ]
+    },
+    {
+      "id": "submitted-asa-v-call-law-library",
+      "name": "Asa V. Call Law Library",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [],
+      "reported_location": "USC Gould School of Law, near Figueroa/Exposition.",
+      "reported_setting": "indoor",
+      "description": "Recently renovated; three floors of silent workspace; very few people.",
+      "caveats": "Check access before suggesting during exam periods.",
+      "reported_access": "Open to non-law students most of the semester, but law students only during law exam weeks.",
+      "sources": [
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        },
+        {
+          "id": "t360_leavey_not_only",
+          "url": "https://trojans360.com/trojans360posts/leavey-is-not-your-only-option"
+        }
+      ]
+    },
+    {
+      "id": "submitted-architecture-fine-arts-library",
+      "name": "Architecture & Fine Arts Library",
+      "category": "Libraries & quiet reading rooms",
+      "existing_ids": [],
+      "reported_location": "Basement of Watt Hall (School of Architecture).",
+      "reported_setting": "indoor",
+      "description": "Design-forward, pleasant atmosphere.",
+      "caveats": "A student post noted it was under renovation; current state not confirmed.",
+      "reported_access": "USC students.",
+      "sources": [
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        },
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        }
+      ]
+    },
+    {
+      "id": "submitted-kortschak-center-kclc-quiet-study-room",
+      "name": "Kortschak Center (KCLC) Quiet Study Room",
+      "category": "Dedicated quiet study rooms",
+      "existing_ids": [
+        "kortschak-quiet"
+      ],
+      "reported_location": "Student Union, Suite 311 (3rd floor); the room is to the right of the front desk.",
+      "reported_setting": "indoor",
+      "description": "Purpose-built to minimize distractions: six study carrels, standing desks.",
+      "caveats": "Only six carrels. Hours not published on the pages found; likely office hours.",
+      "reported_access": "Any USC student. Scan the QR code at the front desk and choose 'Quiet Study Room'.",
+      "sources": [
+        {
+          "id": "kclc_quiet",
+          "url": "https://kortschakcenter.usc.edu/quiet-study-room/"
+        },
+        {
+          "id": "kclc_checkin",
+          "url": "https://app.tango.us/app/workflow/How-to-Visit-the-Study-Room-in-KCLC-7e8b2a86bb7d4cce86f857d97d7a3be0"
+        }
+      ]
+    },
+    {
+      "id": "submitted-student-union-cultural-center-lounges",
+      "name": "Student Union cultural center lounges",
+      "category": "Lounges & indoor hangouts",
+      "existing_ids": [],
+      "reported_location": "Student Union: Center for Black Cultural and Student Affairs (room 100), MENA Student Lounge (room 100), La CASA (400), Native American & Pasifika Student Lounge (405), APASS and LGBTQ+ Student Center (4th floor; rooms reported as 410/421 and 415).",
+      "reported_setting": "indoor",
+      "description": "Cozy, decorated lounges with couches; one student mentions blankets and stuffed animals at APASS.",
+      "caveats": "Frequent events; closed in the evenings. Suggest only when the user's identity fits or they ask.",
+      "reported_access": "Intended mainly for students from the community each center serves.",
+      "sources": [
+        {
+          "id": "t360_underrated",
+          "url": "https://www.trojans360.com/trojans360posts/underrated-usc-campus-study-spots"
+        },
+        {
+          "id": "t360_nap",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-places-to-nap-on-campus"
+        }
+      ]
+    },
+    {
+      "id": "submitted-sample-hall",
+      "name": "Sample Hall",
+      "category": "Lounges & indoor hangouts",
+      "existing_ids": [],
+      "reported_location": "The building between the Student Union and Tutor Campus Center that leads down to the basement ballrooms.",
+      "reported_setting": "indoor",
+      "description": "Large, ornate room with soft lighting and comfortable, private seats. Very quiet.",
+      "caveats": "Can feel 'too quiet' to some; not for groups.",
+      "reported_access": "Open to all students, despite looking formal.",
+      "sources": [
+        {
+          "id": "t360_underrated",
+          "url": "https://www.trojans360.com/trojans360posts/underrated-usc-campus-study-spots"
+        }
+      ]
+    },
+    {
+      "id": "submitted-tcc-trojan-family-room",
+      "name": "TCC Trojan Family Room",
+      "category": "Lounges & indoor hangouts",
+      "existing_ids": [],
+      "reported_location": "Main entry of the Ronald Tutor Campus Center.",
+      "reported_setting": "indoor",
+      "description": "Fireplace, high beamed ceiling, comfortable seating. Generally quiet per students, but it's the building entrance, so there's foot traffic.",
+      "caveats": "Building hours are from USC's Fall 2023 posting. Next to the busy food court.",
+      "reported_access": "Open to all.",
+      "sources": [
+        {
+          "id": "t360_nap",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-places-to-nap-on-campus"
+        },
+        {
+          "id": "tcc_events",
+          "url": "https://trojanevents.usc.edu/?p=21737"
+        }
+      ]
+    },
+    {
+      "id": "submitted-tcc-upper-floors-lounges-window-seats-balconies",
+      "name": "TCC upper floors (lounges, window seats, balconies)",
+      "category": "Lounges & indoor hangouts",
+      "existing_ids": [],
+      "reported_location": "Ronald Tutor Campus Center, 2nd and 3rd floors (grand staircase or elevator). Includes Trojan Generations Lounge (TCC 326), the Graduate Student Lounge, carpeted hallway window seats and balconies.",
+      "reported_setting": "indoor",
+      "description": "Above the lunch rush; window seating; balconies keep campus energy without the noise.",
+      "caveats": "Second-floor lounges are sometimes booked for events.",
+      "reported_access": "Students; Graduate Student Lounge is for grad students.",
+      "sources": [
+        {
+          "id": "dt_sorta_niche",
+          "url": "https://dailytrojan.com/?p=257023"
+        },
+        {
+          "id": "chan_avery_2025",
+          "url": "https://chan.usc.edu/people/student-blog/avery/my-favorite-hidden-study-spots-at-university-park-campus"
+        },
+        {
+          "id": "dt_productivity_2015",
+          "url": "https://dailytrojan.com/2015/09/14/study-spaces-5-places-that-promote-productivity/"
+        },
+        {
+          "id": "t360_5best",
+          "url": "https://www.trojans360.com/trojans360posts/5-best-places-to-study-on-campus"
+        },
+        {
+          "id": "tcc_events",
+          "url": "https://trojanevents.usc.edu/?p=21737"
+        }
+      ]
+    },
+    {
+      "id": "submitted-annenberg-digital-lounge",
+      "name": "Annenberg Digital Lounge",
+      "category": "Lounges & indoor hangouts",
+      "existing_ids": [],
+      "reported_location": "Third floor of Wallis Annenberg Hall (next to the bookstore), to the right of the elevator.",
+      "reported_setting": "indoor",
+      "description": "Bright, tastefully decorated; cushioned window ledges overlooking Lazzaro Plaza; low-volume music and talk. A student writer called it ideal for neurodivergent students.",
+      "caveats": "Getting more popular; seats can be limited. Not silent. The ground floor of the same building is loud.",
+      "reported_access": "Open to all students, not just Annenberg.",
+      "sources": [
+        {
+          "id": "t360_underrated",
+          "url": "https://www.trojans360.com/trojans360posts/underrated-usc-campus-study-spots"
+        },
+        {
+          "id": "dt_sorta_niche",
+          "url": "https://dailytrojan.com/?p=257023"
+        },
+        {
+          "id": "dt_productivity_2015",
+          "url": "https://dailytrojan.com/2015/09/14/study-spaces-5-places-that-promote-productivity/"
+        }
+      ]
+    },
+    {
+      "id": "submitted-old-annenberg-asc-lounge-patios",
+      "name": "Old Annenberg (ASC) lounge & patios",
+      "category": "Lounges & indoor hangouts",
+      "existing_ids": [],
+      "reported_location": "Annenberg School for Communication on Watt Way, across from the soccer field and Heritage Hall. Use the Watt Way entrance for the big room.",
+      "reported_setting": "indoor",
+      "description": "Large room with tables and comfy chairs; balconies and walkway tables with umbrellas. Field noise when people are playing outside.",
+      "caveats": "Occasional group work raises the noise level.",
+      "reported_access": "Open to students.",
+      "sources": [
+        {
+          "id": "t360_underrated",
+          "url": "https://www.trojans360.com/trojans360posts/underrated-usc-campus-study-spots"
+        },
+        {
+          "id": "t360_comprehensive",
+          "url": "https://www.trojans360.com/trojans360posts/a-comprehensive-list-of-the-best-campus-study"
+        },
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        }
+      ]
+    },
+    {
+      "id": "submitted-verna-peter-dauterive-hall-vpd",
+      "name": "Verna & Peter Dauterive Hall (VPD)",
+      "category": "Lounges & indoor hangouts",
+      "existing_ids": [],
+      "reported_location": "On Pardee Way behind Lewis Hall; lowest level has the most seating.",
+      "reported_setting": "indoor",
+      "description": "Clean, spacious, modern; long glass art piece hanging from the ceiling; outdoor balconies with comfy seats.",
+      "caveats": "",
+      "reported_access": "Open to students.",
+      "sources": [
+        {
+          "id": "t360_comprehensive",
+          "url": "https://www.trojans360.com/trojans360posts/a-comprehensive-list-of-the-best-campus-study"
+        },
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        }
+      ]
+    },
+    {
+      "id": "submitted-fertitta-hall-jff",
+      "name": "Fertitta Hall (JFF)",
+      "category": "Lounges & indoor hangouts",
+      "existing_ids": [],
+      "reported_location": "Corner of Figueroa and Exposition. Third-floor window seats are the quiet option; couches in the back are calmer than the main area.",
+      "reported_setting": "indoor",
+      "description": "Fireplace, rocking chairs, small courtyard. Cafe smells (sushi, dim sum) carry through the building.",
+      "caveats": "Can be loud and crowded. Marshall facilities are closed on some Saturdays (fall 2026: 10/31, 11/21).",
+      "reported_access": "Common areas open; breakout/study rooms are for Marshall students.",
+      "sources": [
+        {
+          "id": "t360_comprehensive",
+          "url": "https://www.trojans360.com/trojans360posts/a-comprehensive-list-of-the-best-campus-study"
+        },
+        {
+          "id": "admissions_hidden_gems",
+          "url": "https://www.admissionblog.usc.edu/p/usc-hidden-gems-and-favorite-spots"
+        },
+        {
+          "id": "lib_hours_fall2026",
+          "url": "https://libraries.usc.edu/sites/default/files/hours/2026-06/Fall%20hours%202026.pdf"
+        }
+      ]
+    },
+    {
+      "id": "submitted-taper-hall-lounges-empty-classrooms-thh-dmc",
+      "name": "Taper Hall lounges & empty classrooms (THH, DMC)",
+      "category": "Classroom-building nooks",
+      "existing_ids": [
+        "thh-lounge4"
+      ],
+      "reported_location": "Taper Hall on Trousdale near 34th St; empty classrooms in THH and DMC.",
+      "reported_setting": "indoor",
+      "description": "Taper lounges have couches, ottomans, big windows and natural light. Classrooms are quiet in afternoons and evenings.",
+      "caveats": "Very noisy during passing periods.",
+      "reported_access": "Open buildings; classrooms only when no class is scheduled.",
+      "sources": [
+        {
+          "id": "chan_avery_2025",
+          "url": "https://chan.usc.edu/people/student-blog/avery/my-favorite-hidden-study-spots-at-university-park-campus"
+        },
+        {
+          "id": "t360_comprehensive",
+          "url": "https://www.trojans360.com/trojans360posts/a-comprehensive-list-of-the-best-campus-study"
+        }
+      ]
+    },
+    {
+      "id": "submitted-gfs-couches",
+      "name": "GFS couches",
+      "category": "Classroom-building nooks",
+      "existing_ids": [],
+      "reported_location": "Couches in the GFS classroom building.",
+      "reported_setting": "indoor",
+      "description": "Dead quiet outside passing periods; noisy during them.",
+      "caveats": "Time it between passing periods.",
+      "reported_access": "Open building.",
+      "sources": [
+        {
+          "id": "t360_nap",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-places-to-nap-on-campus"
+        }
+      ]
+    },
+    {
+      "id": "submitted-mudd-hall-courtyard",
+      "name": "Mudd Hall Courtyard",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "Courtyard of Mudd Hall of Philosophy, edge of campus near Exposition Blvd.",
+      "reported_setting": "outdoor",
+      "description": "Central fountain, rose bushes, palm trees; only about three tables, so it stays calm.",
+      "caveats": "Heavy foot traffic on football game days (on the route to the Coliseum). Limited seating.",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "t360_quaint",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-quaint-areas-on-usc-campus"
+        },
+        {
+          "id": "admissions_hidden_gems",
+          "url": "https://www.admissionblog.usc.edu/p/usc-hidden-gems-and-favorite-spots"
+        }
+      ]
+    },
+    {
+      "id": "submitted-nazarian-pavilion-courtyard-doheny-courtyard-literatea",
+      "name": "Nazarian Pavilion Courtyard (Doheny courtyard) + Literatea",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [
+        "dining-literatea"
+      ],
+      "reported_location": "Behind Doheny Library, through the iron gate; next to the Literatea cafe.",
+      "reported_setting": "outdoor",
+      "description": "Enclosed by brick walls, umbrella-shaded tables, cafe nearby (boba, snacks). Secluded feel.",
+      "caveats": "One of the more popular outdoor spots; Literatea hours not verified.",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        },
+        {
+          "id": "t360_quaint",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-quaint-areas-on-usc-campus"
+        },
+        {
+          "id": "admissions_hidden_gems",
+          "url": "https://www.admissionblog.usc.edu/p/usc-hidden-gems-and-favorite-spots"
+        },
+        {
+          "id": "t360_askatrojan",
+          "url": "https://trojans360.com/our-responses-source/ask-a-trojan-whats-your-favourite-spot-on-campus-and-why"
+        },
+        {
+          "id": "dt_sorta_niche",
+          "url": "https://dailytrojan.com/?p=257023"
+        }
+      ]
+    },
+    {
+      "id": "submitted-watt-hall-harris-hall-courtyards",
+      "name": "Watt Hall & Harris Hall courtyards",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "Courtyards of the two architecture buildings; more grass and landscaping behind the school toward Exposition Blvd.",
+      "reported_setting": "outdoor",
+      "description": "Open air, grass, landscaped areas.",
+      "caveats": "",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        }
+      ]
+    },
+    {
+      "id": "submitted-roski-courtyard",
+      "name": "Roski Courtyard",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "Small square in the middle of the USC Roski School of Art and Design, steps from the Fisher Museum of Art.",
+      "reported_setting": "outdoor",
+      "description": "Large shade trees, tulip beds, bright yellow tables and chairs. Quiet even with design students passing through.",
+      "caveats": "",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "t360_quaint",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-quaint-areas-on-usc-campus"
+        }
+      ]
+    },
+    {
+      "id": "submitted-town-and-gown-hancock-garden-area",
+      "name": "Town and Gown / Hancock garden area",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "The park-like area between Town and Gown and the Allan Hancock Foundation Building.",
+      "reported_setting": "outdoor",
+      "description": "Flowers, trees, red brick, benches; feels removed from the main walkways.",
+      "caveats": "",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "usctoday_faves",
+          "url": "https://today.usc.edu/best-usc-study-spots-relax-university-park-campus/"
+        }
+      ]
+    },
+    {
+      "id": "submitted-zumberge-hall-courtyard",
+      "name": "Zumberge Hall courtyard",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "Through the iron gates of Zumberge Hall of Science; turn right at the tile mural.",
+      "reported_setting": "outdoor",
+      "description": "Small courtyard with a few benches and trees; painted timeline of life on Earth on one wall. The entrance mural has a table where people leave natural objects as offerings.",
+      "caveats": "",
+      "reported_access": "Open space; mural area accessible Mon-Fri 9am-5pm.",
+      "sources": [
+        {
+          "id": "t360_quaint",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-quaint-areas-on-usc-campus"
+        },
+        {
+          "id": "orsl_places",
+          "url": "https://orsl.usc.edu/life/places/"
+        }
+      ]
+    },
+    {
+      "id": "submitted-school-of-cinematic-arts-balconies-courtyard",
+      "name": "School of Cinematic Arts balconies & courtyard",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "SCA complex at 34th St and Watt Way; third-floor balconies overlook the courtyard.",
+      "reported_setting": "outdoor",
+      "description": "Fountain courtyard, outdoor patio seating on the balconies.",
+      "caveats": "Main courtyard fills up during the school day; limited seats.",
+      "reported_access": "Balconies open to all students. Upper indoor floors are signed SCA-students-only.",
+      "sources": [
+        {
+          "id": "dt_sorta_niche",
+          "url": "https://dailytrojan.com/?p=257023"
+        },
+        {
+          "id": "ali_hidden_gems",
+          "url": "https://ali.usc.edu/blog/tag/gpa/"
+        },
+        {
+          "id": "t360_comprehensive",
+          "url": "https://www.trojans360.com/trojans360posts/a-comprehensive-list-of-the-best-campus-study"
+        },
+        {
+          "id": "t360_nap",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-places-to-nap-on-campus"
+        }
+      ]
+    },
+    {
+      "id": "submitted-sci-scb-balconies-back-of-the-sca-complex",
+      "name": "SCI & SCB balconies (back of the SCA complex)",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "Past the main SCA courtyard, in the SCI and SCB buildings (USC Games / animation).",
+      "reported_setting": "outdoor",
+      "description": "Outdoor balconies, rarely occupied.",
+      "caveats": "Exposed to weather.",
+      "reported_access": "Easy to reach; may feel unfamiliar to non-SCA students.",
+      "sources": [
+        {
+          "id": "t360_underrated",
+          "url": "https://www.trojans360.com/trojans360posts/underrated-usc-campus-study-spots"
+        }
+      ]
+    },
+    {
+      "id": "submitted-engineering-quad-archimedes-plaza",
+      "name": "Engineering Quad & Archimedes Plaza",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "Viterbi engineering area between Downey Way and Bloom Walk.",
+      "reported_setting": "outdoor",
+      "description": "Fountain, cardinal umbrellas for shade, tables and armchairs; low ambient noise off-peak.",
+      "caveats": "Packed at peak hours.",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "t360_comprehensive",
+          "url": "https://www.trojans360.com/trojans360posts/a-comprehensive-list-of-the-best-campus-study"
+        },
+        {
+          "id": "t360_5best",
+          "url": "https://www.trojans360.com/trojans360posts/5-best-places-to-study-on-campus"
+        },
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        }
+      ]
+    },
+    {
+      "id": "submitted-tutor-hall-rth-courtyard",
+      "name": "Tutor Hall (RTH) courtyard",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "On McClintock Ave across from the Gerontology building; go up a few stairs to the patio behind the building.",
+      "reported_setting": "outdoor",
+      "description": "Fountain, water sounds, lots of greenery.",
+      "caveats": "",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "t360_comprehensive",
+          "url": "https://www.trojans360.com/trojans360posts/a-comprehensive-list-of-the-best-campus-study"
+        }
+      ]
+    },
+    {
+      "id": "submitted-queens-courtyard",
+      "name": "Queens Courtyard",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "Outside the USC Thornton School of Music, off Trousdale, with a partial view of Bovard.",
+      "reported_setting": "outdoor",
+      "description": "Shady tree canopy, grass, benches, fountain, faint sound of instruments, squirrels.",
+      "caveats": "Campus tour groups pass by on Trousdale.",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "usctoday_faves",
+          "url": "https://today.usc.edu/best-usc-study-spots-relax-university-park-campus/"
+        },
+        {
+          "id": "ali_study_spots",
+          "url": "https://ali.usc.edu/blog/tag/study-spots"
+        },
+        {
+          "id": "admissions_hidden_gems",
+          "url": "https://www.admissionblog.usc.edu/p/usc-hidden-gems-and-favorite-spots"
+        }
+      ]
+    },
+    {
+      "id": "submitted-lawn-between-the-music-and-theatre-buildings",
+      "name": "Lawn between the music and theatre buildings",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "The green space surrounded by Taper Hall, Norris Theatre, Bing Theatre, Booth Hall and the music buildings.",
+      "reported_setting": "outdoor",
+      "description": "Soft grass and nature sounds; described as unbelievably quiet. Full sun in places.",
+      "caveats": "Gets hot; follow the shade. May be close to or overlap Queens Courtyard.",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "t360_comprehensive",
+          "url": "https://www.trojans360.com/trojans360posts/a-comprehensive-list-of-the-best-campus-study"
+        }
+      ]
+    },
+    {
+      "id": "submitted-36th-place-garden-nook-porch-swing",
+      "name": "36th Place garden nook (porch swing)",
+      "category": "Outdoor courtyards & green spaces",
+      "existing_ids": [],
+      "reported_location": "Corner between the Denney Research Center and the Technical Theater Laboratory, behind the Downey Way parking structure.",
+      "reported_setting": "outdoor",
+      "description": "Shaded, trees and flowers, wooden porch swing outside the Theater Lab.",
+      "caveats": "Some street and parking-structure noise from Vermont Ave.",
+      "reported_access": "Open outdoor space.",
+      "sources": [
+        {
+          "id": "t360_quaint",
+          "url": "https://www.trojans360.com/trojans360posts/my-favorite-quaint-areas-on-usc-campus"
+        }
+      ]
+    },
+    {
+      "id": "submitted-evk-mccarthy-dining-hall-outdoor-seating",
+      "name": "EVK & McCarthy dining hall outdoor seating",
+      "category": "Food spots with calmer seating",
+      "existing_ids": [],
+      "reported_location": "Outdoor seating at Everybody's Kitchen (EVK) and McCarthy Dining Hall.",
+      "reported_setting": "outdoor",
+      "description": "Outdoor seating is much quieter than inside.",
+      "caveats": "Loud and crowded at lunch and dinner peaks; go between meal rushes.",
+      "reported_access": "Requires a meal swipe or payment.",
+      "sources": [
+        {
+          "id": "t360_underrated",
+          "url": "https://www.trojans360.com/trojans360posts/underrated-usc-campus-study-spots"
+        }
+      ]
+    },
+    {
+      "id": "submitted-ministry-of-coffee-trojan-catholic-center-library",
+      "name": "Ministry of Coffee & Trojan Catholic Center library",
+      "category": "Cafes",
+      "existing_ids": [],
+      "reported_location": "Next to the Trojan Catholic Center (Caruso Catholic Center, 844 W 32nd St); the library is upstairs above the cafe.",
+      "reported_setting": "mixed",
+      "description": "Cafe has indoor and outdoor seating; the upstairs library is quieter and more peaceful.",
+      "caveats": "",
+      "reported_access": "Cafe open to all; library access not confirmed.",
+      "sources": [
+        {
+          "id": "chan_avery_2025",
+          "url": "https://chan.usc.edu/people/student-blog/avery/my-favorite-hidden-study-spots-at-university-park-campus"
+        }
+      ]
+    },
+    {
+      "id": "submitted-eruta-nature-inside-rock-reilly-s-usc-village",
+      "name": "Eruta Nature (inside Rock & Reilly's, USC Village)",
+      "category": "Cafes",
+      "existing_ids": [],
+      "reported_location": "Inside Rock & Reilly's in USC Village.",
+      "reported_setting": "mixed",
+      "description": "Morning bagel and coffee spot; usually a free table.",
+      "caveats": "Turns into an Irish pub and sports bar at night - avoid for respite in the evening.",
+      "reported_access": "Open to all.",
+      "sources": [
+        {
+          "id": "chan_avery_2025",
+          "url": "https://chan.usc.edu/people/student-blog/avery/my-favorite-hidden-study-spots-at-university-park-campus"
+        }
+      ]
+    },
+    {
+      "id": "submitted-south-la-cafe-at-the-natural-history-museum",
+      "name": "South LA Cafe at the Natural History Museum",
+      "category": "Cafes",
+      "existing_ids": [],
+      "reported_location": "Inside the Natural History Museum of Los Angeles County, Exposition Park, just south of campus.",
+      "reported_setting": "mixed",
+      "description": "Clean, modern space with minimal crowds.",
+      "caveats": "Off campus.",
+      "reported_access": "Open to the public.",
+      "sources": [
+        {
+          "id": "dt_sorta_niche",
+          "url": "https://dailytrojan.com/?p=257023"
+        }
+      ]
+    },
+    {
+      "id": "submitted-exposition-park-rose-garden",
+      "name": "Exposition Park Rose Garden",
+      "category": "Just off campus",
+      "existing_ids": [
+        "mapped-way-172470301"
+      ],
+      "reported_location": "Across Exposition Blvd from campus, in Exposition Park.",
+      "reported_setting": "outdoor",
+      "description": "Formal rose garden; most striking when roses are blooming.",
+      "caveats": "Off campus; recommendation comes from an alum's memory. Expect visitors on weekends and event days.",
+      "reported_access": "Public city park.",
+      "sources": [
+        {
+          "id": "usctoday_faves",
+          "url": "https://today.usc.edu/best-usc-study-spots-relax-university-park-campus/"
+        }
+      ]
+    },
+    {
+      "id": "submitted-usc-peace-garden-kerckhoff-hall-lawn",
+      "name": "USC Peace Garden (Kerckhoff Hall lawn)",
+      "category": "Just off campus",
+      "existing_ids": [],
+      "reported_location": "Lawn outside Kerckhoff Hall, 734 W Adams Blvd - about a 17-minute walk north of UPC.",
+      "reported_setting": "outdoor",
+      "description": "Wellness garden with California native plants, run by USC Chan occupational therapy faculty.",
+      "caveats": "New location; planting began April 2026 after the original lot was sold. Confirm it is established before recommending.",
+      "reported_access": "Gates described as permanently open; open to USC and the neighborhood.",
+      "sources": [
+        {
+          "id": "chan_peace_garden",
+          "url": "https://chan.usc.edu/community/usc-peace-garden"
+        },
+        {
+          "id": "dt_peace_garden_kerckhoff",
+          "url": "https://dailytrojan.com/?p=244418"
+        },
+        {
+          "id": "dt_peace_garden_2026",
+          "url": "https://dailytrojan.com/2026/04/28/volunteers-break-ground-at-new-peace-garden-location/"
+        }
+      ]
+    }
+  ]
+}

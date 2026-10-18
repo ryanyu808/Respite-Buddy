@@ -1847,5 +1847,104 @@
     "routing_anchor": "Mapped outdoor feature anchor, not a verified entrance or seat.",
     "anchor_source": "https://www.openstreetmap.org/way/172470301",
     "amenities": []
+  },
+  {
+    "id": "dml-hall-honor",
+    "name": "Hall of Honor (Card Catalog Room)",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": null,
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence and indoor setting documented by USC Libraries. Access, current hours, noise and seating availability are unconfirmed.",
+    "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/hall-honor-card-catalog-room",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/hall-honor-card-catalog-room",
+        "source_type": "USC primary source",
+        "checked": "2026-10-18",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "Study space"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Study space"
+    ]
+  },
+  {
+    "id": "dml-treasure",
+    "name": "Treasure Room",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": null,
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence and indoor setting documented by USC Libraries. Access, current hours, noise and seating availability are unconfirmed.",
+    "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/treasure-room",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/treasure-room",
+        "source_type": "USC primary source",
+        "checked": "2026-10-18",
+        "supports": [
+          "name",
+          "building",
+          "indoor"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": []
   }
 ]
