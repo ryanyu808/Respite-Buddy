@@ -1,10 +1,12 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
-import { afterEach, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import App from './App'
 import { savedDemo } from './services/respiteApi'
 import { DEFAULTS } from './preferences'
 
 vi.mock('./components/MapView', () => ({ MapView: () => <div>Walking map</div> }))
+// These regression cases intentionally exercise the full live tools, not the demo landing.
+beforeEach(() => window.history.replaceState({}, '', '/?live=1'))
 afterEach(() => {
   cleanup()
   vi.unstubAllGlobals()

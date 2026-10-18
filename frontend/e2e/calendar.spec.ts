@@ -5,7 +5,7 @@ test('offline sample schedule opens exact saved engine recommendations and both 
   page,
 }) => {
   await page.route('**/api/**', (route) => route.abort())
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'My Schedule', exact: true }).click()
   await page.getByRole('button', { name: 'Import sample schedule', exact: true }).click()
   await expect(
@@ -32,7 +32,7 @@ test('offline sample schedule opens exact saved engine recommendations and both 
 test('manual recurring classes persist, edit, detect duplicates and clear explicitly', async ({
   page,
 }) => {
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'My Schedule', exact: true }).click()
   await page.getByLabel('Course or event name', { exact: true }).fill('CSCI local test')
   await page.getByLabel('First date', { exact: true }).fill('2026-10-19')
@@ -70,7 +70,7 @@ test('manual recurring classes persist, edit, detect duplicates and clear explic
 test('ICS import is reviewed, not silently classified, and duplicate imports are skipped', async ({
   page,
 }) => {
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'My Schedule', exact: true }).click()
   await page.getByLabel('Import range starts', { exact: true }).fill('2026-10-19')
   await page.getByLabel('Import range ends (maximum 120 days)', { exact: true }).fill('2026-11-03')
@@ -108,7 +108,7 @@ test('candidate directory and mobile schedule are accessible, honest, and do not
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Campus spaces', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(34)
   await page.getByLabel('Search campus spaces', { exact: true }).fill('210A')
@@ -143,7 +143,7 @@ test('live gap planning transmits only class locations and times and stays hones
   page.on('request', (request) => {
     if (request.url().endsWith('/api/plan-day')) sent = request.postDataJSON()
   })
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'My Schedule', exact: true }).click()
   for (const [title, building, start, end] of [
     ['Private lecture', 'Leavey Library', '12:00', '13:00'],
