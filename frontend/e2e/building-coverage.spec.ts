@@ -21,7 +21,7 @@ test('JKP to Fisher works for the reported 1 PM–2:15 PM window without Render'
   await expect(page.locator('.demo-map .walking-route-line').first()).toBeVisible()
   await page.getByText('Building approach & entrance limits', { exact: true }).click()
   await expect(page.getByText(/not a verified entrance/, { exact: false }).last()).toBeVisible()
-  await page.getByRole('button', { name: 'Then to class', exact: true }).click()
+  await page.getByRole('button', { name: 'Next destination', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'On to USC Fisher Museum.' })).toBeVisible()
   await expect(page.locator('.demo-map .walking-route-line').first()).toBeVisible()
 })

@@ -331,7 +331,7 @@ export function DemoHome({
                 requestAnimationFrame(() => routeRef.current?.focus())
               }}
             >
-              Then to class
+              Next destination
             </button>
           )}
           {leg === 'class' && walking.route_to_spot && (
@@ -400,7 +400,7 @@ export function DemoHome({
                   setRouteId('')
                 }}
               >
-                Then to class
+                Next destination
               </button>
             )}
           </div>

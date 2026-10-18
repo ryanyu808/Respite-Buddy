@@ -1019,7 +1019,7 @@ export function RespiteBuddy({
                       setRouteId(selected.route_to_class!.recommended_id)
                     }}
                   >
-                    To next class
+                    Next destination
                   </button>
                 </div>
               )}

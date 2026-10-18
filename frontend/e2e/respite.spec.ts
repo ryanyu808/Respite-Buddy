@@ -80,7 +80,7 @@ test('engine deep links restore selected spot, next-class leg and private naviga
   await expect(
     page.getByRole('heading', { name: `${selected.spot.name} · walking directions` }),
   ).toBeVisible()
-  await page.getByRole('button', { name: 'To next class', exact: true }).click()
+  await page.getByRole('button', { name: 'Next destination', exact: true }).click()
   await expect(page.locator('.reset-route')).toContainText('From your reset spot to')
   await expect(page.locator('.reset-route .walking-route-line').first()).toBeVisible()
   await expect(page.locator('.reset-spot-card')).toHaveCount(value.recommendations.length)

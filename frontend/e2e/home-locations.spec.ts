@@ -17,7 +17,7 @@ test('changing both locations recomputes both walking legs without Render', asyn
   await page.getByRole('button', { name: 'Walk me there', exact: true }).first().click()
   await expect(page.locator('.demo-directions')).toContainText('Start at USC Village.')
   await expect(page.locator('.demo-map .walking-route-line').first()).toBeVisible()
-  await page.getByRole('button', { name: 'Then to class', exact: true }).click()
+  await page.getByRole('button', { name: 'Next destination', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'On to Doheny Memorial Library.' })).toBeVisible()
   await expect(page.locator('.demo-map .walking-route-line').first()).toBeVisible()
 })
@@ -41,7 +41,7 @@ test('destination is optional on narrow mobile and zero-distance does not invent
   await expect(page.getByRole('heading', { name: 'No outdoor walk needed.' })).toBeVisible()
   await expect(page.locator('.demo-directions')).toBeFocused()
   await expect(page.locator('.demo-map')).toHaveCount(0)
-  await expect(page.getByRole('button', { name: 'Then to class', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Next destination', exact: true })).toHaveCount(0)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   expect(
     (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())

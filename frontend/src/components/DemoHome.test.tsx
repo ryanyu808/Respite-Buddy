@@ -57,7 +57,7 @@ it('changes both mapped endpoints and uses those names in walking directions', (
   expect(screen.getByText('USC Village → Doheny Memorial Library')).toBeInTheDocument()
   fireEvent.click(screen.getAllByRole('button', { name: 'Walk me there' })[0])
   expect(screen.getByText(/Start at USC Village/)).toBeInTheDocument()
-  fireEvent.click(screen.getByRole('button', { name: 'Then to class' }))
+  fireEvent.click(screen.getByRole('button', { name: 'Next destination' }))
   expect(
     screen.getByRole('heading', { name: 'On to Doheny Memorial Library.' }),
   ).toBeInTheDocument()
@@ -74,7 +74,7 @@ it('allows a blank next destination and handles already-at-spot without a fake r
   fireEvent.click(screen.getAllByRole('button', { name: 'Walk me there' })[0])
   expect(screen.getByRole('heading', { name: 'No outdoor walk needed.' })).toBeInTheDocument()
   expect(screen.queryByText('Saved walking map')).not.toBeInTheDocument()
-  expect(screen.queryByRole('button', { name: 'Then to class' })).not.toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: 'Next destination' })).not.toBeInTheDocument()
 })
 
 it('rejects unknown endpoints but supports the published JKP building', () => {
@@ -215,7 +215,7 @@ it('shows both saved route legs and explains when the three engine strategies sh
   fireEvent.click(screen.getAllByRole('button', { name: 'Walk me there' })[0])
   expect(screen.getByRole('heading', { name: /Let’s walk to/ })).toBeInTheDocument()
   expect(screen.getByText('Saved walking map')).toBeInTheDocument()
-  fireEvent.click(screen.getByRole('button', { name: 'Then to class' }))
+  fireEvent.click(screen.getByRole('button', { name: 'Next destination' }))
   expect(screen.getByRole('heading', { name: 'On to Tutor Campus Center.' })).toBeInTheDocument()
   expect(screen.getByText(/Leave by.*About/)).toBeInTheDocument()
   fireEvent.click(screen.getByText('Other walking routes', { selector: 'summary' }))
