@@ -13,6 +13,7 @@ import {
 } from '../smartFilters'
 import { api } from '../services/api'
 import { rememberedCampus, rememberCampus } from '../smartContext'
+import { LocationPhoto, PhotoCredit } from './LocationPhoto'
 export function CampusDirectory({
   onWalk,
   onDemo,
@@ -79,26 +80,14 @@ export function CampusDirectory({
     )
   return (
     <main className="campus-page" id="campus-content" tabIndex={-1}>
-      <div className="eyebrow">EXPLORE, WITH CONTEXT</div>
-      <h1>A little space around campus.</h1>
-      <p className="page-intro">
-        Documented places to explore, not verified reset recommendations. Current noise, crowds,
-        opening hours, entry rules and step-free access remain unconfirmed.
-      </p>
-      <div className="calendar-notice">
-        <strong>
-          {records.length} documented or mapped candidates · 0 scout verifications added
-        </strong>
-        <p>
-          Room routes end at an approximate building anchor, not the room or a verified entrance.
-          Check the source and current campus rules before visiting. No after-dark suitability is
-          implied.
-        </p>
-        <button onClick={onDemo}>Try the sample demo</button>
-      </div>
+      <h1>Find a little space.</h1>
+      <p className="page-intro">Choose a place. Check hours and entry before you go.</p>
       <details>
         <summary>Adjust · optional filters</summary>
         <SmartFilterControls value={filters} onChange={setFilters} />
+        <button className="reset-link" onClick={onDemo}>
+          Try sample demo
+        </button>
         <label className="reset-field directory-origin">
           Campus starting point for walking estimates
           <input
@@ -131,161 +120,174 @@ export function CampusDirectory({
         </label>
       </div>
       <p role="status">
-        {filtered.length} matching spaces. This directory is bundled for use while the server wakes.
+        {filtered.length} {filtered.length === 1 ? 'place' : 'places'}
       </p>
       <div className="candidate-grid">
         {filtered.map((p) => (
           <article className="candidate-card" key={p.id}>
-            <span className="candidate-status">
-              {p.provenance?.[0].source_type === 'OpenStreetMap snapshot'
-                ? 'Mapped potential location'
-                : 'USC documented — conditions unconfirmed'}
-            </span>
+            <LocationPhoto place={p} />
             <h2>{p.name}</h2>
-            <p>
-              {p.building ?? 'Outdoor mapped space'}
+            <p className="location-one-line">
+              {p.building ?? 'Campus green space'}
               {p.floor ? ` · Floor ${p.floor}` : ''} ·{' '}
-              {p.indoor == null ? 'Indoor/outdoor unconfirmed' : p.indoor ? 'Indoor' : 'Outdoor'}
+              {p.indoor == null ? 'Setting unknown' : p.indoor ? 'Indoor' : 'Outdoor'}
             </p>
-            <dl>
-              <dt>Documented amenities</dt>
-              <dd>{p.amenities?.join(' · ') || 'No amenity claims confirmed'}</dd>
-              <dt>Outlets</dt>
-              <dd>
-                {attributeState(p, 'outlets') === 'present'
-                  ? 'Documented present'
-                  : attributeState(p, 'outlets') === 'absent'
-                    ? 'Confirmed absent'
-                    : 'Unknown'}
-              </dd>
-              <dt>Food for purchase</dt>
-              <dd>
-                {attributeState(p, 'food_available') === 'present'
-                  ? 'Documented venue; current service unconfirmed'
-                  : attributeState(p, 'food_available') === 'absent'
-                    ? 'Confirmed absent'
-                    : 'Unknown'}
-              </dd>
-              <dt>Food allowed</dt>
-              <dd>
-                {attributeState(p, 'food_allowed') === 'present'
-                  ? 'Documented permission'
-                  : attributeState(p, 'food_allowed') === 'absent'
-                    ? 'Confirmed not allowed'
-                    : 'Unknown — not implied by food sales'}
-              </dd>
-              {p.venue_kind && (
-                <>
-                  <dt>Venue type</dt>
-                  <dd>{p.venue_kind.replaceAll('_', ' ')}</dd>
-                </>
-              )}
-              {p.walk_min != null && (
-                <>
-                  <dt>Mapped walk</dt>
-                  <dd>
-                    {p.walk_min} minutes from {origin}; not a verified reset recommendation
-                  </dd>
-                </>
-              )}
-              <dt>Access</dt>
-              <dd>{p.access_note ?? 'Unconfirmed'}</dd>
-              <dt>Hours</dt>
-              <dd>
-                Unconfirmed —{' '}
-                <a
-                  href={
-                    p.venue_kind && p.source_url ? p.source_url : 'https://libraries.usc.edu/hours'
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {p.venue_kind ? 'check venue hours' : 'check current library hours'}
-                </a>
-              </dd>
-              <dt>Reservation</dt>
-              <dd>
-                {p.reservation_required
-                  ? 'Required; availability not checked'
-                  : 'Unconfirmed; not a guarantee of walk-in access'}
-              </dd>
-              <dt>Unconfirmed</dt>
-              <dd>
-                Noise, occupancy, seating condition, lighting, step-free access, after-dark safety,
-                current opening and entry.
-              </dd>
-            </dl>
-            <details>
-              <summary>Sources &amp; routing limits</summary>
-              <p>{p.routing_anchor}</p>
-              <a href={p.anchor_source} target="_blank" rel="noreferrer">
-                Coordinate source
-              </a>
-              {p.provenance?.map((source, i) => (
-                <p key={i}>
-                  <a href={source.url} target="_blank" rel="noreferrer">
-                    {source.source_type}
-                  </a>{' '}
-                  · Checked {source.checked}
-                  <br />
-                  Supports: {source.supports.join(', ')}
-                </p>
-              ))}
-              {Object.entries(p.evidence ?? {}).map(([field, evidence]) => (
-                <p key={field}>
-                  <a href={evidence.url} target="_blank" rel="noreferrer">
-                    {field.replaceAll('_', ' ')} evidence
-                  </a>{' '}
-                  · Checked {evidence.checked}
-                </p>
-              ))}
-              <p>Historical descriptions may no longer reflect current furniture or use.</p>
-            </details>
+            {p.reservation_required === true && (
+              <span className="location-important">Reservation required</span>
+            )}
+            {p.walk_min != null && (
+              <p className="location-one-line">
+                {p.walk_min} min walk from {origin}
+              </p>
+            )}
             <button
+              className="location-walk"
               onClick={() =>
                 onWalk({ lat: p.lat, lon: p.lng, name: p.name + ' (approximate anchor)' })
               }
             >
-              Explore walking route
+              Walk me there
             </button>
+            <details className="location-more">
+              <summary>More info</summary>
+              <span className="candidate-status">
+                {p.provenance?.[0].source_type === 'OpenStreetMap snapshot'
+                  ? 'Mapped potential location'
+                  : 'USC documented — conditions unconfirmed'}
+              </span>
+              <dl>
+                <dt>Documented amenities</dt>
+                <dd>{p.amenities?.join(' · ') || 'No amenity claims confirmed'}</dd>
+                <dt>Outlets</dt>
+                <dd>
+                  {attributeState(p, 'outlets') === 'present'
+                    ? 'Documented present'
+                    : attributeState(p, 'outlets') === 'absent'
+                      ? 'Confirmed absent'
+                      : 'Unknown'}
+                </dd>
+                <dt>Food for purchase</dt>
+                <dd>
+                  {attributeState(p, 'food_available') === 'present'
+                    ? 'Documented venue; current service unconfirmed'
+                    : attributeState(p, 'food_available') === 'absent'
+                      ? 'Confirmed absent'
+                      : 'Unknown'}
+                </dd>
+                <dt>Food allowed</dt>
+                <dd>
+                  {attributeState(p, 'food_allowed') === 'present'
+                    ? 'Documented permission'
+                    : attributeState(p, 'food_allowed') === 'absent'
+                      ? 'Confirmed not allowed'
+                      : 'Unknown — not implied by food sales'}
+                </dd>
+                {p.venue_kind && (
+                  <>
+                    <dt>Venue type</dt>
+                    <dd>{p.venue_kind.replaceAll('_', ' ')}</dd>
+                  </>
+                )}
+                {p.walk_min != null && (
+                  <>
+                    <dt>Mapped walk</dt>
+                    <dd>
+                      {p.walk_min} minutes from {origin}; not a verified reset recommendation
+                    </dd>
+                  </>
+                )}
+                <dt>Access</dt>
+                <dd>{p.access_note ?? 'Unconfirmed'}</dd>
+                <dt>Hours</dt>
+                <dd>
+                  Unconfirmed —{' '}
+                  <a
+                    href={
+                      p.venue_kind && p.source_url
+                        ? p.source_url
+                        : 'https://libraries.usc.edu/hours'
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {p.venue_kind ? 'check venue hours' : 'check current library hours'}
+                  </a>
+                </dd>
+                <dt>Reservation</dt>
+                <dd>
+                  {p.reservation_required
+                    ? 'Required; availability not checked'
+                    : 'Unconfirmed; not a guarantee of walk-in access'}
+                </dd>
+                <dt>Unconfirmed</dt>
+                <dd>
+                  Noise, occupancy, seating condition, lighting, step-free access, after-dark
+                  safety, current opening and entry.
+                </dd>
+              </dl>
+              <details>
+                <summary>Sources &amp; routing limits</summary>
+                <p>{p.routing_anchor}</p>
+                <a href={p.anchor_source} target="_blank" rel="noreferrer">
+                  Coordinate source
+                </a>
+                {p.provenance?.map((source, i) => (
+                  <p key={i}>
+                    <a href={source.url} target="_blank" rel="noreferrer">
+                      {source.source_type}
+                    </a>{' '}
+                    · Checked {source.checked}
+                    <br />
+                    Supports: {source.supports.join(', ')}
+                  </p>
+                ))}
+                {Object.entries(p.evidence ?? {}).map(([field, evidence]) => (
+                  <p key={field}>
+                    <a href={evidence.url} target="_blank" rel="noreferrer">
+                      {field.replaceAll('_', ' ')} evidence
+                    </a>{' '}
+                    · Checked {evidence.checked}
+                  </p>
+                ))}
+                <p>Historical descriptions may no longer reflect current furniture or use.</p>
+              </details>
+              <PhotoCredit place={p} />
+            </details>
           </article>
         ))}
       </div>
-      <details className="submitted-research" open={query.trim().length > 0 ? true : undefined}>
-        <summary>More spots from the team’s research ({research.length})</summary>
-        <p>
-          Reported descriptions, not verified observations. These places do not yet have checked
-          routing anchors or confirmed amenity matches, so they are not included in strict filters
-          or reset recommendations. Community-specific and dedicated spaces are for their stated
-          purpose; we do not infer who should use them.
-        </p>
-        <div className="candidate-grid">
-          {research.map((entry) => (
-            <article className="candidate-card" key={entry.id}>
-              <span className="candidate-status">Team-submitted research · not verified</span>
-              <h2>{entry.name}</h2>
-              <p>{entry.reported_location}</p>
-              <p>
-                Reported setting: {entry.reported_setting}. Current access and hours unconfirmed.
-              </p>
-              <details>
-                <summary>Reported description &amp; sources</summary>
-                <p>{entry.description}</p>
-                <p>{entry.reported_access}</p>
-                <p>{entry.caveats}</p>
-                {entry.sources.map((source) => (
-                  <p key={source.id}>
-                    <a href={source.url} target="_blank" rel="noreferrer">
-                      {source.id.replaceAll('_', ' ')}
-                    </a>
-                  </p>
-                ))}
-                <p>No route offered until a real geographic anchor is checked.</p>
-              </details>
-            </article>
-          ))}
-        </div>
-      </details>
+      {research.length > 0 && (
+        <details className="submitted-research" open={query.trim().length > 0 ? true : undefined}>
+          <summary>More spots from the team’s research ({research.length})</summary>
+          <p className="directory-note">Research only. Locations and entry still need checking.</p>
+          <div className="candidate-grid">
+            {research.map((entry) => (
+              <article className="candidate-card" key={entry.id}>
+                <LocationPhoto place={entry} />
+                <h2>{entry.name}</h2>
+                <p className="location-one-line">Research only · {entry.reported_setting}</p>
+                <details className="location-more">
+                  <summary>More info</summary>
+                  <p>Team-submitted research · not verified</p>
+                  <p>{entry.reported_location}</p>
+                  <p>{entry.description}</p>
+                  <p>{entry.reported_access}</p>
+                  <p>{entry.caveats}</p>
+                  {entry.sources.map((source) => (
+                    <p key={source.id}>
+                      <a href={source.url} target="_blank" rel="noreferrer">
+                        {source.id.replaceAll('_', ' ')}
+                      </a>
+                    </p>
+                  ))}
+                  <p>No route offered until a real geographic anchor is checked.</p>
+                  <PhotoCredit place={entry} />
+                </details>
+              </article>
+            ))}
+          </div>
+        </details>
+      )}
       {!filtered.length && (
         <div className="smart-filter-empty">
           <p>

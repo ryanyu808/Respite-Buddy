@@ -267,7 +267,7 @@ export default function App() {
           >
             <Leaf size={16} /> Find a spot
           </button>
-          {surface === 'demo' ? (
+          {surface === 'demo' || surface === 'directory' ? (
             <>
               <button className="nav-item" onClick={() => setSurface('schedule')}>
                 My Schedule
@@ -284,7 +284,12 @@ export default function App() {
                     Live reset tools
                   </button>
                   <button onClick={() => setSurface('walk')}>Plan a walk</button>
-                  <button onClick={() => setSurface('directory')}>Campus spaces</button>
+                  <button
+                    aria-current={surface === 'directory' ? 'page' : undefined}
+                    onClick={() => setSurface('directory')}
+                  >
+                    Campus spaces
+                  </button>
                   <button onClick={() => setPage('about')}>Our approach</button>
                   <button onClick={() => setPage('methodology')}>Behind the map</button>
                 </div>
@@ -317,11 +322,7 @@ export default function App() {
               >
                 My Schedule
               </button>
-              <button
-                className={`nav-item ${surface === 'directory' ? 'active' : ''}`}
-                aria-current={surface === 'directory' ? 'page' : undefined}
-                onClick={() => setSurface('directory')}
-              >
+              <button className="nav-item" onClick={() => setSurface('directory')}>
                 Campus spaces
               </button>
               <button className="nav-item" onClick={() => setPage('about')}>

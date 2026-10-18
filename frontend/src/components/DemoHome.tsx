@@ -15,6 +15,7 @@ import { DEMO_TIME, timeLabel, type Recommendation } from '../respite'
 import { savedDemo } from '../services/respiteApi'
 import { MapView } from './MapView'
 import { BreakTimeControls } from './BreakTimeControls'
+import { LocationPhoto, PhotoCredit } from './LocationPhoto'
 import '../demo-home.css'
 
 // Replay the existing engine's saved two-leg routes, not invented campus observations.
@@ -334,19 +335,15 @@ export function DemoHome({
               className={`demo-spot ${index === 0 ? 'demo-best' : ''}`}
               aria-labelledby={`demo-${item.spot.id}`}
             >
-              <div
-                className={`demo-spot-art demo-art-${item.spot.name.includes('Hutton') ? 'hutton' : item.spot.name.includes('Alumni') ? 'alumni' : 'associates'}`}
-                aria-hidden="true"
-              >
-                <Trees size={52} strokeWidth={1.1} />
-                <span>{index === 0 ? 'Your best pick' : 'Another lovely option'}</span>
+              <div className="demo-photo-wrap">
+                <LocationPhoto place={item.spot} />
+                {index === 0 && <span className="demo-photo-pick">Your best pick</span>}
               </div>
               <div className="demo-spot-body">
                 <p className="demo-spot-type">
                   {item.spot.indoor ? 'INDOOR' : 'OUTDOOR'} PAUSE · SAMPLE
                 </p>
                 <h3 id={`demo-${item.spot.id}`}>{nameOf(item)}</h3>
-                <p className="demo-spot-description">{description(item)}</p>
                 <div className="demo-metrics">
                   <span>
                     <Footprints size={18} aria-hidden="true" />
@@ -369,6 +366,11 @@ export function DemoHome({
                 <button className="demo-full" onClick={() => skip(item)}>
                   It’s full
                 </button>
+                <details className="location-more">
+                  <summary>More info</summary>
+                  <p>{description(item)}</p>
+                  <PhotoCredit place={item.spot} />
+                </details>
               </div>
             </article>
           ))}

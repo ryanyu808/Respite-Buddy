@@ -95,7 +95,7 @@ test('real entered schedule shows documented indoor alternatives, not fabricated
   await page
     .getByRole('button', { name: 'Open this break & walking directions', exact: true })
     .click()
-  await expect(page.getByText('Documented indoor options · not scout-verified')).toBeVisible()
+  await expect(page.getByText('Indoor options. Check entry; times are provisional.')).toBeVisible()
   await expect(page.locator('.reset-spot-card').first()).toContainText('Leavey Library')
   await expect(page.locator('.reset-spot-card').first()).toContainText('provisional')
   await expect(page.getByText('Verified by scouts', { exact: true })).toHaveCount(0)
@@ -110,15 +110,11 @@ test('new submitted places are searchable without duplicate or fabricated routin
   await page.getByLabel('Search campus spaces', { exact: true }).fill('Hoose')
   await expect(page.getByRole('article')).toHaveCount(1)
   await expect(page.getByRole('article')).toContainText('Team-submitted research · not verified')
-  await expect(
-    page.getByRole('button', { name: 'Explore walking route', exact: true }),
-  ).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Walk me there', exact: true })).toHaveCount(0)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await page.getByLabel('Search campus spaces', { exact: true }).fill('Hall of Honor')
   await expect(page.getByRole('article')).toHaveCount(1)
-  await expect(
-    page.getByRole('button', { name: 'Explore walking route', exact: true }),
-  ).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Walk me there', exact: true })).toBeVisible()
   expect(
     (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
       .violations,
