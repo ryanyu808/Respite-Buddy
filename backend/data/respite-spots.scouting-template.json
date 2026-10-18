@@ -26,6 +26,10 @@
     "notes": null,
     "source_url": "https://REPLACE_WITH_SOURCE",
     "data_kind": "scouted",
-    "purpose": "general"
+    "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null
   }
 ]

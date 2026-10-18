@@ -11,16 +11,19 @@ test('primary recommendation, source labels, swaps, time chips and safety previe
   await page.getByRole('button', { name: 'Somewhere calm, now' }).click()
   await expect(page.getByText('No eligible spots for this break.')).toBeVisible()
   await page.getByRole('button', { name: 'Try the demo' }).click()
-  await expect(page.getByRole('article')).toHaveCount(3)
+  await expect(page.locator('.reset-spot-card')).toHaveCount(3)
   await expect(page.getByText('Saved demonstration (works offline)')).toBeVisible()
   await expect(page.getByText('Crowd information unavailable.', { exact: true })).toHaveCount(3)
+  await page.getByRole('button', { name: 'Walk me there', exact: true }).first().click()
   await expect(page.locator('.reset-route .walking-route-line').first()).toBeVisible()
   const firstName = await page.getByRole('article').first().getByRole('heading').innerText()
   await page.getByRole('button', { name: 'It’s full', exact: true }).first().click()
-  await expect(page.getByRole('article')).toHaveCount(2)
+  await expect(page.locator('.reset-spot-card')).toHaveCount(2)
   await expect(page.getByRole('article').getByRole('heading', { name: firstName })).toHaveCount(0)
+  await page.getByText('Other options', { exact: true }).first().click()
   await page.getByRole('button', { name: 'It’s locked', exact: true }).first().click()
   await expect(page.getByRole('article')).toHaveCount(1)
+  await page.getByText('Change preferences', { exact: false }).click()
   await page.getByRole('button', { name: '10 min', exact: true }).click()
   await expect(page.getByText('Tight on time.', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: '5 min', exact: true }).click()
@@ -48,14 +51,15 @@ test('cold start can be superseded by an immediate saved demo; unmatched setting
   await page.getByRole('button', { name: 'Somewhere calm, now' }).click()
   await expect(page.getByRole('button', { name: 'Finding your pause…' })).toBeVisible()
   await page.getByRole('button', { name: 'Try the demo' }).click()
-  await expect(page.getByRole('article')).toHaveCount(3, { timeout: 3000 })
+  await expect(page.locator('.reset-spot-card')).toHaveCount(3, { timeout: 3000 })
   release()
+  await page.getByText('Change preferences', { exact: false }).click()
   await page.getByText('Fine-tune', { exact: false }).first().click()
   await page.getByRole('combobox', { name: 'Starting near', exact: true }).fill('JKP')
   await expect(page.getByRole('alert')).toContainText('No saved demo matches these settings')
   await expect(page.getByRole('article')).toHaveCount(0)
   await page.getByRole('button', { name: 'Restart sample demo', exact: true }).click()
-  await expect(page.getByRole('article')).toHaveCount(3)
+  await expect(page.locator('.reset-spot-card')).toHaveCount(3)
 })
 
 test('engine deep links restore selected spot, next-class leg and private navigation context', async ({
@@ -75,7 +79,7 @@ test('engine deep links restore selected spot, next-class leg and private naviga
   await page.getByRole('button', { name: 'To next class', exact: true }).click()
   await expect(page.locator('.reset-route')).toContainText('From your reset spot to')
   await expect(page.locator('.reset-route .walking-route-line').first()).toBeVisible()
-  await expect(page.getByRole('article')).toHaveCount(value.recommendations.length)
+  await expect(page.locator('.reset-spot-card')).toHaveCount(value.recommendations.length)
   expect(await page.locator('.reset-status').innerText()).toContain(
     `${value.minutes} minutes remain`,
   )
@@ -86,10 +90,12 @@ test('mobile route action moves focus, preferences persist, and calendar is simu
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/')
+  await page.getByText('Change preferences', { exact: false }).click()
   await page.getByRole('button', { name: 'Quiet', exact: true }).click()
   await page.getByRole('button', { name: '12 min', exact: true }).click()
   await page.getByRole('button', { name: 'Toggle high contrast' }).click()
   await page.reload()
+  await page.getByText('Change preferences', { exact: false }).click()
   await expect(page.getByRole('button', { name: 'Quiet', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
@@ -105,7 +111,7 @@ test('mobile route action moves focus, preferences persist, and calendar is simu
   await page.getByRole('button', { name: 'Preview calendar' }).click()
   await expect(page.getByText('Simulated calendar · not connected')).toBeVisible()
   await page.getByRole('button', { name: 'Try this sample break' }).click()
-  await expect(page.getByRole('article')).toHaveCount(3)
+  await expect(page.locator('.reset-spot-card')).toHaveCount(3)
   await page.getByRole('button', { name: 'Walk me there', exact: true }).last().click()
   await expect(page.locator('.reset-route')).toBeFocused()
   await expect(page.locator('.reset-route')).toBeInViewport()
@@ -126,8 +132,9 @@ test('keyboard and WCAG checks on initial, results and high contrast views', asy
   expect(
     (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()).violations,
   ).toEqual([])
+  await page.getByText('Change preferences', { exact: false }).click()
   await page.getByRole('button', { name: 'Try the demo' }).click()
-  await expect(page.getByRole('article')).toHaveCount(3)
+  await expect(page.locator('.reset-spot-card')).toHaveCount(3)
   expect(
     (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze()).violations,
   ).toEqual([])

@@ -34,6 +34,7 @@ import {
 } from '../calendar/google'
 import { api } from '../services/api'
 import { savedDemo } from '../services/respiteApi'
+import { loadFilters } from '../smartFilters'
 import type { Location } from '../types'
 import { NEEDS, type Need, type ResetRequest, type Recommendation } from '../respite'
 
@@ -211,6 +212,7 @@ export function MySchedule({
         throw new Error('Correct missing class buildings before planning.')
       // No titles, notes, room numbers, IDs or full calendar leave the browser.
       const payload = {
+        filters: loadFilters(),
         classes: classes.map((e) => ({
           start: e.start,
           end: e.end,
@@ -232,6 +234,7 @@ export function MySchedule({
             )
           if (minutes < 1) continue
           const request: ResetRequest = {
+            filters: loadFilters(),
             near: previous.buildingCode || previous.location,
             next_class: following.buildingCode || following.location,
             minutes,

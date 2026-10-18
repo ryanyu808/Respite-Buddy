@@ -1,4 +1,6 @@
 # Respite Buddy (built on NeuroRoute)
+Latest feature: [one-tap discovery and evidence-backed smart filters](docs/smart-filters.md). No questionnaire or mandatory schedule, activity or account; documented candidates remain separate from verified recommendations.
+
 Find somewhere to reset on campus before your next class, with existing sensory-aware walking navigation.
 
 The primary experience now ranks reset spots by time left to rest, using the existing NeuroRoute engine for both walking legs. The website and four MCP tools share the same FastAPI service. Advanced walking preferences and the original fastest/calmer/balanced comparison remain available under **Plan a walk** and **Fine-tune**.

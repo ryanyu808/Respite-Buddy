@@ -5,15 +5,16 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from .models import RouteRequest, RouteResponse, PreferenceRequest, PreferenceResponse, ExplainRequest, ExplainResponse, Location, RestStop
 from .services.geographic_data import MapData, DATA_DIR
 from .services.routing import Router
 from .services.ai_service import interpret, route_explanation
-from .respite_models import ResetRequest, ResetResponse, SwapRequest, PlanDayRequest, Spot
+from .respite_models import ResetRequest, ResetResponse, SwapRequest, PlanDayRequest, Spot, SpotFilters, StrictModel
 from .services.respite import RespiteEngine
 from .services.spot_library import building_library
 from .services.campus_directory import candidates, CampusCandidate
+from .models import Point
 
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
@@ -92,6 +93,43 @@ def buildings():
 @app.get('/api/campus-candidates', response_model=list[CampusCandidate])
 def campus_candidates():
     return candidates()
+
+
+class DirectoryRequest(StrictModel):
+    near: str | Point = 'Leavey'
+    filters: SpotFilters = Field(default_factory=SpotFilters)
+
+
+@app.post('/api/campus-candidates/filter')
+def filter_campus_candidates(request: DirectoryRequest):
+    from datetime import datetime
+    from .services.respite import PACIFIC
+    from .services.spot_filters import matches, activity_priority
+    from .models import Point
+    import math
+    at = datetime.now(PACIFIC)
+    try:
+        origin = app.state.respite.resolve(ResetRequest(near=request.near).near)
+        result = []
+        for spot in candidates():
+            if not matches(spot,request.filters.model_copy(update={'max_walk_min':None}),at):
+                continue
+            walk = None
+            if request.filters.max_walk_min is not None:
+                try:
+                    leg = app.state.respite.walking_leg(origin,Point(lat=spot.lat,lon=spot.lng,name=spot.name),ResetRequest().preferences)
+                    walk = math.ceil(next(r.duration_min for r in leg.routes if r.id==leg.recommended_id)) if leg else 0
+                except ValueError:
+                    continue  # Disconnected is unknown, not zero minutes.
+                if walk > request.filters.max_walk_min:
+                    continue
+            result.append((spot,walk))
+        result.sort(key=lambda pair:(-activity_priority(pair[0],request.filters.activity),pair[0].name))
+        return {'places':[{**spot.model_dump(mode='json'),'walk_min':walk} for spot,walk in result],
+                'evaluated_at':at.isoformat(),'mode':'exploration','origin':origin.model_dump(),
+                'note':'Documented candidates, not verified reset recommendations. Walking time excludes indoor travel.'}
+    except ValueError as exc:
+        raise HTTPException(422,str(exc)) from exc
 
 
 @app.get('/api/spots', response_model=list[Spot])

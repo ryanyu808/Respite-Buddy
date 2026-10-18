@@ -24,6 +24,18 @@ class HoursInterval(StrictModel):
         return self
 
 
+class AttributeEvidence(StrictModel):
+    url: str = Field(pattern=r'^https://[^\s/]+(?:/[^\s]*)?$')
+    checked: date
+
+    @field_validator('checked')
+    @classmethod
+    def not_future(cls, value):
+        if value > date.today():
+            raise ValueError('Evidence cannot be checked in the future.')
+        return value
+
+
 class Spot(StrictModel):
     id: str = Field(min_length=1, max_length=100, pattern=r'^[a-zA-Z0-9_-]+$')
     name: str = Field(min_length=1, max_length=160)
@@ -53,6 +65,10 @@ class Spot(StrictModel):
     source_url: str
     data_kind: Literal['scouted', 'mapped', 'illustrative'] = 'scouted'
     purpose: Literal['general', 'prayer', 'lactation', 'other_dedicated'] = 'general'
+    food_available: bool | None = None
+    venue_kind: Literal['cafe', 'dining_hall', 'food_market', 'outdoor_eating', 'seating_only'] | None = None
+    reservation_required: bool | None = None
+    evidence: dict[str, AttributeEvidence] | None = None
 
     @field_validator('source_url', 'photo_url')
     @classmethod
@@ -84,6 +100,33 @@ class Exclusion(StrictModel):
         return value
 
 
+class SpotFilters(StrictModel):
+    quiet: bool = False
+    outlets: bool = False
+    comfortable_seating: bool = False
+    few_people: bool = False
+    dim: bool = False
+    indoor: bool = False
+    outdoor: bool = False
+    restroom: bool = False
+    food_allowed: bool = False
+    food_available: bool = False
+    step_free: bool = False
+    open_now: bool = False
+    no_reservation: bool = False
+    verified_only: bool = False
+    evening_access: bool = False
+    max_walk_min: int | None = Field(default=None, ge=1, le=120)
+    access: Literal['any', 'open', 'usc_id'] = 'any'
+    activity: Literal['break', 'study', 'charge', 'eat', 'between', 'friend'] = 'break'
+
+    @model_validator(mode='after')
+    def compatible(self):
+        if self.indoor and self.outdoor:
+            raise ValueError('Choose indoor or outdoor, not both.')
+        return self
+
+
 class ResetRequest(StrictModel):
     near: str | Point = 'Leavey'
     next_class: str | Point | None = None
@@ -96,6 +139,7 @@ class ResetRequest(StrictModel):
     usc_id: bool = False
     preferences: Preferences = Field(default_factory=Preferences)
     exclusions: list[Exclusion] = Field(default_factory=list, max_length=100)
+    filters: SpotFilters = Field(default_factory=SpotFilters)
 
     @field_validator('near', 'next_class')
     @classmethod
@@ -202,6 +246,7 @@ class PlanDayRequest(StrictModel):
     needs: list[Need] = Field(default_factory=list, max_length=6)
     demo: bool = False
     usc_id: bool = False
+    filters: SpotFilters = Field(default_factory=SpotFilters)
 
     @model_validator(mode='after')
     def no_overlap(self):

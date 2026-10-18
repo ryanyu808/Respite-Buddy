@@ -8,6 +8,7 @@ import {
   type ResetResult,
 } from '../respite'
 import { FALLBACK } from '../data/fallback'
+import { DEFAULT_FILTERS, matchesFilters } from '../smartFilters'
 
 type DemoBundle = {
   request: ResetRequest
@@ -80,7 +81,14 @@ export function savedDemo(request: ResetRequest): ResetResult | null {
   if (!scenario) return null
   const exclusions = activeExclusions(request.exclusions ?? [])
   const recommendations = scenario.response.recommendations.filter(
-    (item) => !exclusions.some((exclusion) => exclusion.spot_id === item.spot.id),
+    (item) =>
+      !exclusions.some((exclusion) => exclusion.spot_id === item.spot.id) &&
+      matchesFilters(
+        item.spot,
+        request.filters ?? DEFAULT_FILTERS,
+        scenario.response.evaluated_at,
+        item.walk_to_min,
+      ),
   )
   return {
     saved: true,

@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, expect, it, vi } from 'vitest'
 import App from './App'
 import { savedDemo } from './services/respiteApi'
@@ -46,22 +46,27 @@ it('keeps saved demos usable while a live search is pending and ignores its stal
   expect(screen.getByRole('button', { name: 'Finding your pause…' })).toBeDisabled()
   fireEvent.click(screen.getByRole('button', { name: 'Try the demo' }))
   expect(await screen.findByText('Saved demonstration (works offline)')).toBeInTheDocument()
-  expect(screen.getAllByRole('article')).toHaveLength(3)
+  expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(3)
   resolveLive({ ok: true, json: async () => ({ recommendations: [], notes: [] }) })
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(3))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(3))
 })
 
 it('recalculates time and needs, persists display preferences and clears them in one tap', async () => {
   vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('offline')))
   render(<App />)
+  fireEvent.click(screen.getByText(/Change preferences/, { selector: 'summary' }))
   fireEvent.click(screen.getByRole('button', { name: 'Try the demo' }))
   await screen.findByText('Saved demonstration (works offline)')
   fireEvent.click(screen.getByRole('button', { name: '10 min' }))
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(3))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(3))
   expect(screen.getAllByText('Tight on time.').length).toBeGreaterThan(0)
-  fireEvent.click(screen.getByRole('button', { name: 'Quiet' }))
+  fireEvent.click(
+    within(screen.getByLabelText('Find a reset spot')).getByRole('button', { name: 'Quiet' }),
+  )
   await waitFor(() =>
-    expect(screen.getByRole('button', { name: 'Quiet' })).toHaveAttribute('aria-pressed', 'true'),
+    expect(
+      within(screen.getByLabelText('Find a reset spot')).getByRole('button', { name: 'Quiet' }),
+    ).toHaveAttribute('aria-pressed', 'true'),
   )
   fireEvent.click(screen.getByRole('button', { name: 'Toggle high contrast' }))
   expect(JSON.parse(localStorage.getItem('respite-buddy-preferences')!)).toMatchObject({
@@ -72,7 +77,9 @@ it('recalculates time and needs, persists display preferences and clears them in
   fireEvent.click(screen.getByText('Fine-tune', { exact: false, selector: 'summary' }))
   fireEvent.click(screen.getByRole('button', { name: 'Clear saved preferences' }))
   expect(screen.getByRole('button', { name: '15 min' })).toHaveAttribute('aria-pressed', 'true')
-  expect(screen.getByRole('button', { name: 'Quiet' })).toHaveAttribute('aria-pressed', 'false')
+  expect(
+    within(screen.getByLabelText('Find a reset spot')).getByRole('button', { name: 'Quiet' }),
+  ).toHaveAttribute('aria-pressed', 'false')
   expect(screen.getByRole('button', { name: 'Toggle high contrast' })).toHaveAttribute(
     'aria-pressed',
     'false',
@@ -85,13 +92,13 @@ it('hides full and locked places for this session, keeps source labels and allow
   fireEvent.click(screen.getByRole('button', { name: 'Preview calendar' }))
   expect(screen.getByText('Simulated calendar · not connected')).toBeInTheDocument()
   fireEvent.click(screen.getByRole('button', { name: 'Try this sample break' }))
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(3))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(3))
   expect(screen.queryByText('Verified by scouts', { exact: true })).not.toBeInTheDocument()
   expect(screen.getAllByText('Crowd information unavailable.')).toHaveLength(3)
   fireEvent.click(screen.getAllByRole('button', { name: 'It’s full' })[0])
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(2))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(2))
   fireEvent.click(screen.getAllByRole('button', { name: 'It’s locked' })[0])
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(1))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(1))
   expect(JSON.parse(sessionStorage.getItem('respite-buddy-exclusions')!)).toHaveLength(2)
 })
 
@@ -122,28 +129,26 @@ it('preserves the original deadline across a live swap and displays the remainin
     minutes: 8,
     deadline: '2026-10-19T13:15:00-07:00',
   }
-  const fetch = vi
-    .fn()
-    .mockImplementation((path: string) =>
-      Promise.resolve({
-        ok: true,
-        json: async () =>
-          path.endsWith('/reset-spots/swap')
-            ? { ...response, recommendations: response.recommendations.slice(1) }
-            : path.endsWith('/reset-spots')
-              ? response
-              : path.includes('metadata')
-                ? { available: true }
-                : [],
-      }),
-    )
+  const fetch = vi.fn().mockImplementation((path: string) =>
+    Promise.resolve({
+      ok: true,
+      json: async () =>
+        path.endsWith('/reset-spots/swap')
+          ? { ...response, recommendations: response.recommendations.slice(1) }
+          : path.endsWith('/reset-spots')
+            ? response
+            : path.includes('metadata')
+              ? { available: true }
+              : [],
+    }),
+  )
   vi.stubGlobal('fetch', fetch)
   render(<App />)
   fireEvent.click(screen.getByRole('button', { name: 'Somewhere calm, now' }))
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(3))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(3))
   expect(screen.getByText(/8 minutes remain/)).toBeInTheDocument()
   fireEvent.click(screen.getAllByRole('button', { name: 'It’s full' })[0])
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(2))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(2))
   const swapCall = fetch.mock.calls.find(([path]) => String(path).endsWith('/reset-spots/swap'))
   expect(JSON.parse(swapCall![1].body).request.deadline).toBe(response.deadline)
   fireEvent.click(screen.getByRole('button', { name: '20 min' }))
@@ -200,17 +205,19 @@ it('handles an already-at-spot result without inventing a walking geometry', asy
 it('counts a first full report once and separates demo first-try outcomes from later swaps', async () => {
   vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('offline')))
   render(<App />)
+  fireEvent.click(screen.getByText(/Change preferences/, { selector: 'summary' }))
   fireEvent.click(screen.getByRole('button', { name: 'Try the demo' }))
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(3))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(3))
   fireEvent.click(screen.getAllByRole('button', { name: 'It’s full' })[0])
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(2))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(2))
   fireEvent.click(screen.getAllByRole('button', { name: 'It’s full' })[0])
-  await waitFor(() => expect(screen.getAllByRole('article')).toHaveLength(1))
+  await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(1))
   const summary = screen.getByText('First recommendation feedback')
   fireEvent.click(summary)
   expect(summary.parentElement).toHaveTextContent(
     'Demonstration: 0 first suggestions accepted; 1 first suggestions full.',
   )
+  fireEvent.click(screen.getByRole('button', { name: 'Walk me there' }))
   fireEvent.click(screen.getByRole('button', { name: 'This spot works for me' }))
   expect(summary.parentElement).toHaveTextContent(
     '0 first suggestions accepted; 1 first suggestions full.',

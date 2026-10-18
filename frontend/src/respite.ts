@@ -1,5 +1,6 @@
 import type { Location, Point, Preferences, Route, RouteResponse } from './types'
 import { isPreferences } from './preferences'
+import { validFilters, type SmartFilters } from './smartFilters'
 
 export const NEEDS = [
   { id: 'quiet', label: 'Quiet' },
@@ -38,6 +39,7 @@ export type ResetRequest = {
   usc_id: boolean
   preferences?: Preferences
   exclusions?: Exclusion[]
+  filters?: SmartFilters
 }
 export type Spot = {
   id: string
@@ -66,6 +68,10 @@ export type Spot = {
   notes: string | null
   data_kind: 'scouted' | 'mapped' | 'illustrative'
   source_url: string | null
+  evidence?: Record<string, { url: string; checked: string }> | null
+  food_available?: boolean | null
+  venue_kind?: 'cafe' | 'dining_hall' | 'food_market' | 'outdoor_eating' | 'seating_only' | null
+  reservation_required?: boolean | null
 }
 export type Recommendation = {
   spot: Spot
@@ -161,11 +167,13 @@ export function parseDeepLink(
     usc_id?: boolean
     preferences?: Preferences
     demo_time?: string
+    filters?: SmartFilters
   } = {}
   if (hash.startsWith('#reset=')) {
     try {
       if (hash.length > 6000) throw new Error('Context too long')
       const value = JSON.parse(decodeURIComponent(hash.slice(7)))
+      if (value.filters) context.filters = validFilters(value.filters)
       if (!value || typeof value !== 'object' || Array.isArray(value))
         throw new Error('Invalid context')
       const isDate = (date: unknown): date is string =>
