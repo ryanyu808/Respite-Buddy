@@ -8,7 +8,10 @@ test('instant default demo works with an unavailable backend and map tiles', asy
   await page.route('**/tile.openstreetmap.org/**', (route) => route.abort())
   await page.goto('/')
   await expect(page.getByRole('article')).toHaveCount(3)
-  await expect(page.getByText('Presentation demo · sample conditions')).toBeVisible()
+  await expect(page.getByText('Presentation demo · sample conditions')).toHaveCount(0)
+  await expect(page.getByText(/A few minutes to yourself/)).toHaveCount(0)
+  await expect(page.getByLabel('Start time', { exact: true })).toBeVisible()
+  await expect(page.getByLabel('End time', { exact: true })).toBeVisible()
   await expect(page.getByRole('combobox')).toHaveCount(0)
   await page.getByRole('button', { name: 'Find me a spot' }).click()
   await expect(page.getByRole('region', { name: 'Somewhere to reset.' })).toBeFocused()
@@ -55,6 +58,18 @@ test('mobile demo is keyboard accessible, unclipped and has no axe violations', 
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
   await expect(page.getByRole('button', { name: 'Find me a spot' })).toBeVisible()
+  await expect(page.getByLabel('Start time', { exact: true })).toBeInViewport()
+  await expect(page.getByLabel('End time', { exact: true })).toBeInViewport()
+  for (const name of [
+    'Outdoors',
+    'Indoors',
+    'Quiet',
+    'Place to sit',
+    'Lower light',
+    'Fewer people',
+  ]) {
+    await expect(page.getByRole('button', { name, exact: true })).toBeVisible()
+  }
   await page.screenshot({ path: '../tmp/demo-home-mobile.png', fullPage: true })
   await page.getByRole('button', { name: 'Find me a spot' }).focus()
   await page.keyboard.press('Enter')

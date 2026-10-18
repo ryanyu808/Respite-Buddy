@@ -1,17 +1,8 @@
 import { useRef, useState } from 'react'
-import {
-  ArrowLeft,
-  ArrowRight,
-  Clock3,
-  Footprints,
-  Leaf,
-  MapPin,
-  RotateCcw,
-  Trees,
-} from 'lucide-react'
+import { ArrowLeft, ArrowRight, Footprints, Leaf, RotateCcw } from 'lucide-react'
 import type { FeatureCollection } from 'geojson'
 import { DEFAULTS } from '../preferences'
-import { DEMO_TIME, timeLabel, type Recommendation } from '../respite'
+import { DEMO_TIME, timeLabel, type Need, type Recommendation } from '../respite'
 import { savedDemo } from '../services/respiteApi'
 import { MapView } from './MapView'
 import { BreakTimeControls } from './BreakTimeControls'
@@ -19,12 +10,12 @@ import { LocationPhoto, PhotoCredit } from './LocationPhoto'
 import '../demo-home.css'
 
 // Replay the existing engine's saved two-leg routes, not invented campus observations.
-function demoResult(minutes: number, clock: string, deadline: string | undefined, indoor: boolean) {
+function demoResult(minutes: number, clock: string, deadline: string | undefined, needs: Need[]) {
   return savedDemo({
     near: 'Leavey',
     next_class: 'TCC',
     minutes,
-    needs: indoor ? ['indoor'] : [],
+    needs,
     demo: true,
     demo_time: clock,
     deadline,
@@ -32,6 +23,15 @@ function demoResult(minutes: number, clock: string, deadline: string | undefined
     preferences: { ...DEFAULTS },
   })?.response
 }
+
+const PREFERENCES: { id: Need; label: string }[] = [
+  { id: 'outdoor', label: 'Outdoors' },
+  { id: 'indoor', label: 'Indoors' },
+  { id: 'quiet', label: 'Quiet' },
+  { id: 'seated', label: 'Place to sit' },
+  { id: 'dim', label: 'Lower light' },
+  { id: 'few_people', label: 'Fewer people' },
+]
 
 const nameOf = (item: Recommendation) => item.spot.name.replace(/\s*\(sample\)$/, '')
 function description(item: Recommendation) {
@@ -53,8 +53,8 @@ export function DemoHome({
   const [minutes, setMinutes] = useState(15)
   const [clock, setClock] = useState(DEMO_TIME)
   const [deadline, setDeadline] = useState<string | undefined>()
-  const [indoor, setIndoor] = useState(false)
-  const DEMO = demoResult(minutes, clock, deadline, indoor)
+  const [needs, setNeeds] = useState<Need[]>([])
+  const DEMO = demoResult(minutes, clock, deadline, needs)
   const [skipped, setSkipped] = useState<string[]>([])
   const [offset, setOffset] = useState(0)
   const [walking, setWalking] = useState<Recommendation | null>(null)
@@ -92,16 +92,13 @@ export function DemoHome({
     setOffset(0)
     setWalking(null)
     setNotice(
-      `${nameOf(item)} is skipped for this demo. ${options.length > 1 ? 'Here’s another option. Your class time stays the same.' : 'You’ve tried all three sample spots. Restart whenever you like.'}`,
+      `${nameOf(item)} is skipped for this demo. ${options.length > 1 ? 'Here’s another option. Your class time stays the same.' : 'You’ve tried all matching sample spots. Restart whenever you like.'}`,
     )
     focusOptions()
   }
 
   return (
     <main id="campus-content" className="demo-home">
-      <div className="showcase-label">
-        <span /> Presentation demo · sample conditions
-      </div>
       <section className="demo-hero" aria-labelledby="demo-title">
         <div>
           <p className="demo-eyebrow">
@@ -112,49 +109,30 @@ export function DemoHome({
             <br />
             Not another decision.
           </h1>
-          <p className="demo-intro">
-            A few minutes to yourself, and a simple way to get there. We’ve picked three spots for
-            your next pause.
-          </p>
-          <button
-            className="primary-button demo-find"
-            onClick={() => {
-              setWalking(null)
-              if (!options.length) {
-                setSkipped([])
-                if (!DEMO?.recommendations.length) {
-                  setMinutes(15)
-                  setClock(DEMO_TIME)
-                  setDeadline(undefined)
-                  setNotice('Restarted the 15-minute afternoon sample.')
-                }
-              }
-              focusOptions()
-            }}
-          >
-            Find me a spot <ArrowRight size={19} aria-hidden="true" />
-          </button>
-          <p className="demo-no-setup">No questions. No account. Just a little space.</p>
         </div>
         <aside
           className="demo-context"
           aria-label="Sample break, not your actual schedule or location"
         >
-          <div className="demo-context-icon">
-            <Trees size={35} aria-hidden="true" />
-          </div>
-          <p className="demo-eyebrow">LET’S TRY A CAMPUS BREAK</p>
-          <strong>{minutes} minutes, just for you.</strong>
-          <p>
-            <MapPin size={16} aria-hidden="true" /> Starting at Leavey Library
-          </p>
-          <p>
-            <Clock3 size={16} aria-hidden="true" /> Next stop: Tutor Campus Center at{' '}
-            {timeLabel(
-              DEMO?.deadline ?? new Date(Date.parse(clock) + minutes * 60000).toISOString(),
-            )}
-          </p>
-          <small>Sample starting point and class. Not your location or calendar.</small>
+          <BreakTimeControls
+            key={`${clock}/${minutes}`}
+            minutes={minutes}
+            clock={clock}
+            submitLabel="Find me a spot"
+            onWindow={(window) => {
+              setMinutes(window.minutes)
+              setClock(window.now)
+              setDeadline(window.deadline)
+              setSkipped([])
+              setOffset(0)
+              setWalking(null)
+              setNotice('Your time is set.')
+              focusOptions()
+            }}
+          />
+          <small>
+            Sample route: Leavey Library → Tutor Campus Center. Not your location or calendar.
+          </small>
         </aside>
       </section>
 
@@ -285,46 +263,28 @@ export function DemoHome({
             </button>
           )}
         </div>
-        <details className="demo-adjust">
-          <summary>Change preferences · time &amp; indoor options</summary>
-          <BreakTimeControls
-            minutes={minutes}
-            clock={clock}
-            onPreset={(value) => {
-              setMinutes(value)
-              setDeadline(undefined)
-              setWalking(null)
-              setNotice('Time updated. Sample options are ready.')
-            }}
-            onWindow={(window) => {
-              setMinutes(window.minutes)
-              setClock(window.now)
-              setDeadline(window.deadline)
-              setWalking(null)
-              setNotice('Break calculated from your selected times. Sample conditions still apply.')
-            }}
-          />
-          <div className="reset-chips" role="group" aria-label="Sample setting">
+        <div className="reset-chips demo-preferences" role="group" aria-label="Spot preferences">
+          {PREFERENCES.map(({ id, label }) => (
             <button
-              aria-pressed={!indoor}
+              key={id}
+              aria-pressed={id === 'outdoor' ? !needs.includes('indoor') : needs.includes(id)}
               onClick={() => {
-                setIndoor(false)
+                setNeeds(
+                  id === 'indoor' || id === 'outdoor'
+                    ? [...needs.filter((need) => need !== 'indoor' && need !== 'outdoor'), id]
+                    : needs.includes(id)
+                      ? needs.filter((need) => need !== id)
+                      : [...needs, id],
+                )
+                setOffset(0)
                 setWalking(null)
+                setNotice('Preferences updated.')
               }}
             >
-              Outdoors
+              {label}
             </button>
-            <button
-              aria-pressed={indoor}
-              onClick={() => {
-                setIndoor(true)
-                setWalking(null)
-              }}
-            >
-              Indoors
-            </button>
-          </div>
-        </details>
+          ))}
+        </div>
         <p className="demo-status" role="status">
           {notice}
         </p>
@@ -380,8 +340,8 @@ export function DemoHome({
             <p>
               {DEMO
                 ? DEMO.recommendations.length
-                  ? 'All three sample spots have been skipped. You can replay the demo in one tap.'
-                  : 'No sample spot fits this time window. Try more time or a daytime break.'
+                  ? 'All matching sample spots have been skipped. You can replay the demo in one tap.'
+                  : 'No sample spot fits. Try a daytime break or fewer preferences.'
                 : 'The saved demo is unavailable in this build. The live tools are still available below.'}
             </p>
             {DEMO && (
@@ -394,12 +354,13 @@ export function DemoHome({
                     setMinutes(15)
                     setClock(DEMO_TIME)
                     setDeadline(undefined)
+                    setNeeds([])
                   }
-                  setNotice('Demo restarted. All three sample spots are ready.')
+                  setNotice('Demo restarted. Sample spots are ready.')
                   focusOptions()
                 }}
               >
-                {DEMO.recommendations.length ? 'Restart demo' : 'Reset to 15-minute demo'}{' '}
+                {DEMO.recommendations.length ? 'Restart demo' : 'Reset demo'}{' '}
                 <RotateCcw size={17} aria-hidden="true" />
               </button>
             )}
@@ -409,10 +370,10 @@ export function DemoHome({
       <div className="demo-disclosure">
         <Leaf size={20} aria-hidden="true" />
         <div>
-          <strong>A simple demo, not a live promise.</strong>
+          <strong>Sample conditions, not live observations.</strong>
           <p>
-            Real campus places and saved walking paths. Quietness, availability, and this break are
-            illustrative—not verified observations. This demo works without the campus server.
+            Real places and saved routes. Lighting, seating, quietness, and crowd levels are
+            simulated.
           </p>
           <button className="demo-text-button" onClick={onLive}>
             Use live reset tools <ArrowRight size={14} aria-hidden="true" />

@@ -1,26 +1,21 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 
-test('demo supports only four presets and immediately recalculates indoor choices offline', async ({
+test('visible time window replaces presets and immediately recalculates indoor choices offline', async ({
   page,
 }) => {
   await page.route('**/api/**', (route) => route.abort())
   await page.goto('/')
-  await page.getByText('Change preferences · time & indoor options', { exact: true }).click()
-  const intervals = page.getByRole('group', { name: 'Available time', exact: true })
-  await expect(intervals.getByRole('button')).toHaveCount(4)
-  for (const name of ['15 min', '30 min', '45 min', '1 hour']) {
-    await intervals.getByRole('button', { name, exact: true }).click()
+  await expect(page.getByRole('group', { name: 'Available time', exact: true })).toHaveCount(0)
+  for (const end of ['13:15', '13:30', '13:45', '14:00']) {
+    await page.getByLabel('End time', { exact: true }).fill(end)
+    await page.getByRole('button', { name: 'Find me a spot', exact: true }).click()
     await expect(page.getByRole('article')).toHaveCount(3)
-    await expect(intervals.getByRole('button', { name, exact: true })).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    )
   }
   await page.getByRole('button', { name: 'Indoors', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(3)
   await expect(page.getByRole('article').first()).toContainText('Leavey Library')
-  await expect(page.getByText('60 minutes, just for you.', { exact: true })).toBeVisible()
+  await expect(page.getByText(/60 minutes available/)).toBeVisible()
   await expect(page.getByRole('article').first()).toContainText('53 min to reset')
   await page.getByRole('button', { name: 'Walk me there', exact: true }).first().click()
   await expect(page.getByText(/You’re already at the approximate building/)).toBeVisible()
@@ -32,20 +27,21 @@ test('current time and class time calculate a custom break without restarting it
 }) => {
   await page.route('**/api/**', (route) => route.abort())
   await page.goto('/')
-  await page.getByText('Change preferences · time & indoor options', { exact: true }).click()
-  await page.getByText('Or use current time & class start', { exact: true }).click()
-  await page.getByLabel('Break date', { exact: true }).fill('2026-10-19')
-  await page.getByLabel('Current time', { exact: true }).fill('14:10')
-  await page.getByLabel('Class starts', { exact: true }).fill('14:47')
-  await page.getByRole('button', { name: 'Calculate my break', exact: true }).click()
-  await expect(page.getByText('37 minutes, just for you.', { exact: true })).toBeVisible()
-  await expect(page.getByText(/Next stop: Tutor Campus Center at 2:47 PM/)).toBeVisible()
+  await page.getByLabel('Start time', { exact: true }).fill('10:15')
+  await page.getByLabel('End time', { exact: true }).fill('12:00')
+  await page.getByRole('button', { name: 'Find me a spot', exact: true }).click()
+  await expect(page.getByText(/105 minutes available/)).toBeVisible()
+  for (const name of ['Indoors', 'Quiet', 'Place to sit', 'Lower light', 'Fewer people']) {
+    await page.getByRole('button', { name, exact: true }).click()
+    await expect(page.getByRole('article')).toHaveCount(3)
+  }
   const leave = await page.getByRole('article').nth(1).locator('.demo-leave').innerText()
   await page.getByRole('button', { name: 'It’s full', exact: true }).first().click()
   await expect(page.getByRole('article').first().locator('.demo-leave')).toHaveText(leave)
-  await page.getByLabel('Class starts', { exact: true }).fill('14:00')
-  await page.getByRole('button', { name: 'Calculate my break', exact: true }).click()
-  await expect(page.getByRole('alert')).toContainText('Class must start after')
+  await expect(page.getByLabel('End time', { exact: true })).toHaveValue('12:00')
+  await page.getByLabel('End time', { exact: true }).fill('10:00')
+  await page.getByRole('button', { name: 'Find me a spot', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('End time must be after')
   await expect(page.getByRole('article')).toHaveCount(2)
 })
 
@@ -63,9 +59,9 @@ test('sample schedule with indoor selected opens usable saved indoor routes', as
   await expect(page.locator('.reset-spot-card').first()).toContainText('Illustrative demo')
   await expect(page.locator('.reset-route .walking-route-line').first()).toBeVisible()
   await page.getByText('Change preferences', { exact: false }).first().click()
-  await expect(
-    page.getByRole('group', { name: 'Available time', exact: true }).getByRole('button'),
-  ).toHaveCount(4)
+  await expect(page.getByLabel('Start time', { exact: true })).toBeVisible()
+  await expect(page.getByLabel('End time', { exact: true })).toBeVisible()
+  await expect(page.getByRole('group', { name: 'Available time', exact: true })).toHaveCount(0)
 })
 
 test('real entered schedule shows documented indoor alternatives, not fabricated scout results', async ({

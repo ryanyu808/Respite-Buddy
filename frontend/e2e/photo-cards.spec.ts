@@ -63,7 +63,6 @@ test('indoor demo and full reset cards retain times and actions without walls of
   page,
 }) => {
   await page.goto('/')
-  await page.getByText('Change preferences · time & indoor options', { exact: true }).click()
   await page.getByRole('button', { name: 'Indoors', exact: true }).click()
   await expect(page.getByRole('article').first().getByRole('img')).toBeVisible()
   await expect(

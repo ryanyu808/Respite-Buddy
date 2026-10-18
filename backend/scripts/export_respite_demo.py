@@ -2,7 +2,6 @@
 import json
 import sys
 from itertools import combinations
-from datetime import datetime
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app.services.geographic_data import MapData
@@ -15,19 +14,19 @@ OUT = Path(__file__).resolve().parents[2] / 'frontend' / 'src' / 'data' / 'respi
 def build():
     engine = RespiteEngine(MapData())
     scenarios = []
-    supported = ['quiet','seated','outdoor']
-    need_sets = [list(group) for size in range(4) for group in combinations(supported,size)]
-    need_sets += [['dim'],['few_people'],['indoor']]
-    need_sets += [['quiet','indoor'], ['seated','indoor'], ['quiet','seated','indoor']]
-    # Retain older deep links, but the UI only offers 15/30/45/60. The 240-minute
-    # seed supports arbitrary selected-clock demo windows from the same real routes.
-    for minutes in [5,10,12,15,20,30,45,60,240]:
+    supported = ['quiet','seated','dim','few_people']
+    need_sets = [list(group) + setting for size in range(5)
+                 for group in combinations(supported,size) for setting in [[],['indoor'],['outdoor']]]
+    # One route seed per compatible preference combination supports all selected
+    # time windows (and older duration links), without duplicating each geometry.
+    for minutes in [15,240]:
         for needs in need_sets:
+            if minutes == 15 and needs:
+                continue
             for next_class in [None,'TCC']:
-                for demo_time in [None, datetime.fromisoformat('2026-10-19T21:00:00-07:00')]:
-                    request = ResetRequest(demo=True, minutes=minutes, needs=needs, next_class=next_class, demo_time=demo_time)
-                    scenarios.append({'request': request.model_dump(mode='json'),
-                                      'response': engine.recommend(request).model_dump(mode='json')})
+                request = ResetRequest(demo=True, minutes=minutes, needs=needs, next_class=next_class)
+                scenarios.append({'request': request.model_dump(mode='json'),
+                                  'response': engine.recommend(request).model_dump(mode='json')})
     default = next(s for s in scenarios if s['request']['minutes'] == 15 and not s['request']['needs'] and s['request']['next_class'] is None and s['request']['demo_time'] is None)
     return {**default, 'scenarios': scenarios,
             'provenance': 'Real OSM coordinates and engine-computed routes. Demo spot attributes are simulated. No crowd observations.'}

@@ -1,63 +1,65 @@
 import { useState } from 'react'
-import { BREAK_INTERVALS, breakLabel, breakWindow, timeFields } from '../breakTime'
+import { breakWindow, timeFields } from '../breakTime'
 
 export function BreakTimeControls({
   minutes,
   clock,
-  onPreset,
   onWindow,
+  submitLabel = 'Calculate my break',
 }: {
   minutes: number
   clock: string
-  onPreset: (minutes: number) => void
   onWindow: (window: { minutes: number; now: string; deadline: string }) => void
+  submitLabel?: string
 }) {
-  const [fields, setFields] = useState(() => timeFields(clock))
+  const [fields, setFields] = useState(() => timeFields(clock, minutes))
   const [error, setError] = useState('')
   return (
     <div className="break-time-controls">
-      <p className="reset-label">Available time</p>
-      <div className="reset-chips" role="group" aria-label="Available time">
-        {BREAK_INTERVALS.map((value) => (
-          <button
-            key={value}
-            aria-pressed={minutes === value}
-            onClick={() => {
-              setError('')
-              onPreset(value)
-            }}
-          >
-            {breakLabel(value)}
-          </button>
-        ))}
-      </div>
-      {!BREAK_INTERVALS.some((value) => value === minutes) && (
-        <p className="reset-small">Calculated break: {minutes} minutes.</p>
-      )}
-      <details className="break-exact-time">
-        <summary>Or use current time &amp; class start</summary>
-        <p className="reset-small">Campus time · Pacific. Times are used for this search only.</p>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault()
-            try {
-              const window = breakWindow(
-                fields.date,
-                fields.current,
-                fields.classStarts,
-                fields.nextDay,
-              )
-              setError('')
-              onWindow(window)
-            } catch (error) {
-              setError(
-                error instanceof Error && /Choose|Class must/.test(error.message)
-                  ? error.message
-                  : 'These times are invalid or ambiguous. Check the date and Pacific times.',
-              )
-            }
-          }}
-        >
+      <form
+        aria-label="Your break times"
+        onSubmit={(event) => {
+          event.preventDefault()
+          try {
+            const window = breakWindow(
+              fields.date,
+              fields.current,
+              fields.classStarts,
+              fields.nextDay,
+            )
+            setError('')
+            onWindow(window)
+          } catch (error) {
+            setError(
+              error instanceof Error && /Choose|End time/.test(error.message)
+                ? error.message
+                : 'These times are invalid or ambiguous. Check the date and Pacific times.',
+            )
+          }
+        }}
+      >
+        <div className="form-grid">
+          <label className="reset-field">
+            Start time
+            <input
+              type="time"
+              required
+              value={fields.current}
+              onChange={(e) => setFields({ ...fields, current: e.target.value })}
+            />
+          </label>
+          <label className="reset-field">
+            End time
+            <input
+              type="time"
+              required
+              value={fields.classStarts}
+              onChange={(e) => setFields({ ...fields, classStarts: e.target.value })}
+            />
+          </label>
+        </div>
+        <details className="break-date-options">
+          <summary>Date &amp; overnight</summary>
           <label className="reset-field">
             Break date
             <input
@@ -67,44 +69,28 @@ export function BreakTimeControls({
               onChange={(e) => setFields({ ...fields, date: e.target.value })}
             />
           </label>
-          <div className="form-grid">
-            <label className="reset-field">
-              Current time
-              <input
-                type="time"
-                required
-                value={fields.current}
-                onChange={(e) => setFields({ ...fields, current: e.target.value })}
-              />
-            </label>
-            <label className="reset-field">
-              Class starts
-              <input
-                type="time"
-                required
-                value={fields.classStarts}
-                onChange={(e) => setFields({ ...fields, classStarts: e.target.value })}
-              />
-            </label>
-          </div>
           <label className="reset-check">
             <input
               type="checkbox"
               checked={fields.nextDay}
               onChange={(e) => setFields({ ...fields, nextDay: e.target.checked })}
             />{' '}
-            Class starts the next day
+            End time is the next day
           </label>
-          {error && (
-            <p role="alert" className="reset-time-error">
-              {error}
-            </p>
-          )}
-          <button className="reset-link" type="submit">
-            Calculate my break
-          </button>
-        </form>
-      </details>
+        </details>
+        <p className="reset-small">Pacific time · {minutes} minutes available</p>
+        {error && (
+          <p role="alert" className="reset-time-error">
+            {error}
+          </p>
+        )}
+        <button
+          className={submitLabel === 'Find me a spot' ? 'primary-button demo-find' : 'reset-link'}
+          type="submit"
+        >
+          {submitLabel}
+        </button>
+      </form>
     </div>
   )
 }
