@@ -264,3 +264,23 @@ def test_demo_bundle_matches_shared_engine(engine):
     for scenario in bundle['scenarios']:
         expected = engine.recommend(ResetRequest.model_validate(scenario['request'])).model_dump(mode='json')
         assert scenario['response'] == expected, 'Run scripts/export_respite_demo.py'
+
+
+def test_saved_campus_legs_match_real_directed_router(engine):
+    from app.models import Point, Preferences
+    from app.services.spot_library import building_library
+    path = Path(__file__).resolve().parents[2] / 'frontend/src/data/demo-route-legs.json'
+    catalog = json.loads(path.read_text(encoding='utf-8'))
+    assert catalog['locations'] == building_library(engine.data)
+    for location in catalog['locations']:
+        point = Point(lat=location['lat'], lon=location['lon'], name=location['name'])
+        for spot in engine.library(demo=True):
+            target = Point(lat=spot.lat, lon=spot.lng, name=spot.name)
+            pair = catalog['legs'][location['id']][spot.id]
+            for key, start, end in [('outward', point, target), ('onward', target, point)]:
+                try:
+                    route = engine.walking_leg(start, end, Preferences())
+                except ValueError:
+                    assert key not in pair, 'An unreachable leg must not become a zero-minute walk.'
+                else:
+                    assert pair[key] == (route.model_dump(mode='json') if route else None)

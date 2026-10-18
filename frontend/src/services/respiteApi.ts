@@ -10,6 +10,7 @@ import {
 import { FALLBACK } from '../data/fallback'
 import { DEFAULT_FILTERS, matchesFilters } from '../smartFilters'
 import { inZone, localInstant } from '../calendar/model'
+import { campusJourneySeed } from './demoJourney'
 
 type DemoBundle = {
   request: ResetRequest
@@ -92,13 +93,31 @@ export function savedDemo(request: ResetRequest): ResetResult | null {
     lookup.minutes >= 1 &&
     lookup.minutes <= 240
   ) {
-    const seed = scenarios.find((item) =>
+    let seed = scenarios.find((item) =>
       sameRequest(
         { ...lookup, minutes: 240, demo_time: DEMO_TIME, deadline: undefined },
         item.request,
         item.response,
       ),
     )
+    if (!seed) {
+      const baseline = scenarios.find((item) =>
+        sameRequest(
+          {
+            ...lookup,
+            near: 'Leavey',
+            next_class: null,
+            minutes: 240,
+            demo_time: DEMO_TIME,
+            deadline: undefined,
+          },
+          item.request,
+          item.response,
+        ),
+      )
+      const response = baseline && campusJourneySeed(lookup, baseline.response)
+      if (response) seed = { request: lookup, response }
+    }
     if (seed) {
       const clock = lookup.demo_time ?? DEMO_TIME
       const at = Date.parse(clock)

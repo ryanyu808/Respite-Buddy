@@ -17,12 +17,13 @@ export function breakWindow(date: string, current: string, classStarts: string, 
   return { minutes, now: start, deadline }
 }
 
-export function timeFields(clock: string, minutes = 15) {
+export function timeFields(clock: string, minutes = 15, deadline?: string) {
   const at = inZone(clock)
+  const end = deadline ? inZone(deadline) : at.add({ minutes })
   return {
     date: at.toPlainDate().toString(),
     current: at.toPlainTime().toString().slice(0, 5),
-    classStarts: at.add({ minutes }).toPlainTime().toString().slice(0, 5),
-    nextDay: at.add({ minutes }).day !== at.day,
+    classStarts: end.toPlainTime().toString().slice(0, 5),
+    nextDay: !end.toPlainDate().equals(at.toPlainDate()),
   }
 }
