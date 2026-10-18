@@ -37,6 +37,17 @@ import { PreferencesPanel } from './PreferencesPanel'
 import { MapView } from './MapView'
 import { SupportFooter } from './SupportFooter'
 import { SpotCard } from './SpotCard'
+import { SmartFilterControls } from './SmartFilterControls'
+import { DEFAULT_FILTERS, loadFilters, saveFilters, type SmartFilters } from '../smartFilters'
+import {
+  contextualSuggestion,
+  scheduleContext,
+  rememberedCampus,
+  rememberCampus,
+  clearRememberedCampus,
+} from '../smartContext'
+import { readSchedule } from '../calendar/storage'
+import type { CalendarEvent } from '../calendar/model'
 
 type Props = {
   locations: Location[]
@@ -66,7 +77,26 @@ export function RespiteBuddy({
   onSchedule,
 }: Props) {
   const [link] = useState(() => parseDeepLink(window.location.search))
-  const [near, setNear] = useState<string | Point>(link.near ?? 'Leavey')
+  const [near, setNear] = useState<string | Point>(
+    link.near ?? rememberedCampus() ?? 'Leavey Library',
+  )
+  const [locationSource, setLocationSource] = useState(
+    link.near
+      ? 'Linked starting point'
+      : rememberedCampus()
+        ? 'Last selected campus starting point'
+        : 'Default campus starting point (not your current location)',
+  )
+  const [filters, setFilters] = useState<SmartFilters>(link.filters ?? loadFilters())
+  const [schedule, setSchedule] = useState<CalendarEvent[]>([])
+  const [dismissedSuggestion, setDismissedSuggestion] = useState('')
+  const [showBackups, setShowBackups] = useState(false)
+  const [showDirections, setShowDirections] = useState(Boolean(link.to || context))
+  const [adjust, setAdjust] = useState(false)
+  const scheduleRef = useRef<CalendarEvent[]>([])
+  const classDeadlineRef = useRef<string | undefined>(
+    context?.next_class ? context.deadline : link.next ? link.deadline : undefined,
+  )
   const [nextClass, setNextClass] = useState<string | Point | null>(link.next)
   const [buildings, setBuildings] = useState<Location[]>(FALLBACK.buildings ?? locations)
   const [uscId, setUscId] = useState(link.usc_id ?? false)
@@ -94,6 +124,28 @@ export function RespiteBuddy({
   const routeRef = useRef<HTMLElement>(null)
   const [minutes, setMinutes] = useState(link.minutes ?? settings.minutes)
   const [needs, setNeeds] = useState(link.needs ?? settings.needs)
+  useEffect(() => {
+    if (!demo) saveFilters(filters)
+  }, [filters, demo])
+  useEffect(() => {
+    let mounted = true
+    readSchedule()
+      .then((value) => {
+        if (mounted) {
+          scheduleRef.current = value
+          setSchedule(value)
+        }
+      })
+      .catch(() => {})
+    return () => {
+      mounted = false
+    }
+  }, [])
+  const automaticContext = scheduleContext(schedule)
+  const suggestion = contextualSuggestion(
+    demo ? demoTime : new Date().toISOString(),
+    demo ? null : automaticContext,
+  )
 
   useEffect(() => {
     let cancelled = false
@@ -125,6 +177,7 @@ export function RespiteBuddy({
       demo,
       usc_id: uscId,
       preferences,
+      filters,
       deadline,
       exclusions: activeExclusions(exclusions),
       ...(demo ? { demo_time: demoTime } : {}),
@@ -145,6 +198,7 @@ export function RespiteBuddy({
       const value = await findResetSpots(input)
       if (id !== sequence.current) return
       setResult(value)
+      setShowBackups(false)
       setDeadline(value.response.deadline)
       setLastRequest({ ...input, deadline: value.response.deadline })
       const requestedSpot = !linkApplied.current ? link.to : null
@@ -175,6 +229,7 @@ export function RespiteBuddy({
   }, [])
   useEffect(() => {
     if (!context) return
+    setShowDirections(true)
     setNear(context.near)
     setNextClass(context.next_class)
     setMinutes(context.minutes)
@@ -183,18 +238,76 @@ export function RespiteBuddy({
     setDemoTime(context.demo_time ?? DEMO_TIME)
     setUscId(context.usc_id)
     setDeadline(context.deadline)
+    classDeadlineRef.current = context.next_class ? context.deadline : undefined
+    if (context.filters || context.demo) setFilters(context.filters ?? { ...DEFAULT_FILTERS })
+    setLocationSource(
+      context.demo
+        ? 'Sample starting point'
+        : typeof context.near === 'string'
+          ? 'Selected campus starting point'
+          : 'Selected starting point (not live location)',
+    )
     if (context.preferences) onPreferences(context.preferences)
     void search(
-      { ...context, preferences: context.preferences ?? preferences, exclusions: [] },
+      {
+        ...context,
+        filters: context.filters ?? (context.demo ? { ...DEFAULT_FILTERS } : filters),
+        preferences: context.preferences ?? preferences,
+        exclusions: [],
+      },
       true,
     )
   }, [context])
+  function quickSearch() {
+    setShowDirections(false)
+    const available = !demo && !context && !link.auto ? scheduleContext(scheduleRef.current) : null
+    if (available) {
+      setNextClass(available.next_class)
+      setMinutes(available.minutes)
+      setDeadline(available.deadline)
+      classDeadlineRef.current = available.deadline
+    }
+    void search(available ?? {}, true)
+  }
+  function updateFilters(value: SmartFilters) {
+    setFilters(value)
+    if (hasRun.current) void search({ filters: value })
+  }
+  function useApprovedLocation() {
+    if (!navigator.geolocation) {
+      setNotice('Location is unavailable. The labeled campus starting point still works.')
+      return
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const point = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+          name: 'Your approved location',
+        }
+        if (
+          point.lat < 34.01 ||
+          point.lat > 34.032 ||
+          point.lon < -118.298 ||
+          point.lon > -118.277
+        ) {
+          setNotice('That location is outside the campus snapshot. Choose a campus starting point.')
+          return
+        }
+        setLocationSource('Your approved location (this session only)')
+        change({ near: point })
+      },
+      () =>
+        setNotice('Location was not available. Your labeled campus starting point is unchanged.'),
+      { timeout: 5000, maximumAge: 60000 },
+    )
+  }
 
   function change(input: Partial<ResetRequest>) {
     if (input.minutes !== undefined) {
       const value = input.minutes
       setMinutes(value)
-      const classDeadline = context?.next_class ? context.deadline : undefined
+      const classDeadline = classDeadlineRef.current
       setDeadline(classDeadline)
       input = { ...input, deadline: classDeadline }
       onSettings({ ...settings, minutes: value, needs: input.needs ?? needs })
@@ -203,7 +316,12 @@ export function RespiteBuddy({
       setNeeds(input.needs)
       onSettings({ ...settings, minutes: input.minutes ?? minutes, needs: input.needs })
     }
-    if (input.near !== undefined) setNear(input.near)
+    if (input.near !== undefined) {
+      setNear(input.near)
+      rememberCampus(input.near)
+      if (typeof input.near === 'string')
+        setLocationSource('Selected campus starting point (not live location)')
+    }
     if ('next_class' in input) setNextClass(input.next_class ?? null)
     if (input.usc_id !== undefined) setUscId(input.usc_id)
     if (input.preferences) onPreferences(input.preferences)
@@ -216,6 +334,10 @@ export function RespiteBuddy({
     setExclusions(demoExclusions)
     saveExclusions(demoExclusions)
     setDemo(true)
+    setShowDirections(false)
+    setLocationSource('Sample starting point (not your current location)')
+    classDeadlineRef.current = undefined
+    setFilters({ ...DEFAULT_FILTERS })
     setDemoTime(DEMO_TIME)
     setNear('Leavey')
     setNextClass(null)
@@ -235,6 +357,7 @@ export function RespiteBuddy({
         deadline: undefined,
         usc_id: false,
         preferences: { ...DEFAULTS },
+        filters: { ...DEFAULT_FILTERS },
         exclusions: demoExclusions,
       },
       true,
@@ -329,7 +452,11 @@ export function RespiteBuddy({
     : null
 
   return (
-    <main className="reset-page" id="reset-controls">
+    <main
+      className={`reset-page ${!result && !busy && !error ? 'zero-start' : ''}`}
+      id="reset-controls"
+      tabIndex={-1}
+    >
       <div className="reset-hero">
         <div>
           <div className="eyebrow">
@@ -355,204 +482,227 @@ export function RespiteBuddy({
             <h2>Your next little break</h2>
             <span className="reset-campus">USC · University Park</span>
           </div>
-          <p className="reset-label" id="available-time">
-            How many minutes do you have?
-          </p>
-          <div className="reset-chips" role="group" aria-labelledby="available-time">
-            {[...new Set([...TIME_CHIPS, minutes])]
-              .sort((a, b) => a - b)
-              .map((value) => (
-                <button
-                  key={value}
-                  aria-pressed={minutes === value}
-                  onClick={() => change({ minutes: value })}
-                >
-                  {value}
-                  <span> min</span>
-                </button>
-              ))}
-          </div>
-          <fieldset className="reset-needs">
-            <legend>
-              What would feel good? <span>Optional</span>
-            </legend>
-            <div className="reset-chips">
-              {NEEDS.map(({ id, label }) => (
-                <button
-                  key={id}
-                  aria-pressed={needs.includes(id)}
-                  onClick={() =>
-                    change({
-                      needs: needs.includes(id)
-                        ? needs.filter((need) => need !== id)
-                        : [
-                            ...needs.filter(
-                              (need) =>
-                                !(id === 'indoor' && need === 'outdoor') &&
-                                !(id === 'outdoor' && need === 'indoor'),
-                            ),
-                            id,
-                          ],
-                    })
-                  }
-                >
-                  {needs.includes(id) && <Check size={13} />}
-                  {label}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-          <button
-            className="primary-button reset-primary"
-            disabled={busy}
-            onClick={() => void search({}, true)}
-          >
+          <button className="primary-button reset-primary" disabled={busy} onClick={quickSearch}>
             {busy ? <LoaderCircle className="spin" size={19} /> : <Leaf size={19} />}
             {busy ? 'Finding your pause…' : 'Somewhere calm, now'}
-            {!busy && <ArrowRight size={18} />}
           </button>
           <p className="reset-default-note">
-            Starting near {placeText(near)}.{' '}
-            {nextClass
-              ? `Next stop: ${placeText(nextClass)}.`
-              : 'No next class selected; rest time is provisional.'}
+            {locationSource}: {placeText(near)}.{' '}
+            {automaticContext && !nextClass
+              ? `${automaticContext.minutes} minutes before your next class.`
+              : nextClass
+                ? `Next stop: ${placeText(nextClass)}.`
+                : `${minutes} minute break; no next-class walk included.`}
           </p>
-          <div className="reset-presets" role="group" aria-label="Walking presets">
-            <span>Walking style</span>
-            <div className="preset-list">
-              {Object.entries(PRESETS).map(([name, value]) => (
-                <button
-                  key={name}
-                  className={`chip ${JSON.stringify(value) === JSON.stringify(preferences) ? 'active' : ''}`}
-                  aria-pressed={JSON.stringify(value) === JSON.stringify(preferences)}
-                  onClick={() => change({ preferences: { ...value } })}
-                >
-                  {name}
-                </button>
-              ))}
-            </div>
-          </div>
-          <details className="reset-fine-tune">
-            <summary>
-              Fine-tune <span>Location, next class & walking preferences</span>
-            </summary>
-            <label className="reset-field">
-              Starting near
-              <input
-                list="reset-buildings"
-                value={placeText(near)}
-                maxLength={120}
-                onChange={(e) => change({ near: e.target.value })}
-                onBlur={() => {
-                  if (!placeText(near).trim()) change({ near: 'Leavey' })
-                }}
-              />
-            </label>
-            <label className="reset-field">
-              Next class <span>Optional building or code</span>
-              <input
-                list="reset-buildings"
-                value={placeText(nextClass)}
-                placeholder="e.g. Leavey · verified buildings only"
-                maxLength={120}
-                onChange={(e) => change({ next_class: e.target.value || null })}
-              />
-            </label>
-            <datalist id="reset-buildings">
-              {buildings.map((building) => (
-                <option key={building.id} value={building.name} />
-              ))}
-            </datalist>
-            <p className="reset-small">
-              Building names and supported codes resolve through the campus library. Unsupported
-              buildings need verified coordinates.
-            </p>
-            <label className="reset-check">
-              <input
-                type="checkbox"
-                checked={uscId}
-                onChange={(e) => change({ usc_id: e.target.checked })}
-              />
-              I have a USC ID for spaces that require it
-            </label>
-            <PreferencesPanel
-              value={preferences}
-              onChange={(value) => change({ preferences: value })}
-              showPresets={false}
-            />
-            <label className="reset-check">
-              <input
-                type="checkbox"
-                checked={settings.lowSensory}
-                onChange={(e) => onSettings({ ...settings, lowSensory: e.target.checked })}
-              />
-              Low-sensory display · larger text, no motion
-            </label>
-            <button
-              className="reset-link"
-              onClick={() => {
-                onClear()
-                setMinutes(15)
-                setNeeds([])
-                setNear('Leavey')
-                setNextClass(null)
-                setUscId(false)
-                setCalendar(false)
-                setDemo(false)
-                setDemoTime(DEMO_TIME)
-                setDeadline(undefined)
-                setResult(null)
-                setLastRequest(null)
-                setError('')
-                setNotice('Preferences cleared on this device.')
-                sequence.current += 1
-                setBusy(false)
-                hasRun.current = false
+          <details
+            className="reset-adjust"
+            open={adjust}
+            onToggle={(e) => setAdjust(e.currentTarget.open)}
+          >
+            <summary
+              onClick={(e) => {
+                e.preventDefault()
+                setAdjust(!adjust)
               }}
             >
-              <RotateCcw size={14} />
-              Clear saved preferences
-            </button>
-          </details>
-          <section className="calendar-demo" aria-label="Calendar demonstration">
-            {onSchedule && (
-              <button onClick={onSchedule}>
-                Open My Schedule — manual, ICS &amp; screenshot import
-              </button>
-            )}
-            <CalendarDays size={20} />
-            <div>
-              <h3>A break that fits your day</h3>
-              <p>Preview free/busy availability. Simulated, with no sign-in.</p>
+              Change preferences <span>Adjust time, starting point &amp; more</span>
+            </summary>
+            <p className="reset-label" id="available-time">
+              Available time
+            </p>
+            <div className="reset-chips" role="group" aria-labelledby="available-time">
+              {[...new Set([...TIME_CHIPS, minutes])]
+                .sort((a, b) => a - b)
+                .map((value) => (
+                  <button
+                    key={value}
+                    aria-pressed={minutes === value}
+                    onClick={() => change({ minutes: value })}
+                  >
+                    {value}
+                    <span> min</span>
+                  </button>
+                ))}
             </div>
-            <button
-              className="reset-link"
-              aria-expanded={calendar}
-              onClick={() => setCalendar(!calendar)}
-            >
-              {calendar ? 'Hide preview' : 'Preview calendar'}
-            </button>
-            {calendar && (
-              <div className="calendar-preview">
-                <strong>Simulated calendar · not connected</strong>
-                <p>Sample only · no class titles or personal schedule.</p>
-                <ol>
-                  <li>
-                    <span>12:00–1:00 PM</span>Busy
-                  </li>
-                  <li>
-                    <span>1:00–1:15 PM</span>Free · 15-minute break
-                  </li>
-                  <li>
-                    <span>1:15–2:15 PM</span>Busy
-                  </li>
-                </ol>
-                <button className="reset-link" onClick={startDemo}>
-                  Try this sample break <ArrowRight size={14} />
-                </button>
+            <fieldset className="reset-needs">
+              <legend>
+                Reset preferences <span>Optional</span>
+              </legend>
+              <div className="reset-chips">
+                {NEEDS.map(({ id, label }) => (
+                  <button
+                    key={id}
+                    aria-pressed={needs.includes(id)}
+                    onClick={() =>
+                      change({
+                        needs: needs.includes(id)
+                          ? needs.filter((need) => need !== id)
+                          : [
+                              ...needs.filter(
+                                (need) =>
+                                  !(id === 'indoor' && need === 'outdoor') &&
+                                  !(id === 'outdoor' && need === 'indoor'),
+                              ),
+                              id,
+                            ],
+                      })
+                    }
+                  >
+                    {needs.includes(id) && <Check size={13} />}
+                    {label}
+                  </button>
+                ))}
               </div>
-            )}
-          </section>
+            </fieldset>
+            <div className="reset-presets" role="group" aria-label="Walking presets">
+              <span>Walking style</span>
+              <div className="preset-list">
+                {Object.entries(PRESETS).map(([name, value]) => (
+                  <button
+                    key={name}
+                    className={`chip ${JSON.stringify(value) === JSON.stringify(preferences) ? 'active' : ''}`}
+                    aria-pressed={JSON.stringify(value) === JSON.stringify(preferences)}
+                    onClick={() => change({ preferences: { ...value } })}
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <details className="reset-fine-tune">
+              <summary>
+                Fine-tune <span>Location, next class & walking preferences</span>
+              </summary>
+              <button className="reset-link" onClick={useApprovedLocation}>
+                Use my location (optional permission)
+              </button>
+              <label className="reset-field">
+                Starting near
+                <input
+                  list="reset-buildings"
+                  value={placeText(near)}
+                  maxLength={120}
+                  onChange={(e) => change({ near: e.target.value })}
+                  onBlur={() => {
+                    if (!placeText(near).trim()) change({ near: 'Leavey' })
+                  }}
+                />
+              </label>
+              <label className="reset-field">
+                Next class <span>Optional building or code</span>
+                <input
+                  list="reset-buildings"
+                  value={placeText(nextClass)}
+                  placeholder="e.g. Leavey · verified buildings only"
+                  maxLength={120}
+                  onChange={(e) => change({ next_class: e.target.value || null })}
+                />
+              </label>
+              <datalist id="reset-buildings">
+                {buildings.map((building) => (
+                  <option key={building.id} value={building.name} />
+                ))}
+              </datalist>
+              <p className="reset-small">
+                Building names and supported codes resolve through the campus library. Unsupported
+                buildings need verified coordinates.
+              </p>
+              <label className="reset-check">
+                <input
+                  type="checkbox"
+                  checked={uscId}
+                  onChange={(e) => change({ usc_id: e.target.checked })}
+                />
+                I have a USC ID for spaces that require it
+              </label>
+              <PreferencesPanel
+                value={preferences}
+                onChange={(value) => change({ preferences: value })}
+                showPresets={false}
+              />
+              <label className="reset-check">
+                <input
+                  type="checkbox"
+                  checked={settings.lowSensory}
+                  onChange={(e) => onSettings({ ...settings, lowSensory: e.target.checked })}
+                />
+                Low-sensory display · larger text, no motion
+              </label>
+              <button
+                className="reset-link"
+                onClick={() => {
+                  onClear()
+                  classDeadlineRef.current = undefined
+                  clearRememberedCampus()
+                  setFilters({ ...DEFAULT_FILTERS })
+                  setLocationSource('Default campus starting point (not your current location)')
+                  setMinutes(15)
+                  setNeeds([])
+                  setNear('Leavey')
+                  setNextClass(null)
+                  setUscId(false)
+                  setCalendar(false)
+                  setDemo(false)
+                  setDemoTime(DEMO_TIME)
+                  setDeadline(undefined)
+                  setResult(null)
+                  setLastRequest(null)
+                  setError('')
+                  setNotice('Preferences cleared on this device.')
+                  sequence.current += 1
+                  setBusy(false)
+                  hasRun.current = false
+                }}
+              >
+                <RotateCcw size={14} />
+                Clear saved preferences
+              </button>
+            </details>
+            <section className="calendar-demo" aria-label="Calendar demonstration">
+              {adjust && !result && !busy && !error && !demo && (
+                <button className="reset-demo-button" onClick={startDemo}>
+                  Try the demo
+                </button>
+              )}
+              {onSchedule && (
+                <button onClick={onSchedule}>
+                  Open My Schedule — manual, ICS &amp; screenshot import
+                </button>
+              )}
+              <CalendarDays size={20} />
+              <div>
+                <h3>A break that fits your day</h3>
+                <p>Preview free/busy availability. Simulated, with no sign-in.</p>
+              </div>
+              <button
+                className="reset-link"
+                aria-expanded={calendar}
+                onClick={() => setCalendar(!calendar)}
+              >
+                {calendar ? 'Hide preview' : 'Preview calendar'}
+              </button>
+              {calendar && (
+                <div className="calendar-preview">
+                  <strong>Simulated calendar · not connected</strong>
+                  <p>Sample only · no class titles or personal schedule.</p>
+                  <ol>
+                    <li>
+                      <span>12:00–1:00 PM</span>Busy
+                    </li>
+                    <li>
+                      <span>1:00–1:15 PM</span>Free · 15-minute break
+                    </li>
+                    <li>
+                      <span>1:15–2:15 PM</span>Busy
+                    </li>
+                  </ol>
+                  <button className="reset-link" onClick={startDemo}>
+                    Try this sample break <ArrowRight size={14} />
+                  </button>
+                </div>
+              )}
+            </section>
+          </details>
         </section>
         <div className="reset-results-column">
           {link.notices.length > 0 && (
@@ -565,7 +715,24 @@ export function RespiteBuddy({
           {error && (
             <div className="reset-error" role="alert">
               <strong>Let’s try another way.</strong>
-              <p>{error}</p>
+              <p>
+                Campus results aren’t available for these settings. Try the sample demo or change
+                the starting point.
+              </p>
+              {onDirectory && (
+                <button className="reset-link" onClick={onDirectory}>
+                  Explore documented locations
+                </button>
+              )}
+              {!demo && (
+                <button className="reset-demo-button" onClick={startDemo}>
+                  Try the demo
+                </button>
+              )}
+              <details>
+                <summary>Connection details</summary>
+                <p>{error}</p>
+              </details>
               <button className="reset-link" disabled={busy} onClick={() => void search()}>
                 Retry connection
               </button>
@@ -609,9 +776,16 @@ export function RespiteBuddy({
                 className="reset-link"
                 onClick={() => {
                   setDemo(false)
+                  const liveFilters = loadFilters()
+                  setFilters(liveFilters)
                   setDemoTime(DEMO_TIME)
                   setDeadline(undefined)
-                  void search({ demo: false, demo_time: undefined, deadline: undefined })
+                  void search({
+                    demo: false,
+                    filters: liveFilters,
+                    demo_time: undefined,
+                    deadline: undefined,
+                  })
                 }}
               >
                 Back to current campus results
@@ -641,30 +815,6 @@ export function RespiteBuddy({
                   ? `${recommendations.length} eligible places. ${result.response.minutes} minutes remain in this break. Evaluated at ${timeLabel(result.response.evaluated_at)} Pacific.${result.saved ? ' Saved demonstration.' : ''}`
                   : 'Your recommendations will appear here.'}
             </div>
-            {!result && !busy && (
-              <div className="reset-empty">
-                <div className="reset-empty-icon">
-                  <Leaf size={34} strokeWidth={1.2} />
-                </div>
-                <h3>A little pause, within reach.</h3>
-                <p>
-                  Choose the time you have. We’ll check the walk there and, if you add it, the walk
-                  to class.
-                </p>
-                <div className="reset-how">
-                  <span>
-                    <Clock3 size={16} />
-                    Time to rest
-                  </span>
-                  <span>
-                    <Footprints size={16} />A mapped walk
-                  </span>
-                  <span>
-                    <MapPin size={16} />A backup option
-                  </span>
-                </div>
-              </div>
-            )}
             {result && !recommendations.length && !busy && (
               <div className="reset-empty">
                 <Leaf size={30} />
@@ -672,7 +822,7 @@ export function RespiteBuddy({
                 <p>
                   {demo
                     ? 'Try more time, fewer needs, or daytime. Unknown safety, access and opening hours do not qualify.'
-                    : "We're still confirming campus spaces. You can explore documented locations or try the sample demo."}
+                    : "We're still confirming campus spaces."}
                 </p>
                 {!demo && onDirectory && (
                   <button onClick={onDirectory}>Explore documented locations</button>
@@ -681,8 +831,13 @@ export function RespiteBuddy({
             )}
             {recommendations.length > 0 && (
               <ol className="reset-spot-list">
-                {recommendations.map((item, index) => (
-                  <li key={item.spot.id}>
+                {[
+                  selected ?? recommendations[0],
+                  ...recommendations.filter(
+                    (r) => r.spot.id !== (selected ?? recommendations[0]).spot.id,
+                  ),
+                ].map((item, index) => (
+                  <li key={item.spot.id} hidden={index > 0 && !showBackups}>
                     <SpotCard
                       item={item}
                       rank={index + 1}
@@ -694,6 +849,7 @@ export function RespiteBuddy({
                       }
                       busy={busy}
                       onSelect={() => {
+                        setShowDirections(true)
                         setSelectedId(item.spot.id)
                         setRouteId(item.route_to_spot?.recommended_id ?? '')
                         setLeg('spot')
@@ -715,6 +871,53 @@ export function RespiteBuddy({
                 ))}
               </ol>
             )}
+            {recommendations.length > 1 && (
+              <button
+                className="reset-link"
+                aria-expanded={showBackups}
+                onClick={() => setShowBackups(!showBackups)}
+              >
+                {showBackups
+                  ? 'Hide backup options'
+                  : `Backup options (${recommendations.length - 1})`}
+              </button>
+            )}
+            {(result || error) && (
+              <details className="reset-filter-adjust">
+                <summary>Adjust · optional filters</summary>
+                <SmartFilterControls value={filters} onChange={updateFilters} />
+              </details>
+            )}
+            {(result || error) && suggestion && suggestion.id !== dismissedSuggestion && (
+              <div className="context-suggestion">
+                <p>{suggestion.text}</p>
+                <button
+                  className="reset-link"
+                  onClick={() => {
+                    if (suggestion.kind === 'between') {
+                      quickSearch()
+                    } else {
+                      setAdjust(true)
+                      updateFilters({
+                        ...filters,
+                        ...(suggestion.kind === 'lunch'
+                          ? { activity: 'eat' as const }
+                          : { evening_access: true }),
+                      })
+                    }
+                  }}
+                >
+                  {suggestion.action}
+                </button>
+                <button
+                  className="reset-link"
+                  onClick={() => setDismissedSuggestion(suggestion.id)}
+                  aria-label="Dismiss suggestion"
+                >
+                  Dismiss
+                </button>
+              </div>
+            )}
             {!!result?.response.notes.length && (
               <details className="reset-data-notes">
                 <summary>Data notes & limitations</summary>
@@ -724,18 +927,14 @@ export function RespiteBuddy({
               </details>
             )}
           </section>
-          {!demo && (
+          {!demo && !error && (busy || result?.response.recommendations.length === 0) && (
             <section className="reset-demo-invite">
-              <div>
-                <strong>Want to see how it works?</strong>
-                <p>Explore an illustrative campus break at a fixed demo time.</p>
-              </div>
               <button className="reset-demo-button" onClick={startDemo}>
                 Try the demo <ArrowRight size={15} />
               </button>
             </section>
           )}
-          {selected && routeResult && route && (
+          {showDirections && selected && routeResult && route && (
             <section
               className="reset-route"
               aria-labelledby="reset-route-title"
@@ -750,7 +949,8 @@ export function RespiteBuddy({
                 {leg === 'spot'
                   ? `From ${result!.response.origin.name} to your reset spot.`
                   : `From your reset spot to ${result!.response.next_class?.name}.`}{' '}
-                Leave the spot by {timeLabel(selected.leave_by)} Pacific.
+                {result?.response.next_class ? 'Leave the spot by' : 'Your rest window ends by'}{' '}
+                {timeLabel(selected.leave_by)} Pacific.
                 {result?.response.mode === 'demo' ? ' Demonstration route.' : ''}
               </p>
               {selected.route_to_class && (

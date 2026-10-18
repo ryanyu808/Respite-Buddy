@@ -11,6 +11,7 @@ from ..models import Point, RouteRequest
 from ..respite_models import ResetRequest, ResetResponse, Recommendation, Crowd, Exclusion
 from .routing import Router
 from .spot_library import load_library, demo_library, building_library
+from .spot_filters import matches, activity_priority
 
 PACIFIC = ZoneInfo('America/Los_Angeles')
 DEMO_TIME = datetime(2026, 10, 19, 13, 0, tzinfo=PACIFIC)
@@ -136,6 +137,10 @@ class RespiteEngine:
             dedicated = spot.purpose != 'general' or re.search(r'\b(prayer|lactation|breastfeeding|nursing room)\b', spot.name, re.IGNORECASE)
             if spot.id in excluded or dedicated:
                 continue
+            if spot.reservation_required is True:
+                # A verified room record does not establish a user's reservation.
+                # Zero-question discovery must not promise a reservable room as walk-in.
+                continue
             if not request.demo and not (spot.data_kind == 'scouted' and spot.verified_by and spot.verified_date):
                 continue
             if spot.access not in ('open','usc_id') or (spot.access == 'usc_id' and not request.usc_id):
@@ -150,6 +155,10 @@ class RespiteEngine:
             closing = open_until(spot, at)
             if closing is None:
                 continue
+            # Apply attribute eligibility before routing/ranking. Walking limits
+            # are checked against the existing router's estimate below.
+            if not matches(spot, request.filters.model_copy(update={'max_walk_min':None}), at):
+                continue
             point = Point(lat=spot.lat, lon=spot.lng, name=spot.name)
             try:
                 outward = self.walking_leg(origin, point, request.preferences)
@@ -162,6 +171,8 @@ class RespiteEngine:
             second = next((r for r in onward.routes if r.id == onward.recommended_id), None) if onward else None
             # Round each leg UP, so displayed rest and leave-by never overpromise time.
             walk_to = math.ceil(first.duration_min) if first else 0
+            if request.filters.max_walk_min is not None and walk_to > request.filters.max_walk_min:
+                continue
             walk_class = math.ceil(second.duration_min) if second else 0
             arrival = plus_minutes(at, walk_to)
             leave_by = min([plus_minutes(deadline, -walk_class), closing], key=lambda d: d.timestamp())
@@ -188,6 +199,8 @@ class RespiteEngine:
             base = os.getenv('WEBSITE_URL', 'https://neuro-route-nine.vercel.app').rstrip('/')
             context = {'deadline':deadline.isoformat(), 'usc_id':request.usc_id,
                        'preferences':request.preferences.model_dump()}
+            if request.filters != type(request.filters)():
+                context['filters'] = request.filters.model_dump(mode='json')
             if request.demo:
                 context['demo_time'] = at.isoformat()
             fragment = quote(json.dumps(context,separators=(',',':')),safe='')
@@ -195,7 +208,7 @@ class RespiteEngine:
                 walk_to_class_min=walk_class if next_class else None, rest_min=rest, leave_by=leave_by,
                 tight_on_time=rest <= 3, route_to_spot=outward, route_to_class=onward,
                 crowd=crowd, deep_link=f'{base}/?{urlencode(query)}#reset={fragment}'))
-        candidates.sort(key=lambda r: (-r.rest_min, {'few':0,'some':1,'many':2,None:3}[r.crowd.category], r.spot.id))
+        candidates.sort(key=lambda r: (-r.rest_min, -activity_priority(r.spot,request.filters.activity), {'few':0,'some':1,'many':2,None:3}[r.crowd.category], r.spot.id))
         for item in candidates:
             other = next((r for r in candidates if r.spot.id != item.spot.id), None)
             item.backup_id = other.spot.id if other else None
@@ -227,7 +240,7 @@ class RespiteEngine:
                 continue
             reset = ResetRequest(near=previous.location, next_class=following.location,
                 minutes=min(minutes,240), needs=request.needs, demo=request.demo, usc_id=request.usc_id,
-                deadline=following.start,
+                deadline=following.start, filters=request.filters,
                 now=previous.end if not request.demo else None, demo_time=previous.end if request.demo else None)
             result = self.recommend(reset)
             gaps.append({'start': previous.end.isoformat(), 'end': following.start.isoformat(),

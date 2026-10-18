@@ -27,6 +27,10 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -45,8 +49,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Desks and tables"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-popular",
@@ -76,6 +79,10 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -94,8 +101,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Reading collection"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-av",
@@ -125,6 +131,10 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -143,8 +153,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Viewing stations"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-suite113",
@@ -174,6 +183,10 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-1st-floor",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-1st-floor",
@@ -192,8 +205,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Study seats"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-east1",
@@ -223,6 +235,10 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-1st-floor",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-1st-floor",
@@ -241,8 +257,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Individual desks"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-ahmanson",
@@ -272,6 +287,10 @@
     "source_url": "https://libraries.usc.edu/spaces-overview",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/spaces-overview",
@@ -290,8 +309,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Computing space"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-study2",
@@ -321,6 +339,10 @@
     "source_url": "https://libraries.usc.edu/spaces-overview",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/spaces-overview",
@@ -339,8 +361,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Study area"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-east3",
@@ -370,6 +391,10 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-library-third-floor",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-library-third-floor",
@@ -388,8 +413,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Designated quiet study (not a noise measurement)"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-west3",
@@ -419,6 +443,10 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-library-third-floor",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-library-third-floor",
@@ -437,8 +465,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Collaborative study"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-terrace",
@@ -468,6 +495,10 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -485,8 +516,7 @@
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
       "Outdoor study area"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "lvl-pod-210a",
@@ -505,7 +535,7 @@
     "noise": null,
     "seating": null,
     "typical_crowd": null,
-    "outlets": null,
+    "outlets": true,
     "food_allowed": null,
     "restroom_nearby": null,
     "step_free": null,
@@ -516,6 +546,19 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": true,
+    "evidence": {
+      "outlets": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      },
+      "reservation_required": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      }
+    },
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -533,9 +576,9 @@
     "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
-      "Reservable pod"
-    ],
-    "reservation_required": true
+      "Reservable pod",
+      "Documented power outlets; availability unconfirmed"
+    ]
   },
   {
     "id": "lvl-pod-210b",
@@ -554,7 +597,7 @@
     "noise": null,
     "seating": null,
     "typical_crowd": null,
-    "outlets": null,
+    "outlets": true,
     "food_allowed": null,
     "restroom_nearby": null,
     "step_free": null,
@@ -565,6 +608,19 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": true,
+    "evidence": {
+      "outlets": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      },
+      "reservation_required": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      }
+    },
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -582,9 +638,9 @@
     "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
-      "Reservable pod"
-    ],
-    "reservation_required": true
+      "Reservable pod",
+      "Documented power outlets; availability unconfirmed"
+    ]
   },
   {
     "id": "lvl-pod-210c",
@@ -603,7 +659,7 @@
     "noise": null,
     "seating": null,
     "typical_crowd": null,
-    "outlets": null,
+    "outlets": true,
     "food_allowed": null,
     "restroom_nearby": null,
     "step_free": null,
@@ -614,6 +670,19 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": true,
+    "evidence": {
+      "outlets": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      },
+      "reservation_required": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      }
+    },
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -631,9 +700,9 @@
     "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
-      "Reservable pod"
-    ],
-    "reservation_required": true
+      "Reservable pod",
+      "Documented power outlets; availability unconfirmed"
+    ]
   },
   {
     "id": "lvl-pod-310a",
@@ -652,7 +721,7 @@
     "noise": null,
     "seating": null,
     "typical_crowd": null,
-    "outlets": null,
+    "outlets": true,
     "food_allowed": null,
     "restroom_nearby": null,
     "step_free": null,
@@ -663,6 +732,19 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": true,
+    "evidence": {
+      "outlets": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      },
+      "reservation_required": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      }
+    },
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -680,9 +762,9 @@
     "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
-      "Reservable pod"
-    ],
-    "reservation_required": true
+      "Reservable pod",
+      "Documented power outlets; availability unconfirmed"
+    ]
   },
   {
     "id": "lvl-pod-310b",
@@ -701,7 +783,7 @@
     "noise": null,
     "seating": null,
     "typical_crowd": null,
-    "outlets": null,
+    "outlets": true,
     "food_allowed": null,
     "restroom_nearby": null,
     "step_free": null,
@@ -712,6 +794,19 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": true,
+    "evidence": {
+      "outlets": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      },
+      "reservation_required": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      }
+    },
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -729,9 +824,9 @@
     "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
-      "Reservable pod"
-    ],
-    "reservation_required": true
+      "Reservable pod",
+      "Documented power outlets; availability unconfirmed"
+    ]
   },
   {
     "id": "lvl-pod-310c",
@@ -750,7 +845,7 @@
     "noise": null,
     "seating": null,
     "typical_crowd": null,
-    "outlets": null,
+    "outlets": true,
     "food_allowed": null,
     "restroom_nearby": null,
     "step_free": null,
@@ -761,6 +856,19 @@
     "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": true,
+    "evidence": {
+      "outlets": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      },
+      "reservation_required": {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "checked": "2026-10-17"
+      }
+    },
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
@@ -778,9 +886,9 @@
     "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
     "anchor_source": "https://www.openstreetmap.org/way/406923908",
     "amenities": [
-      "Reservable pod"
-    ],
-    "reservation_required": true
+      "Reservable pod",
+      "Documented power outlets; availability unconfirmed"
+    ]
   },
   {
     "id": "dml-times",
@@ -810,6 +918,10 @@
     "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/los-angeles-times-reference-room",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/los-angeles-times-reference-room",
@@ -828,8 +940,7 @@
     "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
     "amenities": [
       "Study tables"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "dml-east-asian",
@@ -859,6 +970,10 @@
     "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
@@ -877,8 +992,7 @@
     "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
     "amenities": [
       "Library study area"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "dml-stacks",
@@ -908,6 +1022,10 @@
     "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
@@ -925,8 +1043,7 @@
     "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
     "amenities": [
       "Study desks"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "dml-collaborative",
@@ -956,6 +1073,10 @@
     "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": true,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
@@ -973,8 +1094,7 @@
     "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
     "amenities": [
       "Group study"
-    ],
-    "reservation_required": true
+    ]
   },
   {
     "id": "dml-music",
@@ -1004,6 +1124,10 @@
     "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/doheny-memorial-library",
@@ -1022,8 +1146,7 @@
     "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
     "amenities": [
       "Library study area"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "dml-arts-corridor",
@@ -1053,6 +1176,10 @@
     "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/doheny-memorial-library",
@@ -1071,8 +1198,7 @@
     "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
     "amenities": [
       "Study area"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "dml-cin-reading",
@@ -1102,6 +1228,10 @@
     "source_url": "https://libraries.usc.edu/locations/cinematic-arts-library/cinematic-arts-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/cinematic-arts-library/cinematic-arts-library-spaces",
@@ -1120,8 +1250,7 @@
     "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
     "amenities": [
       "Reading area"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "dml-cin-study",
@@ -1151,6 +1280,10 @@
     "source_url": "https://libraries.usc.edu/locations/cinematic-arts-library/cinematic-arts-library-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://libraries.usc.edu/locations/cinematic-arts-library/cinematic-arts-library-spaces",
@@ -1169,8 +1302,7 @@
     "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
     "amenities": [
       "Study area"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "kortschak-quiet",
@@ -1200,6 +1332,10 @@
     "source_url": "https://kortschakcenter.usc.edu/our-space/",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://kortschakcenter.usc.edu/our-space/",
@@ -1218,8 +1354,7 @@
     "anchor_source": "https://calendar.usc.edu/student_union_stu",
     "amenities": [
       "Center study space"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "kortschak-dynamic",
@@ -1249,6 +1384,10 @@
     "source_url": "https://kortschakcenter.usc.edu/our-space/",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://kortschakcenter.usc.edu/our-space/",
@@ -1267,8 +1406,7 @@
     "anchor_source": "https://calendar.usc.edu/student_union_stu",
     "amenities": [
       "Center study space"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "kortschak-creativity",
@@ -1298,6 +1436,10 @@
     "source_url": "https://kortschakcenter.usc.edu/our-space/",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://kortschakcenter.usc.edu/our-space/",
@@ -1316,8 +1458,7 @@
     "anchor_source": "https://calendar.usc.edu/student_union_stu",
     "amenities": [
       "Center study space"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "thh-lounge4",
@@ -1347,6 +1488,10 @@
     "source_url": "https://chan.usc.edu/people/student-blog/makayla/my-hidden-gem-study-and-rest-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://chan.usc.edu/people/student-blog/makayla/my-hidden-gem-study-and-rest-spaces",
@@ -1365,8 +1510,7 @@
     "anchor_source": "https://calendar.usc.edu/taper_hall_thh",
     "amenities": [
       "Department lounge"
-    ],
-    "reservation_required": null
+    ]
   },
   {
     "id": "rgl-lounge1",
@@ -1396,6 +1540,10 @@
     "source_url": "https://chan.usc.edu/people/student-blog/makayla/my-hidden-gem-study-and-rest-spaces",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://chan.usc.edu/people/student-blog/makayla/my-hidden-gem-study-and-rest-spaces",
@@ -1414,8 +1562,144 @@
     "anchor_source": "https://calendar.usc.edu/lewis_hall_rgl",
     "amenities": [
       "Student lounge"
+    ]
+  },
+  {
+    "id": "dining-seeds",
+    "name": "Seeds Marketplace",
+    "building": "Tutor Campus Center",
+    "building_code": "TCC",
+    "floor": null,
+    "lat": 34.02039675,
+    "lng": -118.28634612607036,
+    "photo_url": null,
+    "indoor": null,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://hospitality.usc.edu/dining-locations/seeds-marketplace/",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "food_available": true,
+    "venue_kind": "food_market",
+    "reservation_required": null,
+    "evidence": {
+      "food_available": {
+        "url": "https://hospitality.usc.edu/dining-locations/seeds-marketplace/",
+        "checked": "2026-10-17"
+      },
+      "venue_kind": {
+        "url": "https://hospitality.usc.edu/dining-locations/seeds-marketplace/",
+        "checked": "2026-10-17"
+      }
+    },
+    "provenance": [
+      {
+        "url": "https://hospitality.usc.edu/dining-locations/seeds-marketplace/",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "Documented food for purchase; current service hours unknown"
+        ]
+      },
+      {
+        "url": "https://hospitality.usc.edu/dining-locations-upc/",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "building",
+          "building_code"
+        ]
+      }
     ],
-    "reservation_required": null
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/154906751",
+    "amenities": [
+      "Documented food for purchase; current service hours unknown"
+    ]
+  },
+  {
+    "id": "dining-literatea",
+    "name": "Literatea",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": null,
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://hospitality.usc.edu/dining-locations/literatea/",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "food_available": true,
+    "venue_kind": "cafe",
+    "reservation_required": null,
+    "evidence": {
+      "food_available": {
+        "url": "https://hospitality.usc.edu/dining-locations/literatea/",
+        "checked": "2026-10-17"
+      },
+      "venue_kind": {
+        "url": "https://hospitality.usc.edu/dining-locations/literatea/",
+        "checked": "2026-10-17"
+      }
+    },
+    "provenance": [
+      {
+        "url": "https://hospitality.usc.edu/dining-locations/literatea/",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "Documented food for purchase; current service hours unknown"
+        ]
+      },
+      {
+        "url": "https://hospitality.usc.edu/dining-locations-upc/",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "building",
+          "building_code"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Documented food for purchase; current service hours unknown"
+    ]
   },
   {
     "id": "mapped-way-154906676",
@@ -1445,6 +1729,10 @@
     "source_url": "https://www.openstreetmap.org/way/154906676",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://www.openstreetmap.org/way/154906676",
@@ -1460,8 +1748,7 @@
     ],
     "routing_anchor": "Mapped outdoor feature anchor, not a verified entrance or seat.",
     "anchor_source": "https://www.openstreetmap.org/way/154906676",
-    "amenities": [],
-    "reservation_required": null
+    "amenities": []
   },
   {
     "id": "mapped-way-154906727",
@@ -1491,6 +1778,10 @@
     "source_url": "https://www.openstreetmap.org/way/154906727",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://www.openstreetmap.org/way/154906727",
@@ -1506,8 +1797,7 @@
     ],
     "routing_anchor": "Mapped outdoor feature anchor, not a verified entrance or seat.",
     "anchor_source": "https://www.openstreetmap.org/way/154906727",
-    "amenities": [],
-    "reservation_required": null
+    "amenities": []
   },
   {
     "id": "mapped-way-172470301",
@@ -1537,6 +1827,10 @@
     "source_url": "https://www.openstreetmap.org/way/172470301",
     "data_kind": "mapped",
     "purpose": "general",
+    "food_available": null,
+    "venue_kind": null,
+    "reservation_required": null,
+    "evidence": null,
     "provenance": [
       {
         "url": "https://www.openstreetmap.org/way/172470301",
@@ -1552,7 +1846,6 @@
     ],
     "routing_anchor": "Mapped outdoor feature anchor, not a verified entrance or seat.",
     "anchor_source": "https://www.openstreetmap.org/way/172470301",
-    "amenities": [],
-    "reservation_required": null
+    "amenities": []
   }
 ]

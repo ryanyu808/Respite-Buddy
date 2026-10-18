@@ -47,6 +47,8 @@ import { CampusDirectory } from './components/CampusDirectory'
 import type { ResetRequest } from './respite'
 import type { CalendarEvent } from './calendar/model'
 import './calendar.css'
+import './smart-filters.css'
+import { rememberCampus } from './smartContext'
 
 function point(location: Point): Point {
   return { lat: location.lat, lon: location.lon, name: location.name }
@@ -166,6 +168,7 @@ export default function App() {
     setPreferences(p)
   }
   function changeOrigin(p: Point | null) {
+    if (p) rememberCampus(p)
     invalidate()
     setOrigin(p)
   }

@@ -1,5 +1,26 @@
 {
   "$defs": {
+    "AttributeEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "pattern": "^https://[^\\s/]+(?:/[^\\s]*)?$",
+          "title": "Url",
+          "type": "string"
+        },
+        "checked": {
+          "format": "date",
+          "title": "Checked",
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "checked"
+      ],
+      "title": "AttributeEvidence",
+      "type": "object"
+    },
     "Evidence": {
       "additionalProperties": false,
       "properties": {
@@ -372,6 +393,63 @@
       "title": "Purpose",
       "type": "string"
     },
+    "food_available": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Food Available"
+    },
+    "venue_kind": {
+      "anyOf": [
+        {
+          "enum": [
+            "cafe",
+            "dining_hall",
+            "food_market",
+            "outdoor_eating",
+            "seating_only"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Venue Kind"
+    },
+    "reservation_required": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Reservation Required"
+    },
+    "evidence": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/AttributeEvidence"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Evidence"
+    },
     "provenance": {
       "items": {
         "$ref": "#/$defs/Evidence"
@@ -394,17 +472,6 @@
       },
       "title": "Amenities",
       "type": "array"
-    },
-    "reservation_required": {
-      "anyOf": [
-        {
-          "type": "boolean"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Reservation Required"
     }
   },
   "required": [
@@ -433,11 +500,11 @@
     "verified_date",
     "notes",
     "source_url",
+    "reservation_required",
     "provenance",
     "routing_anchor",
     "anchor_source",
-    "amenities",
-    "reservation_required"
+    "amenities"
   ],
   "title": "CampusCandidate",
   "type": "object"

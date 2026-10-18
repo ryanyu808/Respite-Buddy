@@ -55,10 +55,12 @@ export function SpotCard({
           </strong>
           <span>to rest{item.walk_to_class_min === null ? ' · provisional' : ''}</span>
         </div>
-        <div>
-          <strong>{timeLabel(item.leave_by)}</strong>
-          <span>leave by · Pacific</span>
-        </div>
+        {item.walk_to_class_min !== null && (
+          <div>
+            <strong>{timeLabel(item.leave_by)}</strong>
+            <span>leave by · Pacific</span>
+          </div>
+        )}
       </div>
       {item.tight_on_time && <p className="reset-tight">Tight on time.</p>}
       <p className="reset-walk-time">
@@ -77,9 +79,23 @@ export function SpotCard({
         ))}
       </ul>
       <p className="reset-crowd">{crowdLabel(item.crowd, evaluatedAt)}</p>
-      {backupName && <p className="reset-small">Backup: {backupName}</p>}
       <details className="reset-spot-details">
         <summary>Access, amenities & source</summary>
+        <p>
+          Food for purchase:{' '}
+          {spot.food_available == null
+            ? 'unknown'
+            : spot.food_available
+              ? 'documented'
+              : 'confirmed absent'}
+          . Food allowed:{' '}
+          {spot.food_allowed == null
+            ? 'unknown'
+            : spot.food_allowed
+              ? 'documented'
+              : 'confirmed absent'}
+          .
+        </p>
         <p>
           {spot.access
             ? { open: 'Open access', usc_id: 'USC ID required', restricted: 'Restricted access' }[
@@ -136,16 +152,19 @@ export function SpotCard({
         <button disabled={busy} onClick={() => onSwap('full')}>
           It’s full
         </button>
-        <button disabled={busy} onClick={() => onSwap('locked')}>
-          It’s locked
-        </button>
-        <button
-          disabled={busy}
-          onClick={() => onSwap('another')}
-          aria-label={`Find another spot instead of ${spot.name}`}
-        >
-          <RotateCcw size={15} />
-        </button>
+        <details className="reset-card-more">
+          <summary>Other options</summary>
+          <button disabled={busy} onClick={() => onSwap('locked')}>
+            It’s locked
+          </button>
+          <button
+            disabled={busy}
+            onClick={() => onSwap('another')}
+            aria-label={`Find another spot instead of ${spot.name}`}
+          >
+            <RotateCcw size={15} />
+          </button>
+        </details>
       </div>
     </article>
   )

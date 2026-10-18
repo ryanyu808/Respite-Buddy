@@ -30,6 +30,7 @@ ANCHORS = {
  'STU': ('Student Union', 34.02023, -118.28575, 'https://calendar.usc.edu/student_union_stu'),
  'THH': ('Taper Hall', 34.021726, -118.284382, 'https://calendar.usc.edu/taper_hall_thh'),
  'RGL': ('Lewis Hall', 34.019242, -118.282883, 'https://calendar.usc.edu/lewis_hall_rgl'),
+ 'TCC': ('Tutor Campus Center', 34.02039675, -118.28634612607036, 'https://www.openstreetmap.org/way/154906751'),
 }
 result = []
 
@@ -62,6 +63,9 @@ for id, name, floor, source, amenities in [
 add('lvl-terrace','Leavey outdoor terrace','LVL',None,LV,['Outdoor study area'],indoor=False)
 for pod in ['210A','210B','210C','310A','310B','310C']:
     add('lvl-pod-'+pod.lower(),'Study Pod '+pod,'LVL',pod[0],LV,['Reservable pod'],True)
+    result[-1]['outlets'] = True
+    result[-1]['evidence'] = {'outlets':dict(url=LV,checked=CHECKED), 'reservation_required':dict(url=LV,checked=CHECKED)}
+    result[-1]['amenities'].append('Documented power outlets; availability unconfirmed')
 for id,name,floor,source,amenities,reserve in [
  ('times','Los Angeles Times Reference Room','1', 'https://libraries.usc.edu/locations/doheny-memorial-library/rooms/los-angeles-times-reference-room',['Study tables'],None),
  ('east-asian','East Asian Library','1',DML,['Library study area'],None),
@@ -77,6 +81,20 @@ for id,name in [('quiet','Quiet Study Room'),('dynamic','Dynamic Study Space'),(
 CHAN='https://chan.usc.edu/people/student-blog/makayla/my-hidden-gem-study-and-rest-spaces'
 add('thh-lounge4','Taper Hall fourth-floor lounge','THH','4',CHAN,['Department lounge'],historic=True)
 add('rgl-lounge1','Price School first-floor student lounge','RGL','1',CHAN,['Student lounge'],historic=True)
+for id,name,code,kind,url in [
+ ('dining-seeds','Seeds Marketplace','TCC','food_market','https://hospitality.usc.edu/dining-locations/seeds-marketplace/'),
+ ('dining-literatea','Literatea','DML','cafe','https://hospitality.usc.edu/dining-locations/literatea/'),
+]:
+    add(id,name,code,None,url,['Documented food for purchase; current service hours unknown'])
+    result[-1].update(food_available=True,venue_kind=kind,
+        evidence={field:dict(url=url,checked=CHECKED) for field in ['food_available','venue_kind']})
+    result[-1]['provenance'].append(dict(url='https://hospitality.usc.edu/dining-locations-upc/',
+        source_type='USC primary source',checked=CHECKED,supports=['building','building_code']))
+    if code == 'TCC':
+        # The dining index establishes the building, not the precise counter's
+        # indoor/outdoor setting. Do not infer it from "marketplace".
+        result[-1]['indoor'] = None
+        result[-1]['provenance'][0]['supports'].remove('indoor')
 
 # Real mapped spaces. No seating, opening times or live crowd claims inferred.
 snapshot = json.loads((ROOT/'data/snapshot/locations.json').read_text())
@@ -97,6 +115,6 @@ if __name__ == '__main__':
     (ROOT/'data/campus-candidate.schema.json').write_text(json.dumps(CampusCandidate.model_json_schema(),indent=2)+'\n')
     buildings = [dict(id='usc-'+code.lower(),name=name,lat=lat,lon=lng,aliases=[code],source_url=url,source_checked=CHECKED,
                      notes='USC-published building coordinate, not an entrance or room.')
-                 for code,(name,lat,lng,url) in ANCHORS.items() if code!='LVL']
+                 for code,(name,lat,lng,url) in ANCHORS.items() if code not in ['LVL','TCC']]
     (ROOT/'data/campus-buildings.json').write_text(json.dumps(buildings,indent=2)+'\n')
     print(f'{len(result)} exploration candidates; zero scout verifications added.')

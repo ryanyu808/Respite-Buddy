@@ -17,6 +17,13 @@ def main():
         target = Path(__file__).resolve().parents[1] / 'data' / 'respite-spots.schema.json'
         schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema', **Spot.model_json_schema()}
         target.write_text(json.dumps(schema, indent=2) + '\n', encoding='utf-8')
+        template = target.with_name('respite-spots.scouting-template.json')
+        # Preserve any teammate additions to the blank template; add only new keys.
+        blank = json.loads(template.read_text(encoding='utf-8'))
+        for record in blank:
+            for key in Spot.model_fields:
+                record.setdefault(key,None)
+        template.write_text(json.dumps(blank,indent=2)+'\n',encoding='utf-8')
         print(f'Generated {target}')
         return
     try:
