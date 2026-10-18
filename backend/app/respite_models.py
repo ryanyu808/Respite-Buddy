@@ -171,14 +171,47 @@ class ClassEntry(StrictModel):
         return self
 
 
+class CalendarEntry(StrictModel):
+    """One already-expanded occurrence; no account or browser-storage access."""
+    id: str = Field(min_length=1, max_length=200)
+    source: Literal['manual', 'ics', 'google', 'microsoft', 'screenshot']
+    title: str = Field(default='', max_length=300)
+    start: datetime
+    end: datetime
+    time_zone: str = 'America/Los_Angeles'
+    recurrence: str | None = None
+    location: str | Point
+    building_code: str | None = None
+    category: Literal['class', 'other', 'unclassified'] = 'unclassified'
+    source_event_id: str | None = None
+
+    @model_validator(mode='after')
+    def ordered(self):
+        ClassEntry(location=self.location, start=self.start, end=self.end)
+        from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+        try:
+            ZoneInfo(self.time_zone)
+        except ZoneInfoNotFoundError as exc:
+            raise ValueError('Use an IANA time zone.') from exc
+        return self
+
+
 class PlanDayRequest(StrictModel):
-    classes: list[ClassEntry] = Field(min_length=1, max_length=20)
+    classes: list[ClassEntry] = Field(default_factory=list, max_length=20)
+    events: list[CalendarEntry] = Field(default_factory=list, max_length=100)
     needs: list[Need] = Field(default_factory=list, max_length=6)
     demo: bool = False
     usc_id: bool = False
 
     @model_validator(mode='after')
     def no_overlap(self):
+        if self.events and self.classes:
+            raise ValueError('Supply classes OR normalized events, not both.')
+        if self.events:
+            self.classes = [ClassEntry(location=e.building_code or e.location, start=e.start, end=e.end)
+                            for e in self.events if e.category == 'class']
+        if not 1 <= len(self.classes) <= 20:
+            raise ValueError('Supply between one and twenty reviewed classes.')
         ordered = sorted(self.classes, key=lambda c: c.start)
         if any(b.start < a.end for a, b in zip(ordered, ordered[1:])):
             raise ValueError('Class times overlap. Review the extracted schedule.')

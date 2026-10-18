@@ -1,0 +1,50 @@
+[
+  {
+    "id": "usc-dml",
+    "name": "Doheny Memorial Library",
+    "lat": 34.020197,
+    "lon": -118.283725,
+    "aliases": [
+      "DML"
+    ],
+    "source_url": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "source_checked": "2026-10-17",
+    "notes": "USC-published building coordinate, not an entrance or room."
+  },
+  {
+    "id": "usc-stu",
+    "name": "Student Union",
+    "lat": 34.02023,
+    "lon": -118.28575,
+    "aliases": [
+      "STU"
+    ],
+    "source_url": "https://calendar.usc.edu/student_union_stu",
+    "source_checked": "2026-10-17",
+    "notes": "USC-published building coordinate, not an entrance or room."
+  },
+  {
+    "id": "usc-thh",
+    "name": "Taper Hall",
+    "lat": 34.021726,
+    "lon": -118.284382,
+    "aliases": [
+      "THH"
+    ],
+    "source_url": "https://calendar.usc.edu/taper_hall_thh",
+    "source_checked": "2026-10-17",
+    "notes": "USC-published building coordinate, not an entrance or room."
+  },
+  {
+    "id": "usc-rgl",
+    "name": "Lewis Hall",
+    "lat": 34.019242,
+    "lon": -118.282883,
+    "aliases": [
+      "RGL"
+    ],
+    "source_url": "https://calendar.usc.edu/lewis_hall_rgl",
+    "source_checked": "2026-10-17",
+    "notes": "USC-published building coordinate, not an entrance or room."
+  }
+]

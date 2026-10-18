@@ -7,6 +7,8 @@ The live scout library is currently empty. Import real records using the [scouti
 
 See the [Respite Buddy handoff](docs/respite-buddy.md) for deployment, API, demo instructions and limitations, and [MCP setup](docs/mcp.md) for the Claude connector. Protocol tests do not establish a successful Claude account connection.
 
+**Campus spaces & My Schedule:** the exploration directory separates USC-documented/mapped candidates from the verified recommendation library. Manual schedules, local ICS parsing, weekly views and class-gap planning work without calendar accounts; schedules are saved in IndexedDB on the device. Screenshot OCR is local and requires review. Optional read-only Microsoft and Google connections need registered provider applications and remain unavailable until configured. See [calendar/location setup, sources and limits](docs/calendar-and-locations.md).
+
 **Find your calmer way.** A working USC walking-navigation prototype for the USC AI Product Showdown. Compare real walking paths using your preferences for road exposure, noise-related geographic proxies and proximity to green spaces.
 
 The shortest route is not always the most comfortable route. NeuroRoute gives people with sensory sensitivities, neurodivergent students and anyone who prefers a calmer walk more control over that tradeoff. Preferences are individual; no diagnosis or account is requested.

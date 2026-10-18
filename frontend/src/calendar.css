@@ -1,0 +1,364 @@
+.campus-shell {
+  height: auto;
+  min-height: 100dvh;
+  overflow: visible;
+}
+.campus-page {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 54px 32px 80px;
+  color: #243f35;
+}
+.campus-page h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(2.1rem, 4vw, 3.3rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  margin: 12px 0 20px;
+}
+.page-intro {
+  max-width: 780px;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #52675e;
+}
+.campus-page h2 {
+  font-size: 1.3rem;
+  font-weight: 650;
+  margin: 12px 0;
+}
+.campus-page h3 {
+  font-size: 1.06rem;
+  margin: 16px 0;
+}
+.campus-page p {
+  line-height: 1.7;
+  margin: 10px 0;
+}
+.campus-page button {
+  border: 1px solid #bdcdc3;
+  border-radius: 9px;
+  background: #fff;
+  color: #254d3b;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  min-height: 44px;
+}
+.campus-page button:hover {
+  background: #edf4ee;
+  border-color: #477457;
+}
+.campus-page button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.campus-page :is(button, input, select, textarea):focus-visible {
+  outline: 3px solid #42664c;
+  outline-offset: 3px;
+}
+.campus-page button.calendar-primary {
+  background: #2d5941;
+  color: #fff;
+  border-color: #2d5941;
+}
+.calendar-notice {
+  background: #eaf0e8;
+  border: 1px solid #d1dfcf;
+  padding: 24px;
+  border-radius: 15px;
+  margin: 28px 0;
+}
+.campus-page label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.86rem;
+  font-weight: 550;
+}
+.campus-page :is(input:not([type='checkbox']), select, textarea) {
+  width: 100%;
+  padding: 11px 12px;
+  background: white;
+  color: #243f35;
+  border: 1px solid #b5c6ba;
+  border-radius: 8px;
+  font: inherit;
+  min-height: 44px;
+}
+.campus-page input[type='checkbox'] {
+  accent-color: #365e44;
+  width: 18px;
+  height: 18px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin: 22px 0;
+}
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.campus-page .action-row label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+}
+.campus-page fieldset {
+  border: 1px solid #cbd7cf;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 20px 0;
+  min-width: 0;
+}
+.campus-page legend {
+  font-size: 0.9rem;
+  padding: 0 6px;
+}
+.campus-page a {
+  color: #255a41;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.candidate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 22px;
+  margin-top: 30px;
+}
+.candidate-card {
+  padding: 25px;
+  background: #fff;
+  border: 1px solid #d6dfd6;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.candidate-card h2 {
+  line-height: 1.35;
+}
+.candidate-status {
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: #6e5228;
+  background: #f6edda;
+  padding: 6px 8px;
+  border-radius: 6px;
+  align-self: flex-start;
+}
+.candidate-card dl {
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+.candidate-card dt {
+  font-weight: 650;
+  margin-top: 10px;
+}
+.candidate-card dd {
+  margin: 0;
+  color: #526257;
+}
+.candidate-card > button {
+  margin-top: auto;
+}
+.campus-page details {
+  margin: 18px 0;
+  border-top: 1px solid #d0dacd;
+  padding-top: 18px;
+}
+.campus-page summary {
+  cursor: pointer;
+  line-height: 1.6;
+  font-weight: 600;
+  min-height: 40px;
+}
+.schedule-section {
+  background: #fff;
+  border: 1px solid #d6dfd6;
+  border-radius: 16px;
+  padding: 28px;
+  margin-top: 28px;
+}
+.schedule-section > .section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+.schedule-section .section-heading input {
+  font-size: 0.9rem;
+}
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin: 28px 0;
+}
+.campus-page .week-day {
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  text-align: left;
+  padding: 12px 8px;
+  background: #f8faf6;
+  font-size: 0.8rem;
+}
+.week-day.selected {
+  box-shadow: inset 0 0 0 2px #3e694a;
+}
+.week-day > span {
+  font-size: 0.73rem;
+}
+.week-block {
+  display: block;
+  padding: 8px 6px;
+  border-radius: 6px;
+  background: #eeeae0;
+  border-left: 3px solid #b19557;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+.week-block.is-class {
+  background: #e0ebdf;
+  border-left-color: #5c8059;
+}
+.week-block small {
+  display: block;
+  font-size: 0.7rem;
+}
+.day-agenda {
+  list-style: none;
+  padding: 0;
+}
+.day-agenda li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #d9e1d8;
+}
+.day-agenda p {
+  font-size: 0.87rem;
+}
+.calendar-gap {
+  border-left: 3px solid #6c9165;
+  background: #f2f6ef;
+  padding: 16px 22px;
+  margin: 20px 0;
+  border-radius: 0 12px 12px 0;
+}
+.calendar-error {
+  background: #fff0e8;
+  color: #803619;
+  border: 1px solid #d5aa8e;
+  padding: 16px;
+  border-radius: 10px;
+}
+.import-review {
+  background: #f6f8f2;
+  border: 1px solid #c9d5c3;
+  padding: 22px;
+  margin: 24px 0;
+  border-radius: 10px;
+  max-height: 900px;
+  overflow: auto;
+}
+.high-contrast .campus-page {
+  color: #132b1a;
+}
+.high-contrast .candidate-status {
+  color: #382400;
+}
+.high-contrast .campus-page :is(p, dd) {
+  color: #243c29;
+}
+.app-header nav {
+  flex-wrap: wrap;
+}
+/* Keep every primary destination reachable on narrow screens; the older walking
+   layout hid the first tab and used a single-row clipped navigation strip. */
+@media (max-width: 760px) {
+  .app-header nav {
+    height: auto;
+    overflow: visible;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 6px 14px;
+    padding-bottom: 10px;
+  }
+  .app-header .nav-item,
+  .app-header .nav-item:first-child {
+    display: flex;
+    min-height: 36px;
+  }
+  .app-header {
+    height: auto;
+    min-height: 110px;
+  }
+}
+.low-sensory .campus-page * {
+  transition: none !important;
+  animation: none !important;
+}
+@media (max-width: 900px) {
+  .week-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .campus-page {
+    padding: 32px 20px;
+  }
+  .app-header {
+    flex-wrap: wrap;
+  }
+  .header-end .campus-tag {
+    display: none;
+  }
+}
+@media (max-width: 560px) {
+  .week-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .campus-page {
+    padding: 26px 14px;
+  }
+  .schedule-section {
+    padding: 19px 15px;
+  }
+  .day-agenda li {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .candidate-grid {
+    grid-template-columns: 1fr;
+  }
+  .schedule-section > .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .calendar-notice {
+    padding: 18px;
+  }
+  .app-header nav {
+    gap: 4px;
+    justify-content: flex-start;
+  }
+  .app-header .nav-item {
+    font-size: 0.75rem;
+    padding: 7px;
+  }
+}

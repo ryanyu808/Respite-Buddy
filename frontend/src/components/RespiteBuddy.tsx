@@ -46,6 +46,9 @@ type Props = {
   preferences: Preferences
   onPreferences: (preferences: Preferences) => void
   onClear: () => void
+  context?: ResetRequest
+  onDirectory?: () => void
+  onSchedule?: () => void
 }
 const placeText = (place: string | Point | null) =>
   typeof place === 'string' ? place : (place?.name ?? '')
@@ -58,6 +61,9 @@ export function RespiteBuddy({
   preferences,
   onPreferences,
   onClear,
+  context,
+  onDirectory,
+  onSchedule,
 }: Props) {
   const [link] = useState(() => parseDeepLink(window.location.search))
   const [near, setNear] = useState<string | Point>(link.near ?? 'Leavey')
@@ -165,15 +171,32 @@ export function RespiteBuddy({
     }
   }
   useEffect(() => {
-    if (link.auto) void search()
+    if (link.auto && !context) void search()
   }, [])
+  useEffect(() => {
+    if (!context) return
+    setNear(context.near)
+    setNextClass(context.next_class)
+    setMinutes(context.minutes)
+    setNeeds(context.needs)
+    setDemo(context.demo)
+    setDemoTime(context.demo_time ?? DEMO_TIME)
+    setUscId(context.usc_id)
+    setDeadline(context.deadline)
+    if (context.preferences) onPreferences(context.preferences)
+    void search(
+      { ...context, preferences: context.preferences ?? preferences, exclusions: [] },
+      true,
+    )
+  }, [context])
 
   function change(input: Partial<ResetRequest>) {
     if (input.minutes !== undefined) {
       const value = input.minutes
       setMinutes(value)
-      setDeadline(undefined)
-      input = { ...input, deadline: undefined }
+      const classDeadline = context?.next_class ? context.deadline : undefined
+      setDeadline(classDeadline)
+      input = { ...input, deadline: classDeadline }
       onSettings({ ...settings, minutes: value, needs: input.needs ?? needs })
     }
     if (input.needs !== undefined) {
@@ -226,7 +249,17 @@ export function RespiteBuddy({
     ]
     setExclusions(excluded)
     saveExclusions(excluded)
-    const input = { ...lastRequest, exclusions: excluded }
+    const input = {
+      ...lastRequest,
+      ...(!lastRequest.demo && context
+        ? {
+            now: new Date(
+              Math.max(Date.now(), Date.parse(lastRequest.now ?? new Date().toISOString())),
+            ).toISOString(),
+          }
+        : {}),
+      exclusions: excluded,
+    }
     setLastRequest(input)
     setBusy(true)
     setError('')
@@ -482,6 +515,11 @@ export function RespiteBuddy({
             </button>
           </details>
           <section className="calendar-demo" aria-label="Calendar demonstration">
+            {onSchedule && (
+              <button onClick={onSchedule}>
+                Open My Schedule — manual, ICS &amp; screenshot import
+              </button>
+            )}
             <CalendarDays size={20} />
             <div>
               <h3>A break that fits your day</h3>
@@ -634,8 +672,11 @@ export function RespiteBuddy({
                 <p>
                   {demo
                     ? 'Try more time, fewer needs, or daytime. Unknown safety, access and opening hours do not qualify.'
-                    : 'The scouted spot library may still be empty, or no place meets these settings. Try the clearly labeled demonstration below.'}
+                    : "We're still confirming campus spaces. You can explore documented locations or try the sample demo."}
                 </p>
+                {!demo && onDirectory && (
+                  <button onClick={onDirectory}>Explore documented locations</button>
+                )}
               </div>
             )}
             {recommendations.length > 0 && (

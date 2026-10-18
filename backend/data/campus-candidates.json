@@ -1,0 +1,1558 @@
+[
+  {
+    "id": "lvl-weingart",
+    "name": "Weingart Reading Room",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "1",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Desks and tables"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Desks and tables"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-popular",
+    "name": "Popular Reading Room",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "1",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Reading collection"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Reading collection"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-av",
+    "name": "Audio/Visual Room",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "1",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Viewing stations"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Viewing stations"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-suite113",
+    "name": "Suite 113 Study Space",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "1",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-1st-floor",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-1st-floor",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Study seats"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Study seats"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-east1",
+    "name": "First-floor East Wing study area",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "1",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-1st-floor",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-1st-floor",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Individual desks"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Individual desks"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-ahmanson",
+    "name": "Ahmanson Information Commons",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "Ground",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/spaces-overview",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/spaces-overview",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Computing space"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Computing space"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-study2",
+    "name": "Second-floor study area",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "2",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/spaces-overview",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/spaces-overview",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Study area"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Study area"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-east3",
+    "name": "Third-floor East Wing quiet study area",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "3",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-library-third-floor",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-library-third-floor",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Designated quiet study (not a noise measurement)"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Designated quiet study (not a noise measurement)"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-west3",
+    "name": "Third-floor West Wing collaborative area",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "3",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-library-third-floor",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/rooms/leavey-library-third-floor",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Collaborative study"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Collaborative study"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-terrace",
+    "name": "Leavey outdoor terrace",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": null,
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": false,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "Outdoor study area"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Outdoor study area"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "lvl-pod-210a",
+    "name": "Study Pod 210A",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "2",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Reservation required; availability not checked.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Reservable pod"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Reservable pod"
+    ],
+    "reservation_required": true
+  },
+  {
+    "id": "lvl-pod-210b",
+    "name": "Study Pod 210B",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "2",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Reservation required; availability not checked.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Reservable pod"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Reservable pod"
+    ],
+    "reservation_required": true
+  },
+  {
+    "id": "lvl-pod-210c",
+    "name": "Study Pod 210C",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "2",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Reservation required; availability not checked.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Reservable pod"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Reservable pod"
+    ],
+    "reservation_required": true
+  },
+  {
+    "id": "lvl-pod-310a",
+    "name": "Study Pod 310A",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "3",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Reservation required; availability not checked.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Reservable pod"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Reservable pod"
+    ],
+    "reservation_required": true
+  },
+  {
+    "id": "lvl-pod-310b",
+    "name": "Study Pod 310B",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "3",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Reservation required; availability not checked.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Reservable pod"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Reservable pod"
+    ],
+    "reservation_required": true
+  },
+  {
+    "id": "lvl-pod-310c",
+    "name": "Study Pod 310C",
+    "building": "Leavey Library",
+    "building_code": "LVL",
+    "floor": "3",
+    "lat": 34.0217845,
+    "lng": -118.28294018728783,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Reservation required; availability not checked.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/leavey-library/leavey-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Reservable pod"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://www.openstreetmap.org/way/406923908",
+    "amenities": [
+      "Reservable pod"
+    ],
+    "reservation_required": true
+  },
+  {
+    "id": "dml-times",
+    "name": "Los Angeles Times Reference Room",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": "1",
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/los-angeles-times-reference-room",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/doheny-memorial-library/rooms/los-angeles-times-reference-room",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Study tables"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Study tables"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "dml-east-asian",
+    "name": "East Asian Library",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": "1",
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Library study area"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Library study area"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "dml-stacks",
+    "name": "Bookstack study desks",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": null,
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "Study desks"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Study desks"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "dml-collaborative",
+    "name": "Collaborative workrooms",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": null,
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Reservation required; availability not checked.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "Group study"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Group study"
+    ],
+    "reservation_required": true
+  },
+  {
+    "id": "dml-music",
+    "name": "Music Library",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": "Ground",
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/doheny-memorial-library",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Library study area"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Library study area"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "dml-arts-corridor",
+    "name": "Arts Corridor study area",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": "Ground",
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/doheny-memorial-library",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/doheny-memorial-library",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Study area"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Study area"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "dml-cin-reading",
+    "name": "Cinematic Arts Library Reading Room",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": "Ground",
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/cinematic-arts-library/cinematic-arts-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/cinematic-arts-library/cinematic-arts-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Reading area"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Reading area"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "dml-cin-study",
+    "name": "Cinematic Arts Library Study Space",
+    "building": "Doheny Memorial Library",
+    "building_code": "DML",
+    "floor": "Ground",
+    "lat": 34.020197,
+    "lng": -118.283725,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://libraries.usc.edu/locations/cinematic-arts-library/cinematic-arts-library-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://libraries.usc.edu/locations/cinematic-arts-library/cinematic-arts-library-spaces",
+        "source_type": "USC primary source",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Study area"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/doheny_memorial_library_dml",
+    "amenities": [
+      "Study area"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "kortschak-quiet",
+    "name": "Quiet Study Room",
+    "building": "Student Union",
+    "building_code": "STU",
+    "floor": "3 / Suite 311",
+    "lat": 34.02023,
+    "lng": -118.28575,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://kortschakcenter.usc.edu/our-space/",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://kortschakcenter.usc.edu/our-space/",
+        "source_type": "USC historical article",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Center study space"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/student_union_stu",
+    "amenities": [
+      "Center study space"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "kortschak-dynamic",
+    "name": "Dynamic Study Space",
+    "building": "Student Union",
+    "building_code": "STU",
+    "floor": "3 / Suite 311",
+    "lat": 34.02023,
+    "lng": -118.28575,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://kortschakcenter.usc.edu/our-space/",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://kortschakcenter.usc.edu/our-space/",
+        "source_type": "USC historical article",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Center study space"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/student_union_stu",
+    "amenities": [
+      "Center study space"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "kortschak-creativity",
+    "name": "Creativity Corner",
+    "building": "Student Union",
+    "building_code": "STU",
+    "floor": "3 / Suite 311",
+    "lat": 34.02023,
+    "lng": -118.28575,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://kortschakcenter.usc.edu/our-space/",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://kortschakcenter.usc.edu/our-space/",
+        "source_type": "USC historical article",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Center study space"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/student_union_stu",
+    "amenities": [
+      "Center study space"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "thh-lounge4",
+    "name": "Taper Hall fourth-floor lounge",
+    "building": "Taper Hall",
+    "building_code": "THH",
+    "floor": "4",
+    "lat": 34.021726,
+    "lng": -118.284382,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://chan.usc.edu/people/student-blog/makayla/my-hidden-gem-study-and-rest-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://chan.usc.edu/people/student-blog/makayla/my-hidden-gem-study-and-rest-spaces",
+        "source_type": "USC historical article",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Department lounge"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/taper_hall_thh",
+    "amenities": [
+      "Department lounge"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "rgl-lounge1",
+    "name": "Price School first-floor student lounge",
+    "building": "Lewis Hall",
+    "building_code": "RGL",
+    "floor": "1",
+    "lat": 34.019242,
+    "lng": -118.282883,
+    "photo_url": null,
+    "indoor": true,
+    "hours": null,
+    "access": null,
+    "access_note": "Student eligibility and current entry rules unconfirmed.",
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Existence documented; current conditions, access and hours require confirmation.",
+    "source_url": "https://chan.usc.edu/people/student-blog/makayla/my-hidden-gem-study-and-rest-spaces",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://chan.usc.edu/people/student-blog/makayla/my-hidden-gem-study-and-rest-spaces",
+        "source_type": "USC historical article",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "building",
+          "indoor",
+          "floor",
+          "Student lounge"
+        ]
+      }
+    ],
+    "routing_anchor": "Approximate building routing anchor, not the room, entrance or an indoor path.",
+    "anchor_source": "https://calendar.usc.edu/lewis_hall_rgl",
+    "amenities": [
+      "Student lounge"
+    ],
+    "reservation_required": null
+  },
+  {
+    "id": "mapped-way-154906676",
+    "name": "Alumni Park",
+    "building": null,
+    "building_code": null,
+    "floor": null,
+    "lat": 34.02063805,
+    "lng": -118.28452027335682,
+    "photo_url": null,
+    "indoor": false,
+    "hours": null,
+    "access": null,
+    "access_note": null,
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Mapped potential location; all access and sensory conditions unconfirmed.",
+    "source_url": "https://www.openstreetmap.org/way/154906676",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://www.openstreetmap.org/way/154906676",
+        "source_type": "OpenStreetMap snapshot",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "lat",
+          "lng",
+          "indoor"
+        ]
+      }
+    ],
+    "routing_anchor": "Mapped outdoor feature anchor, not a verified entrance or seat.",
+    "anchor_source": "https://www.openstreetmap.org/way/154906676",
+    "amenities": [],
+    "reservation_required": null
+  },
+  {
+    "id": "mapped-way-154906727",
+    "name": "McCarthy Quad",
+    "building": null,
+    "building_code": null,
+    "floor": null,
+    "lat": 34.020936899999995,
+    "lng": -118.283145701975,
+    "photo_url": null,
+    "indoor": false,
+    "hours": null,
+    "access": null,
+    "access_note": null,
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Mapped potential location; all access and sensory conditions unconfirmed.",
+    "source_url": "https://www.openstreetmap.org/way/154906727",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://www.openstreetmap.org/way/154906727",
+        "source_type": "OpenStreetMap snapshot",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "lat",
+          "lng",
+          "indoor"
+        ]
+      }
+    ],
+    "routing_anchor": "Mapped outdoor feature anchor, not a verified entrance or seat.",
+    "anchor_source": "https://www.openstreetmap.org/way/154906727",
+    "amenities": [],
+    "reservation_required": null
+  },
+  {
+    "id": "mapped-way-172470301",
+    "name": "Exposition Park Rose Garden",
+    "building": null,
+    "building_code": null,
+    "floor": null,
+    "lat": 34.0171422,
+    "lng": -118.2861138757074,
+    "photo_url": null,
+    "indoor": false,
+    "hours": null,
+    "access": null,
+    "access_note": null,
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": "Mapped potential location; all access and sensory conditions unconfirmed.",
+    "source_url": "https://www.openstreetmap.org/way/172470301",
+    "data_kind": "mapped",
+    "purpose": "general",
+    "provenance": [
+      {
+        "url": "https://www.openstreetmap.org/way/172470301",
+        "source_type": "OpenStreetMap snapshot",
+        "checked": "2026-10-17",
+        "supports": [
+          "name",
+          "lat",
+          "lng",
+          "indoor"
+        ]
+      }
+    ],
+    "routing_anchor": "Mapped outdoor feature anchor, not a verified entrance or seat.",
+    "anchor_source": "https://www.openstreetmap.org/way/172470301",
+    "amenities": [],
+    "reservation_required": null
+  }
+]

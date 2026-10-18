@@ -231,6 +231,8 @@ class RespiteEngine:
                 now=previous.end if not request.demo else None, demo_time=previous.end if request.demo else None)
             result = self.recommend(reset)
             gaps.append({'start': previous.end.isoformat(), 'end': following.start.isoformat(),
+                         'reset_request': reset.model_copy(update={'deadline': result.deadline}).model_dump(mode='json'),
+                         'recommendations': [r.model_dump(mode='json') for r in result.recommendations],
                          'recommendation': result.recommendations[0].model_dump(mode='json') if result.recommendations else None,
                          'notes': result.notes})
         return {'gaps': gaps, 'mode': 'demo' if request.demo else 'live', 'support': SUPPORT,

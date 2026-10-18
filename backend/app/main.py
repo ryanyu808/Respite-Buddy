@@ -13,6 +13,7 @@ from .services.ai_service import interpret, route_explanation
 from .respite_models import ResetRequest, ResetResponse, SwapRequest, PlanDayRequest, Spot
 from .services.respite import RespiteEngine
 from .services.spot_library import building_library
+from .services.campus_directory import candidates, CampusCandidate
 
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
@@ -86,6 +87,11 @@ def rest_stops():
 @app.get('/api/buildings')
 def buildings():
     return building_library(app.state.data)
+
+
+@app.get('/api/campus-candidates', response_model=list[CampusCandidate])
+def campus_candidates():
+    return candidates()
 
 
 @app.get('/api/spots', response_model=list[Spot])

@@ -342,6 +342,9 @@ def test_real_engine_demo_links_swap_plan_details_and_after_dark(campus):
             assert independent == first  # No global or server-session demotion.
             day = payload(await session.call_tool("plan_day", {"classes": CLASSES, "demo": True}))
             assert len(day["gaps"]) == 1
+            normalized = [{**entry, 'id':f'local-{i}', 'source':'ics', 'category':'class'} for i,entry in enumerate(CLASSES)]
+            normalized_day = payload(await session.call_tool('plan_day', {'events':normalized, 'demo':True}))
+            assert normalized_day == day
             dark = payload(await session.call_tool("find_reset_spots", {**arguments, "demo_time": "2026-10-19T21:00:00-07:00"}))
             assert dark["recommendations"] == []
             live = payload(await session.call_tool("find_reset_spots", {"now": "2026-10-19T13:00:00-07:00"}))
