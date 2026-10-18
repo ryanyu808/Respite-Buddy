@@ -5,6 +5,7 @@ test('real cached campus demo, preferences, assistant and map controls', async (
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
   await page.goto('/')
+  await page.getByRole('button', { name: 'Plan a walk' }).click()
   await expect(page.getByRole('button', { name: 'Find My Route' })).toBeEnabled()
   await expect(page.locator('.leaflet-tile-loaded').first()).toBeVisible({ timeout: 15000 })
   await page.screenshot({ path: '../tmp/desktop-initial.png', fullPage: true })
@@ -51,6 +52,7 @@ test('real cached campus demo, preferences, assistant and map controls', async (
 test('mobile layout, route results and invalid selection', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/')
+  await page.getByRole('button', { name: 'Plan a walk' }).click()
   await expect(page.getByRole('button', { name: 'Find My Route' })).toBeEnabled()
   await page.screenshot({ path: '../tmp/mobile-initial.png', fullPage: true })
   await page.getByRole('button', { name: 'Try a campus demo' }).click()
@@ -71,7 +73,7 @@ test('mobile layout, route results and invalid selection', async ({ page }) => {
 })
 
 test('keyboard, dialogs, and automated accessibility checks', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/#walk')
   await expect(page.getByRole('button', { name: 'Find My Route' })).toBeEnabled()
   await page.keyboard.press('Tab')
   await expect(page.getByRole('link', { name: 'Skip to route controls' })).toBeFocused()

@@ -1,5 +1,7 @@
 # Render and Vercel deployment
 
+The existing projects are already live at `https://neuroroute.onrender.com` and `https://neuro-route-nine.vercel.app`. Update those projects; no new infrastructure or paid plan is needed. The existing health, data, route calculation and production CORS were verified successfully on 2026-10-17 before this feature. For the Respite Buddy update, MCP endpoint, environment values and verification procedure, see the [current handoff](respite-buddy.md#update-the-existing-deployments).
+
 ## Render Free
 
 Create a Web Service from this repository and use the checked-in `render.yaml`, or enter these dashboard values:

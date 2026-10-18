@@ -62,12 +62,14 @@ it('renders calculated route metrics and selection', () => {
     exposure: 19,
     extra_minutes: 1.9,
     reduction_pct: 76,
+    major_road_m: 42,
   } as Route
   const onSelect = vi.fn()
   render(<RouteCard route={route} selected={true} recommended={true} onSelect={onSelect} />)
   expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'true')
   expect(screen.getByText('746 m')).toBeInTheDocument()
-  expect(screen.getByText('76% lower estimate')).toBeInTheDocument()
+  expect(screen.getByText('42 m on major-road segments')).toBeInTheDocument()
+  expect(screen.queryByText('76% lower estimate')).not.toBeInTheDocument()
   fireEvent.click(screen.getByRole('button'))
   expect(onSelect).toHaveBeenCalledOnce()
 })
@@ -83,17 +85,15 @@ describe('API', () => {
   it('shows backend error details', async () => {
     vi.stubGlobal(
       'fetch',
-      vi
-        .fn()
-        .mockResolvedValue({
-          ok: false,
-          json: async () => ({ detail: 'No walking path nearby.' }),
-        }),
+      vi.fn().mockResolvedValue({
+        ok: false,
+        json: async () => ({ detail: 'No walking path nearby.' }),
+      }),
     )
     await expect(api('/routes', {})).rejects.toThrow('No walking path nearby.')
   })
   it('gives useful connection errors', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('fetch failed')))
-    await expect(api('/routes', {})).rejects.toThrow('backend is running')
+    await expect(api('/routes', {})).rejects.toThrow("Campus data isn't loading")
   })
 })

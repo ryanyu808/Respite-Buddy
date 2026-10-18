@@ -1,0 +1,31 @@
+[
+  {
+    "id": "REPLACE_WITH_STABLE_ID",
+    "name": "REPLACE_WITH_ACTUAL_NAME",
+    "building": null,
+    "building_code": null,
+    "floor": null,
+    "lat": null,
+    "lng": null,
+    "photo_url": null,
+    "indoor": null,
+    "hours": null,
+    "access": null,
+    "access_note": null,
+    "lighting": null,
+    "noise": null,
+    "seating": null,
+    "typical_crowd": null,
+    "outlets": null,
+    "food_allowed": null,
+    "restroom_nearby": null,
+    "step_free": null,
+    "safe_after_dark": null,
+    "verified_by": null,
+    "verified_date": null,
+    "notes": null,
+    "source_url": "https://REPLACE_WITH_SOURCE",
+    "data_kind": "scouted",
+    "purpose": "general"
+  }
+]

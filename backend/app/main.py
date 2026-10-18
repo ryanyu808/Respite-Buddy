@@ -10,6 +10,9 @@ from .models import RouteRequest, RouteResponse, PreferenceRequest, PreferenceRe
 from .services.geographic_data import MapData, DATA_DIR
 from .services.routing import Router
 from .services.ai_service import interpret, route_explanation
+from .respite_models import ResetRequest, ResetResponse, SwapRequest, PlanDayRequest, Spot
+from .services.respite import RespiteEngine
+from .services.spot_library import building_library
 
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
@@ -22,7 +25,17 @@ def frontend_origins() -> list[str]:
 @asynccontextmanager
 async def lifespan(app):
     app.state.data = MapData()
-    yield
+    app.state.respite = RespiteEngine(app.state.data)
+    from .mcp_server import create_mcp
+    mcp = create_mcp(app.state.data)
+    app.mount('/mcp', mcp.streamable_http_app())
+    mount = app.routes[-1]
+    try:
+        async with mcp.session_manager.run():
+            yield
+    finally:
+        # TestClient and ASGI hosts can enter lifespan again: do not retain old managers.
+        app.routes.remove(mount)
 
 
 app = FastAPI(title="NeuroRoute", version="0.1.0", lifespan=lifespan)
@@ -68,6 +81,48 @@ def demo_scenarios():
 @app.get("/api/rest-stops", response_model=list[RestStop])
 def rest_stops():
     return app.state.data.stops
+
+
+@app.get('/api/buildings')
+def buildings():
+    return building_library(app.state.data)
+
+
+@app.get('/api/spots', response_model=list[Spot])
+def spots(demo: bool = False):
+    return app.state.respite.library(demo)
+
+
+@app.get('/api/spots/{spot_id}', response_model=Spot)
+def spot_details(spot_id: str, demo: bool = False):
+    try:
+        return app.state.respite.details(spot_id, demo)
+    except ValueError as exc:
+        raise HTTPException(404, str(exc)) from exc
+
+
+@app.post('/api/reset-spots', response_model=ResetResponse)
+def reset_spots(request: ResetRequest):
+    try:
+        return app.state.respite.recommend(request)
+    except ValueError as exc:
+        raise HTTPException(422 if app.state.data.graph is not None else 503, str(exc)) from exc
+
+
+@app.post('/api/reset-spots/swap', response_model=ResetResponse)
+def swap_spot(request: SwapRequest):
+    try:
+        return app.state.respite.swap(request)
+    except ValueError as exc:
+        raise HTTPException(422 if app.state.data.graph is not None else 503, str(exc)) from exc
+
+
+@app.post('/api/plan-day')
+def plan_day(request: PlanDayRequest):
+    try:
+        return app.state.respite.plan_day(request)
+    except ValueError as exc:
+        raise HTTPException(422 if app.state.data.graph is not None else 503, str(exc)) from exc
 
 
 def calculate(request):

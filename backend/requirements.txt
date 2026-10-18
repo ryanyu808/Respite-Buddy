@@ -1,4 +1,5 @@
 fastapi>=0.115,<1
+-r requirements-mcp.txt
 uvicorn[standard]>=0.34,<1
 osmnx>=2.0,<3
 networkx>=3.4,<4

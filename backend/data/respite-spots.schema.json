@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "HoursInterval": {
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "title": "Start",
+          "type": "string"
+        },
+        "end": {
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "title": "End",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "title": "HoursInterval",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "building": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Building"
+    },
+    "building_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Building Code"
+    },
+    "floor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Floor"
+    },
+    "lat": {
+      "maximum": 34.032,
+      "minimum": 34.01,
+      "title": "Lat",
+      "type": "number"
+    },
+    "lng": {
+      "maximum": -118.277,
+      "minimum": -118.298,
+      "title": "Lng",
+      "type": "number"
+    },
+    "photo_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Photo Url"
+    },
+    "indoor": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Indoor"
+    },
+    "hours": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "items": {
+              "$ref": "#/$defs/HoursInterval"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "mon",
+              "tue",
+              "wed",
+              "thu",
+              "fri",
+              "sat",
+              "sun"
+            ]
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Hours"
+    },
+    "access": {
+      "anyOf": [
+        {
+          "enum": [
+            "open",
+            "usc_id",
+            "restricted"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Access"
+    },
+    "access_note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Access Note"
+    },
+    "lighting": {
+      "anyOf": [
+        {
+          "enum": [
+            "bright",
+            "medium",
+            "dim"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Lighting"
+    },
+    "noise": {
+      "anyOf": [
+        {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Noise"
+    },
+    "seating": {
+      "anyOf": [
+        {
+          "enum": [
+            "none",
+            "hard",
+            "soft"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Seating"
+    },
+    "typical_crowd": {
+      "anyOf": [
+        {
+          "enum": [
+            "few",
+            "some",
+            "many"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Typical Crowd"
+    },
+    "outlets": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Outlets"
+    },
+    "food_allowed": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Food Allowed"
+    },
+    "restroom_nearby": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Restroom Nearby"
+    },
+    "step_free": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Step Free"
+    },
+    "safe_after_dark": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Safe After Dark"
+    },
+    "verified_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Verified By"
+    },
+    "verified_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Verified Date"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Notes"
+    },
+    "source_url": {
+      "title": "Source Url",
+      "type": "string"
+    },
+    "data_kind": {
+      "default": "scouted",
+      "enum": [
+        "scouted",
+        "mapped",
+        "illustrative"
+      ],
+      "title": "Data Kind",
+      "type": "string"
+    },
+    "purpose": {
+      "default": "general",
+      "enum": [
+        "general",
+        "prayer",
+        "lactation",
+        "other_dedicated"
+      ],
+      "title": "Purpose",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "building",
+    "building_code",
+    "floor",
+    "lat",
+    "lng",
+    "photo_url",
+    "indoor",
+    "hours",
+    "access",
+    "access_note",
+    "lighting",
+    "noise",
+    "seating",
+    "typical_crowd",
+    "outlets",
+    "food_allowed",
+    "restroom_nearby",
+    "step_free",
+    "safe_after_dark",
+    "verified_by",
+    "verified_date",
+    "notes",
+    "source_url"
+  ],
+  "title": "Spot",
+  "type": "object"
+}

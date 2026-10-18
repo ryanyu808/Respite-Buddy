@@ -8,7 +8,12 @@ export type Preferences = {
   max_detour: 10 | 20 | 30 | null
 }
 export type Point = { lat: number; lon: number; name: string }
-export type Location = Point & { id: string; osm_url: string }
+export type Location = Point & {
+  id: string
+  osm_url: string | null
+  source_url?: string
+  aliases?: string[]
+}
 export type RestStop = Location & { kind: string; opening_hours: string | null }
 export type RouteRequest = { origin: Point; destination: Point; preferences: Preferences }
 export type Route = {

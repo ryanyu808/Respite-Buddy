@@ -43,7 +43,9 @@ function MapController({
       map.fitBounds(new LatLngBounds(route.geometry.coordinates.map(([x, y]) => [y, x])), {
         padding: [45, 65],
         maxZoom: 17,
-        animate: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        animate:
+          !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+          !map.getContainer().closest('.low-sensory'),
       })
   }, [map, result, selected, fit])
   useEffect(() => {
@@ -75,6 +77,7 @@ export function MapView({
   stops,
   showStops,
   features,
+  navigationOnly = false,
 }: {
   origin: Point | null
   destination: Point | null
@@ -87,6 +90,7 @@ export function MapView({
   stops: RestStop[]
   showStops: boolean
   features: FeatureCollection | null
+  navigationOnly?: boolean
 }) {
   const [fit, setFit] = useState(0)
   const [hidden, setHidden] = useState<string[]>([])
@@ -138,6 +142,7 @@ export function MapView({
               key={route.id}
               positions={route.geometry.coordinates.map(([x, y]): LatLngTuple => [y, x])}
               pathOptions={{
+                className: 'walking-route-line',
                 color: colors[route.id],
                 weight: route.id === selected ? 7 : 5,
                 opacity: route.id === selected ? 1 : 0.7,
@@ -196,7 +201,7 @@ export function MapView({
                 <br />
                 Quietness and availability not verified.
                 <br />
-                <a href={stop.osm_url} target="_blank" rel="noreferrer">
+                <a href={stop.osm_url ?? undefined} target="_blank" rel="noreferrer">
                   View mapped source
                 </a>
               </Popup>
@@ -236,22 +241,24 @@ export function MapView({
         >
           <LocateFixed size={19} />
         </button>
-        <div className="map-pick-buttons">
-          <button
-            aria-pressed={pickMode === 'origin'}
-            onClick={() => setPickMode(pickMode === 'origin' ? null : 'origin')}
-          >
-            <MapPin size={15} />
-            Set start
-          </button>
-          <button
-            aria-pressed={pickMode === 'destination'}
-            onClick={() => setPickMode(pickMode === 'destination' ? null : 'destination')}
-          >
-            <MapPin size={15} />
-            Set end
-          </button>
-        </div>
+        {!navigationOnly && (
+          <div className="map-pick-buttons">
+            <button
+              aria-pressed={pickMode === 'origin'}
+              onClick={() => setPickMode(pickMode === 'origin' ? null : 'origin')}
+            >
+              <MapPin size={15} />
+              Set start
+            </button>
+            <button
+              aria-pressed={pickMode === 'destination'}
+              onClick={() => setPickMode(pickMode === 'destination' ? null : 'destination')}
+            >
+              <MapPin size={15} />
+              Set end
+            </button>
+          </div>
+        )}
       </div>
       {pickMode && (
         <div className="pick-banner" role="status">

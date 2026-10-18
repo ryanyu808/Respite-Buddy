@@ -26,7 +26,7 @@ export function InfoDialog({
       }}
     >
       <div className="dialog-heading">
-        <span className="eyebrow">NEUROROUTE</span>
+        <span className="eyebrow">RESPITE BUDDY</span>
         <button className="icon-button" onClick={onClose} aria-label="Close information">
           <X size={21} />
         </button>
@@ -35,7 +35,7 @@ export function InfoDialog({
         <>
           <h2>Find your calmer way.</h2>
           <p>
-            Walking directions should reflect the person taking the walk. NeuroRoute helps you
+            Walking directions should reflect the person taking the walk. Respite Buddy helps you
             compare paths around USC according to your own sensory preferences.
           </p>
           <h3>Your walk, your preferences</h3>
@@ -54,9 +54,11 @@ export function InfoDialog({
           <h3>Privacy by default</h3>
           <p>
             No accounts or diagnoses. Preferences are stored in this browser only. Map selections
-            are processed by your local backend. When an OpenAI key is configured, assistant text,
-            current preferences, or route summaries may be sent to OpenAI. No key is sent to the
-            browser. Map tiles are requested from OpenStreetMap servers.
+            are processed by the campus routing service. Reset preferences stay on your device; only
+            the inputs needed to find places are sent with a request. No calendar connection is
+            made. When an OpenAI key is configured, assistant text, current preferences, or route
+            summaries may be sent to OpenAI. No key is sent to the browser. Map tiles are requested
+            from OpenStreetMap servers.
           </p>
         </>
       ) : (
@@ -81,9 +83,9 @@ export function InfoDialog({
           <h3>What's missing?</h3>
           <p>
             Crowds, live sound, lighting and construction conditions are unavailable. The crowd
-            slider is saved but excluded from costs and scores. Noise and traffic proxies overlap
-            and are not independent evidence. Green-space proximity does not prove shade or
-            quietness.
+            preference is excluded from costs and scores because no crowd observations are
+            available. Noise and traffic proxies overlap and are not independent evidence.
+            Green-space proximity does not prove shade or quietness.
           </p>
           <h3>Routes & time</h3>
           <p>
@@ -107,7 +109,7 @@ export function InfoDialog({
         </>
       )}
       <p className="disclaimer">
-        NeuroRoute estimates potential sensory exposure using available geographic data. Actual
+        Respite Buddy estimates potential sensory exposure using available geographic data. Actual
         conditions may differ. Follow posted signs and use your judgment when navigating.
       </p>
       <button className="primary-button" onClick={onClose}>

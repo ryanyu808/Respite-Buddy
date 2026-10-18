@@ -1,0 +1,12 @@
+[
+  {
+    "id": "usc-jkp",
+    "name": "Popovich Hall (JKP)",
+    "lat": 34.018379,
+    "lon": -118.282324,
+    "aliases": ["JKP", "Popovich", "Popovich Hall"],
+    "source_url": "https://calendar.usc.edu/popovich_hall_jkp",
+    "source_checked": "2026-10-17",
+    "notes": "Coordinates published in the USC Event Calendar's Place GeoCoordinates. Building position, not a verified entrance or indoor path."
+  }
+]
