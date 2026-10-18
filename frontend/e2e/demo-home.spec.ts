@@ -18,7 +18,7 @@ test('instant default demo works with an unavailable backend and map tiles', asy
   await expect(page.getByRole('region', { name: 'Somewhere to reset.' })).toBeFocused()
   await page.getByRole('button', { name: 'Walk me there', exact: true }).first().click()
   await expect(page.locator('.demo-map .walking-route-line').first()).toBeVisible()
-  await page.getByRole('button', { name: 'Then to class' }).click()
+  await page.getByRole('button', { name: 'Next destination' }).click()
   await expect(page.getByRole('heading', { name: 'On to Tutor Campus Center.' })).toBeVisible()
   await expect(page.locator('.demo-directions').getByText(/Leave by 1:12 PM/)).toBeVisible()
   await page.getByRole('button', { name: 'Back to spots' }).click()

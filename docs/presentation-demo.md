@@ -26,7 +26,7 @@ Regenerate both demo files with `python backend/scripts/export_respite_demo.py` 
 
 1. Open the website root. Three picks are already shown; no setup is needed.
 2. Choose campus locations or use the clearly labeled sample start, then click **Find me a spot**. Edit start/end times (Pacific) to update options immediately. For example, 10:15 AM–12 PM calculates 105 minutes. **Indoors, Outdoors, Quiet, Place to sit, Lower light, Fewer people** appear directly above the cards. The optional date/overnight controls stay collapsed.
-3. Click **Walk me there** to show the saved route. Click **Then to class** to show the second leg. **Other walking routes** retains fastest, calmer, and balanced alternatives.
+3. Click **Walk me there** to show the saved route. Click **Next destination** to show the second leg. **Other walking routes** retains fastest, calmer, and balanced alternatives.
 4. Click **Back to spots**, then **It’s full**. The next remaining eligible sample becomes the best pick, with the same class deadline. Skips affect only this demo screen, not live crowd reports or saved preferences.
 5. **Show another pick** promotes another sample without excluding anything. **Restart demo** restores skipped spots; **Reset demo** restores the default window/preferences when no sample fits. Refreshing also starts a fresh presentation. Applying a new time window clears demo skips; changing preferences or reporting full does not change the deadline.
 
