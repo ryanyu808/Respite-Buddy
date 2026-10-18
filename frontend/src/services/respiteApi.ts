@@ -63,7 +63,9 @@ function sameRequest(a: ResetRequest, b: ResetRequest, response: ResetResponse) 
     a.usc_id === b.usc_id &&
     prefs(a) === prefs(b) &&
     Date.parse(a.demo_time ?? DEMO_TIME) === Date.parse(b.demo_time ?? DEMO_TIME) &&
-    (!a.deadline || Date.parse(a.deadline) === Date.parse(response.deadline)) &&
+    (!a.deadline ||
+      Math.min(Date.parse(a.deadline), Date.parse(a.demo_time ?? DEMO_TIME) + a.minutes * 60000) ===
+        Date.parse(response.deadline)) &&
     !a.now
   )
 }

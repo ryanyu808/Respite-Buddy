@@ -42,6 +42,11 @@ import {
   saveDevicePreferences,
 } from './respite'
 import { SupportFooter } from './components/SupportFooter'
+import { MySchedule } from './components/MySchedule'
+import { CampusDirectory } from './components/CampusDirectory'
+import type { ResetRequest } from './respite'
+import type { CalendarEvent } from './calendar/model'
+import './calendar.css'
 
 function point(location: Point): Point {
   return { lat: location.lat, lon: location.lon, name: location.name }
@@ -71,9 +76,27 @@ export default function App() {
   const [lastRequest, setLastRequest] = useState<RouteRequest | null>(null)
   const [pickMode, setPickMode] = useState<'origin' | 'destination' | null>(null)
   const [page, setPage] = useState<'about' | 'methodology' | null>(null)
-  const [surface, setSurface] = useState<'reset' | 'walk'>(() =>
+  const [surface, setSurface] = useState<'reset' | 'walk' | 'schedule' | 'directory'>(() =>
     window.location.hash === '#walk' ? 'walk' : 'reset',
   )
+  const [resetContext, setResetContext] = useState<ResetRequest | undefined>()
+  const [scheduleSample, setScheduleSample] = useState<CalendarEvent[] | null>(null)
+  const [scheduleDate, setScheduleDate] = useState<string | undefined>()
+  function openReset(request: ResetRequest) {
+    setResetContext(request)
+    setSurface('reset')
+  }
+  function openDemo() {
+    openReset({
+      near: 'Leavey',
+      next_class: null,
+      minutes: 15,
+      needs: [],
+      demo: true,
+      usc_id: false,
+      preferences: { ...DEFAULTS },
+    })
+  }
   const [deviceSettings, setDeviceSettings] = useState(loadDevicePreferences)
   const [campusSource, setCampusSource] = useState<'connecting' | 'live' | 'saved'>('connecting')
   const [savedResult, setSavedResult] = useState(false)
@@ -206,13 +229,26 @@ export default function App() {
 
   return (
     <div
-      className={`app-shell ${surface === 'reset' ? 'reset-shell' : ''} ${deviceSettings.highContrast ? 'high-contrast' : ''} ${deviceSettings.lowSensory ? 'low-sensory' : ''}`}
+      className={`app-shell ${surface === 'reset' ? 'reset-shell' : surface === 'schedule' || surface === 'directory' ? 'campus-shell' : ''} ${deviceSettings.highContrast ? 'high-contrast' : ''} ${deviceSettings.lowSensory ? 'low-sensory' : ''}`}
     >
-      <a className="skip-link" href={surface === 'reset' ? '#reset-controls' : '#route-controls'}>
-        {surface === 'reset' ? 'Skip to reset controls' : 'Skip to route controls'}
-      </a>
       <header className="app-header">
-        <a className="brand" href="/" aria-label="Respite Buddy home">
+        <a
+          className="skip-link"
+          href={
+            surface === 'reset'
+              ? '#reset-controls'
+              : surface === 'walk'
+                ? '#route-controls'
+                : '#campus-content'
+          }
+        >
+          {surface === 'reset'
+            ? 'Skip to reset controls'
+            : surface === 'walk'
+              ? 'Skip to route controls'
+              : 'Skip to page content'}
+        </a>
+        <a className="brand" href="/">
           <img src="/favicon.svg" alt="" width="38" height="38" />
           <span>
             Respite <span>Buddy</span>
@@ -223,7 +259,10 @@ export default function App() {
           <button
             className={`nav-item ${surface === 'reset' ? 'active' : ''}`}
             aria-current={surface === 'reset' ? 'page' : undefined}
-            onClick={() => setSurface('reset')}
+            onClick={() => {
+              setResetContext(undefined)
+              setSurface('reset')
+            }}
           >
             <HeartHandshake size={16} /> Reset before class
           </button>
@@ -234,6 +273,20 @@ export default function App() {
           >
             <Compass size={16} />
             Plan a walk
+          </button>
+          <button
+            className={`nav-item ${surface === 'schedule' ? 'active' : ''}`}
+            aria-current={surface === 'schedule' ? 'page' : undefined}
+            onClick={() => setSurface('schedule')}
+          >
+            My Schedule
+          </button>
+          <button
+            className={`nav-item ${surface === 'directory' ? 'active' : ''}`}
+            aria-current={surface === 'directory' ? 'page' : undefined}
+            onClick={() => setSurface('directory')}
+          >
+            Campus spaces
           </button>
           <button className="nav-item" onClick={() => setPage('about')}>
             Our approach
@@ -259,7 +312,25 @@ export default function App() {
           </button>
         </div>
       </header>
-      {surface === 'reset' ? (
+      {surface === 'schedule' ? (
+        <MySchedule
+          onReset={openReset}
+          onDirectory={() => setSurface('directory')}
+          initialSample={scheduleSample}
+          onSampleChange={setScheduleSample}
+          initialDate={scheduleDate}
+          onDateChange={setScheduleDate}
+        />
+      ) : surface === 'directory' ? (
+        <CampusDirectory
+          onDemo={openDemo}
+          onWalk={(target) => {
+            changeDestination(target)
+            setSurface('walk')
+            void calculate(preferences, origin, target)
+          }}
+        />
+      ) : surface === 'reset' ? (
         <RespiteBuddy
           locations={locations}
           features={features}
@@ -267,6 +338,9 @@ export default function App() {
           onSettings={setDeviceSettings}
           preferences={preferences}
           onPreferences={setPreferences}
+          context={resetContext}
+          onDirectory={() => setSurface('directory')}
+          onSchedule={() => setSurface('schedule')}
           onClear={() => {
             setDeviceSettings({ ...DEVICE_DEFAULTS })
             setPreferences({ ...DEFAULTS })

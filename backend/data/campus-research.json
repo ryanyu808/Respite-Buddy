@@ -1,0 +1,31 @@
+{
+  "checked": "2026-10-17",
+  "scope": "Requested spaces not imported into the geographic directory; no coordinates are guessed. Imported records live in campus-candidates.json. The Arts Corridor is one additional independently documented space.",
+  "unresolved": [
+    {"name":"Doheny Intellectual Commons","source":"https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces","reason":"Collection documented; ordinary drop-in reset use not established. Confirm precise space and eligibility."},
+    {"name":"Doheny Ground Floor Rotunda","source":"https://libraries.usc.edu/spaces-overview","reason":"Listed space; ordinary use versus exhibition/event restrictions not established. Not imported as a reset candidate."},
+    {"name":"Doheny Hall of Honor","source":"https://libraries.usc.edu/spaces-overview","reason":"Listed space; ordinary student lounge use not established. Confirm special-purpose restrictions."},
+    {"name":"Doheny popular/general reading area","source":"https://libraries.usc.edu/locations/doheny-memorial-library/doheny-memorial-library-spaces","reason":"No independently distinct additional area confirmed; do not duplicate reference room or stack desks."},
+    {"name":"Science and Engineering second-floor individual study","source":"https://libraries.usc.edu/rooms/ssl-2nd-floor","reason":"Study desks and charging documented. Source-confirmed building coordinate unresolved; held outside geographic directory."},
+    {"name":"Science and Engineering second-floor reading collection","source":"https://libraries.usc.edu/rooms/ssl-2nd-floor","reason":"Collection documented, but not established as a distinct seating area; avoid duplicating individual study."},
+    {"name":"Science and Engineering third-floor study","source":"https://libraries.usc.edu/rooms/ssl-3rd-floor","reason":"Individual study and charging documented. Coordinate unresolved; excludes SSL 301 testing center."},
+    {"name":"Science and Engineering reservable group rooms","source":"https://libraries.usc.edu/rooms/ssl-2nd-floor","reason":"Rooms 208/209 documented; reservations required. Coordinate unresolved; classrooms excluded."},
+    {"name":"Library for International and Public Affairs","source":"https://libraries.usc.edu/hours","reason":"Library listed; study-space eligibility and source-backed building anchor still require resolution."},
+    {"name":"Architecture and Fine Arts Library","source":"https://libraries.usc.edu/hours","reason":"Library listed; building anchor and current ordinary-use conditions require confirmation."},
+    {"name":"Gaughan and Tiberti Business Library","source":"https://libraries.usc.edu/hours","reason":"Library listed; source-backed building anchor unresolved. Do not use JKP's coordinate as this library."},
+    {"name":"Queen's Courtyard","source":"https://annenberg.usc.edu/communication/communication-mcm/news/livin%E2%80%99-socal-life-top-10-outdoor-study-spots-usc","reason":"Historical mention; exact courtyard coordinate and current furniture unresolved."},
+    {"name":"Martens Plaza","source":"https://annenberg.usc.edu/communication/communication-mcm/news/livin%E2%80%99-socal-life-top-10-outdoor-study-spots-usc","reason":"Historical mention; no verified plaza anchor. Nearby Leavey centroid is not treated as the plaza."},
+    {"name":"Argue Plaza","source":"https://annenberg.usc.edu/communication/communication-mcm/news/livin%E2%80%99-socal-life-top-10-outdoor-study-spots-usc","reason":"Historical mention; courtyard anchor and current use unresolved."},
+    {"name":"Mudd Hall Courtyard","source":"https://annenberg.usc.edu/communication/communication-mcm/news/livin%E2%80%99-socal-life-top-10-outdoor-study-spots-usc","reason":"Historical mention; exact courtyard anchor unresolved."},
+    {"name":"Nazarian Pavilion","source":"https://annenberg.usc.edu/communication/communication-mcm/news/livin%E2%80%99-socal-life-top-10-outdoor-study-spots-usc","reason":"Historical mention; precise pavilion placement and current use unresolved. Not mapped to Doheny's centroid."},
+    {"name":"Bridge Hall Patio","source":"https://annenberg.usc.edu/communication/communication-mcm/news/livin%E2%80%99-socal-life-top-10-outdoor-study-spots-usc","reason":"Historical mention; patio coordinate unresolved."},
+    {"name":"Cinema Courtyard","source":"https://annenberg.usc.edu/communication/communication-mcm/news/livin%E2%80%99-socal-life-top-10-outdoor-study-spots-usc","reason":"Historical mention; exact courtyard coordinate unresolved."},
+    {"name":"Founders Park seating","source":"https://today.usc.edu/best-usc-study-spots-relax-university-park-campus/","reason":"Existence documented. USC calendar GeoCoordinates appear inconsistent with its descriptive location; do not import without corroboration."},
+    {"name":"Annenberg outdoor seating","source":"https://viterbiadmission.usc.edu/2022/3-best-places-to-study-outside-on-campus/","reason":"Historical student description; seating location and present condition unresolved."},
+    {"name":"Tutor Hall Cafe outdoor seating","source":"https://viterbiadmission.usc.edu/2022/3-best-places-to-study-outside-on-campus/","reason":"Historical description; Ronald Tutor Hall is not Tutor Campus Center. Correct building anchor unresolved."},
+    {"name":"Tutor Hall Cafe indoor seating","source":"https://viterbiadmission.usc.edu/2022/3-best-places-to-study-outside-on-campus/","reason":"Historical description; correct building anchor and current dining access unresolved."},
+    {"name":"USC Village Piazza","source":"https://www.openstreetmap.org/way/541642577","reason":"Snapshot maps USC Village, not a distinct exact piazza or seating position. Avoid relabeling the whole Village centroid."},
+    {"name":"Outdoor area behind Watt Hall near Fisher Museum","source":"https://viterbiadmission.usc.edu/2022/3-best-places-to-study-outside-on-campus/","reason":"Several historically described grassy areas; not a uniquely located spot. Museum coordinate is not the lawn."}
+  ],
+  "excluded_special_purpose": ["Little Chapel of Silence: prayer space, not an ordinary reset lounge", "Hancock Museum: appointments/tours, not ordinary drop-in study", "Leavey instruction rooms and SSL testing center: dedicated teaching/testing use"]
+}

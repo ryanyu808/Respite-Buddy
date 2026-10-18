@@ -9,7 +9,7 @@ BUILDING_FILE = SPOT_FILE.with_name('buildings.json')
 
 
 def building_library(data):
-    aliases = {'Leavey Library':['Leavey','LV'], 'Tutor Campus Center':['TCC'],
+    aliases = {'Leavey Library':['Leavey','LV','LVL'], 'Tutor Campus Center':['TCC'],
                'USC Village':['Village'], 'USC Fisher Museum':['Fisher']}
     locations = [{**p, 'source_url': p['osm_url'], 'aliases': aliases.get(p['name'], [])} for p in data.locations]
     # Curated coordinates from a cited campus primary source, not a geocoder guess.
@@ -17,6 +17,13 @@ def building_library(data):
         from ..models import Point
         Point(lat=record['lat'], lon=record['lon'], name=record['name'])
         locations.append({**record, 'osm_url': None})
+    # Additional evidence-backed building anchors live beside the directory.
+    extra_file = BUILDING_FILE.with_name('campus-buildings.json')
+    if extra_file.exists():
+        for record in json.loads(extra_file.read_text(encoding='utf-8')):
+            if not any(p['id'] == record['id'] for p in locations):
+                Point(lat=record['lat'], lon=record['lon'], name=record['name'])
+                locations.append({**record, 'osm_url': None})
     return locations
 
 
