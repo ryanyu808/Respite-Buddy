@@ -40,10 +40,10 @@ test('full skips retain the class time and restart is a single action', async ({
   await expect(page.getByRole('article')).toHaveCount(3)
 })
 
-test('optional tools are reachable without crowding the demo', async ({ page }) => {
+test('primary destinations are directly reachable from the demo', async ({ page }) => {
   await page.goto('/')
-  await expect(page.getByRole('button', { name: 'Plan a walk', exact: true })).toBeHidden()
-  await page.getByText('More tools', { exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Plan a walk', exact: true })).toBeVisible()
+  await expect(page.getByText('More tools', { exact: true })).toHaveCount(0)
   await page.getByRole('button', { name: 'Plan a walk', exact: true }).click()
   await expect(page.getByRole('button', { name: 'Find My Route' })).toBeVisible()
   await page.getByRole('button', { name: 'Find a spot', exact: true }).click()

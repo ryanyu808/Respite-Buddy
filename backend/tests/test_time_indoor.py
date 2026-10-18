@@ -47,6 +47,28 @@ def test_documented_swap_retains_original_budget(engine):
     assert swapped.deadline == original.deadline and swapped.minutes == 25
     assert all(r.spot.id != item.spot.id for r in swapped.documented_options)
 
+
+@pytest.mark.parametrize('configured', [None, 'https://preview.example/'])
+def test_recommendation_links_use_canonical_site_and_preserve_overrides(engine, monkeypatch, configured):
+    from urllib.parse import urlparse, parse_qs
+    if configured is None:
+        monkeypatch.delenv('WEBSITE_URL', raising=False)
+    else:
+        monkeypatch.setenv('WEBSITE_URL', configured)
+    expected = configured.rstrip('/') if configured else 'https://respite-buddy.vercel.app'
+    for demo in [False, True]:
+        request = ResetRequest(minutes=30, needs=['indoor'], next_class='TCC',
+                               **({'demo': True} if demo else {'now': DEMO_TIME}))
+        result = engine.recommend(request)
+        items = result.recommendations if demo else result.documented_options
+        assert items
+        for item in items:
+            assert item.deep_link.startswith(expected + '/?')
+            link = urlparse(item.deep_link)
+            assert parse_qs(link.query)['to'] == [item.spot.id]
+            assert 'next' in parse_qs(link.query)
+            assert link.fragment.startswith('reset=')
+
 def test_submitted_research_is_deduplicated_and_never_claims_scout_data():
     root = Path(__file__).resolve().parents[2]
     raw = json.loads((root / 'backend/data/campus-submitted.json').read_text(encoding='utf-8'))

@@ -82,8 +82,8 @@ Build Command: pip install --upgrade pip && pip install -r requirements-lock.txt
 Start Command: uvicorn app.main:app --host 0.0.0.0 --port $PORT
 Health Check Path: /api/health
 Instance Plan: Free
-FRONTEND_URL=https://neuro-route-nine.vercel.app
-WEBSITE_URL=https://neuro-route-nine.vercel.app
+FRONTEND_URL=https://respite-buddy.vercel.app
+WEBSITE_URL=https://respite-buddy.vercel.app
 WALKING_SPEED_KPH=4.8
 OPENAI_API_KEY=<leave blank for deterministic operation>
 ```
@@ -93,7 +93,7 @@ The lockfile includes `requirements-mcp.txt`, so the existing Render build comma
 Vercel settings:
 
 ```text
-Existing project URL: https://neuro-route-nine.vercel.app
+Existing project URL: https://respite-buddy.vercel.app
 Root Directory: frontend
 Framework: Vite
 Install Command: npm ci

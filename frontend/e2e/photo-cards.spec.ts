@@ -19,6 +19,7 @@ test('directory card is photo-first, short and hides detail until requested', as
   await page.setViewportSize({ width: 390, height: 844 })
   await page.route('**/api/**', (route) => route.abort())
   await page.goto('/?live=1')
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
   await page.getByRole('button', { name: 'Campus spaces', exact: true }).click()
   await page.getByLabel('Search campus spaces', { exact: true }).fill('Weingart')
   const card = page.getByRole('article')

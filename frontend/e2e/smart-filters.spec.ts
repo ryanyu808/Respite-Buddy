@@ -130,6 +130,7 @@ test('directory strict outlet and food filters show documented matches without p
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/?live=1')
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
   await page.getByRole('button', { name: 'Campus spaces', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(36)
   await page.getByText('Adjust · optional filters', { exact: true }).click()
@@ -165,7 +166,8 @@ test('saved schedule context supplies a deadline without questions or sending pr
   await expect(
     page.getByText('Saved locally. Review overlap warnings before planning gaps.'),
   ).toBeVisible()
-  await page.getByRole('button', { name: 'Reset before class', exact: true }).click()
+  await page.getByRole('button', { name: 'Find a spot', exact: true }).click()
+  await page.getByRole('button', { name: 'Use live reset tools', exact: true }).click()
   await expect(page.getByText(/25 minutes before your next class\./).first()).toBeVisible()
   await page.getByRole('button', { name: 'Somewhere calm, now', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(1)

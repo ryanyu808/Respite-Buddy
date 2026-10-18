@@ -1,4 +1,7 @@
 # Respite Buddy (built on NeuroRoute)
+
+Official website: [respite-buddy.vercel.app](https://respite-buddy.vercel.app).
+
 Latest feature: [one-tap discovery and evidence-backed smart filters](docs/smart-filters.md). No questionnaire or mandatory schedule, activity or account; documented candidates remain separate from verified recommendations.
 
 Find somewhere to reset on campus before your next class, with existing sensory-aware walking navigation.

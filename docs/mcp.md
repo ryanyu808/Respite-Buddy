@@ -1,5 +1,7 @@
 # Respite Buddy MCP
 
+Website links returned by the tools use `https://respite-buddy.vercel.app` by default. Set `WEBSITE_URL` in the existing Render service to the same origin; an explicit value overrides the default. The connector itself remains `https://neuroroute.onrender.com/mcp/`.
+
 The adapter in `backend/app/mcp_server.py` uses the official **mcp 1.30.0** Python SDK, with Streamable HTTP, `stateless_http=True`, `json_response=True`, and `streamable_http_path="/"`. The version is pinned in `backend/requirements-mcp.txt`: the requested FastMCP interface belongs to the supported v1 line; installing an unconstrained `mcp` can select v2 with different APIs.
 
 Verified against the official [v1.30.0 server documentation](https://github.com/modelcontextprotocol/python-sdk/blob/v1.30.0/docs/server.md#streamable-http-transport), [ASGI mounting example](https://github.com/modelcontextprotocol/python-sdk/blob/v1.30.0/examples/snippets/servers/streamable_http_multiple_servers.py), [client implementation](https://github.com/modelcontextprotocol/python-sdk/blob/v1.30.0/src/mcp/client/streamable_http.py), and [transport security implementation](https://github.com/modelcontextprotocol/python-sdk/blob/v1.30.0/src/mcp/server/transport_security.py).

@@ -105,7 +105,7 @@ export function homeRecommendations(request: ResetRequest): ResetResponse | null
       route_to_spot: null,
       route_to_class: null,
       backup_id: null,
-      deep_link: 'https://neuro-route-nine.vercel.app/',
+      deep_link: 'https://respite-buddy.vercel.app/',
       crowd: { category: null, source: null, observed_at: null },
     })),
   }

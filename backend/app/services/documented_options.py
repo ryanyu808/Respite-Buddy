@@ -53,7 +53,7 @@ def indoor_options(engine, request, at, deadline, origin, next_class, excluded):
             query['next'] = f'{next_class.lat},{next_class.lon}'
         context = {'deadline': deadline.isoformat(), 'usc_id': request.usc_id,
                    'preferences': request.preferences.model_dump(), 'filters': request.filters.model_dump(mode='json')}
-        link = os.getenv('WEBSITE_URL', 'https://neuro-route-nine.vercel.app').rstrip('/') + '/?' + urlencode(query) + '#reset=' + quote(json.dumps(context, separators=(',', ':')), safe='')
+        link = os.getenv('WEBSITE_URL', 'https://respite-buddy.vercel.app').rstrip('/') + '/?' + urlencode(query) + '#reset=' + quote(json.dumps(context, separators=(',', ':')), safe='')
         found.append(Recommendation(spot=spot, walk_to_min=walk,
             walk_to_class_min=walk_class if next_class else None, rest_min=rest,
             leave_by=leave_by, tight_on_time=rest <= 3, route_to_spot=outward,

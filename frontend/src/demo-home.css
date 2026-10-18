@@ -415,45 +415,6 @@
 .demo-restart .primary-button {
   margin-top: 16px;
 }
-.demo-tools {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.demo-tools > summary {
-  cursor: pointer;
-  list-style: none;
-}
-.demo-tools > summary::-webkit-details-marker {
-  display: none;
-}
-.demo-tools-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  z-index: 1200;
-  background: #fffefb;
-  border: 1px solid #d5ddcf;
-  box-shadow: 0 8px 25px #304c3420;
-  border-radius: 12px;
-  padding: 8px;
-  width: 210px;
-}
-.demo-tools-menu button {
-  display: block;
-  padding: 12px;
-  width: 100%;
-  text-align: left;
-  background: none;
-  border: 0;
-  color: #365440;
-  font-size: 13px;
-  min-height: 44px;
-}
-.demo-tools-menu button:hover {
-  background: #eaf0e5;
-  border-radius: 6px;
-}
 .high-contrast .demo-home,
 .high-contrast .demo-home p,
 .high-contrast .demo-home small,

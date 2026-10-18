@@ -49,7 +49,7 @@ Filters use localStorage `respite-buddy-smart-filters`; selected building name u
 
 No new dependencies, secrets, hosting resources or paid plans. Human review/merge before production deployment when services track main.
 
-**Render Free:** root `backend`; build `pip install --upgrade pip && pip install -r requirements-lock.txt`; start `uvicorn app.main:app --host 0.0.0.0 --port $PORT`; health `/api/health`. Keep `FRONTEND_URL=https://neuro-route-nine.vercel.app`, `WEBSITE_URL=https://neuro-route-nine.vercel.app` and existing optional settings. Include updated JSON data/schema. Deploy backend before/with frontend for the walking-limit endpoint. No graph replacement/download; exact hosted 512 MB peak RAM remains unverified.
+**Render Free:** root `backend`; build `pip install --upgrade pip && pip install -r requirements-lock.txt`; start `uvicorn app.main:app --host 0.0.0.0 --port $PORT`; health `/api/health`. Keep `FRONTEND_URL=https://respite-buddy.vercel.app`, `WEBSITE_URL=https://respite-buddy.vercel.app` and existing optional settings. Include updated JSON data/schema. Deploy backend before/with frontend for the walking-limit endpoint. No graph replacement/download; exact hosted 512 MB peak RAM remains unverified.
 
 **Vercel:** root `frontend`; Vite; Node 22+; install `npm ci`; build `npm run build`; output `dist`; `VITE_API_BASE_URL=https://neuroroute.onrender.com` without `/api`. Existing optional OAuth identifiers/callback files unchanged. No new variables/permissions. Redeploy after reviewed merge; preview success is not production deployment.
 

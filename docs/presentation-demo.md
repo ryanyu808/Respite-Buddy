@@ -35,7 +35,7 @@ The route line and route summary are available if map tiles fail, but a complete
 ## Existing tools
 
 - **My Schedule** remains available in the header. Real schedules stay on-device as before.
-- **More tools** contains **Live reset tools**, **Plan a walk**, and **Campus spaces**. The live engine retains its evidence requirements and never substitutes these samples for verified results.
+- The desktop header directly shows **Find a spot**, **My Schedule**, **Plan a walk**, **Campus spaces**, **Our approach**, and **Behind the map**. Smaller screens use the **Menu** button. **Use live reset tools** remains available below the demo; existing `/?live=1` and MCP deep links still open the live engine, which retains its evidence requirements.
 - `/?live=1` opens the full reset tool directly. Existing engine/MCP deep links and `/#walk` retain their original behavior.
 - **Find a spot** returns to the simple presentation home from any tool.
 
