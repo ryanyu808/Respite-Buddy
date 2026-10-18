@@ -52,6 +52,7 @@ test('real cached campus demo, preferences, assistant and map controls', async (
 test('mobile layout, route results and invalid selection', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/?live=1')
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
   await page.getByRole('button', { name: 'Plan a walk' }).click()
   await expect(page.getByRole('button', { name: 'Find My Route' })).toBeEnabled()
   await page.screenshot({ path: '../tmp/mobile-initial.png', fullPage: true })

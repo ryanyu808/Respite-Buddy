@@ -50,6 +50,8 @@ import type { CalendarEvent } from './calendar/model'
 import './calendar.css'
 import './smart-filters.css'
 import { rememberCampus } from './smartContext'
+import { HeaderNavigation } from './components/HeaderNavigation'
+import './navigation.css'
 
 function point(location: Point): Point {
   return { lat: location.lat, lon: location.lon, name: location.name }
@@ -260,81 +262,17 @@ export default function App() {
             <small>A LITTLE ROOM IN YOUR DAY.</small>
           </span>
         </a>
-        <nav aria-label="Main navigation">
-          <button
-            className={`nav-item ${surface === 'demo' ? 'active' : ''}`}
-            aria-current={surface === 'demo' ? 'page' : undefined}
-            onClick={openDemo}
-          >
-            <Leaf size={16} /> Find a spot
-          </button>
-          {surface === 'demo' || surface === 'directory' ? (
-            <>
-              <button className="nav-item" onClick={() => setSurface('schedule')}>
-                My Schedule
-              </button>
-              <details className="demo-tools">
-                <summary className="nav-item">More tools</summary>
-                <div className="demo-tools-menu">
-                  <button
-                    onClick={() => {
-                      setResetContext(undefined)
-                      setSurface('reset')
-                    }}
-                  >
-                    Live reset tools
-                  </button>
-                  <button onClick={() => setSurface('walk')}>Plan a walk</button>
-                  <button
-                    aria-current={surface === 'directory' ? 'page' : undefined}
-                    onClick={() => setSurface('directory')}
-                  >
-                    Campus spaces
-                  </button>
-                  <button onClick={() => setPage('about')}>Our approach</button>
-                  <button onClick={() => setPage('methodology')}>Behind the map</button>
-                </div>
-              </details>
-            </>
-          ) : (
-            <>
-              <button
-                className={`nav-item ${surface === 'reset' ? 'active' : ''}`}
-                aria-current={surface === 'reset' ? 'page' : undefined}
-                onClick={() => {
-                  setResetContext(undefined)
-                  setSurface('reset')
-                }}
-              >
-                <HeartHandshake size={16} /> Reset before class
-              </button>
-              <button
-                className={`nav-item ${surface === 'walk' ? 'active' : ''}`}
-                aria-current={surface === 'walk' ? 'page' : undefined}
-                onClick={() => setSurface('walk')}
-              >
-                <Compass size={16} />
-                Plan a walk
-              </button>
-              <button
-                className={`nav-item ${surface === 'schedule' ? 'active' : ''}`}
-                aria-current={surface === 'schedule' ? 'page' : undefined}
-                onClick={() => setSurface('schedule')}
-              >
-                My Schedule
-              </button>
-              <button className="nav-item" onClick={() => setSurface('directory')}>
-                Campus spaces
-              </button>
-              <button className="nav-item" onClick={() => setPage('about')}>
-                Our approach
-              </button>
-              <button className="nav-item" onClick={() => setPage('methodology')}>
-                Behind the map
-              </button>
-            </>
-          )}
-        </nav>
+        <HeaderNavigation
+          active={page ?? (surface === 'reset' ? 'demo' : surface)}
+          onNavigate={(destination) => {
+            if (destination === 'about' || destination === 'methodology') {
+              setPage(destination)
+            } else {
+              setPage(null)
+              setSurface(destination)
+            }
+          }}
+        />
         <div className="header-end">
           <span className="campus-tag">
             <MapPin size={14} />

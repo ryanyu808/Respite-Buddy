@@ -109,6 +109,7 @@ test('candidate directory and mobile schedule are accessible, honest, and do not
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/?live=1')
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
   await page.getByRole('button', { name: 'Campus spaces', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(36)
   await page.getByLabel('Search campus spaces', { exact: true }).fill('210A')
@@ -116,6 +117,7 @@ test('candidate directory and mobile schedule are accessible, honest, and do not
   await expect(page.getByRole('article')).toContainText('Reservation required')
   await expect(page.getByRole('article')).toContainText('USC documented — conditions unconfirmed')
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([])
+  await page.getByRole('button', { name: 'Menu', exact: true }).click()
   await page.getByRole('button', { name: 'My Schedule', exact: true }).click()
   await page.getByRole('button', { name: 'Import sample schedule', exact: true }).click()
   await page.getByText('Connect a read-only calendar (optional)', { exact: true }).click()

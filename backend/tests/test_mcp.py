@@ -93,7 +93,7 @@ def stub(monkeypatch):
             if method == "details":
                 return self.spot
             return StubResponse(
-                recommendations=[{"deep_link": "https://neuro-route-nine.vercel.app/?to=fixture-spot"}],
+                recommendations=[{"deep_link": "https://respite-buddy.vercel.app/?to=fixture-spot"}],
                 evaluated_at=datetime.fromisoformat("2026-10-19T13:00:00-07:00"),
                 notes=["Crowd information unavailable."],
             )
@@ -309,7 +309,8 @@ def campus():
     return data
 
 
-def test_real_engine_demo_links_swap_plan_details_and_after_dark(campus):
+def test_real_engine_demo_links_swap_plan_details_and_after_dark(campus, monkeypatch):
+    monkeypatch.delenv('WEBSITE_URL', raising=False)
     server = mcp_server.create_mcp(campus)
 
     async def check():
@@ -321,6 +322,7 @@ def test_real_engine_demo_links_swap_plan_details_and_after_dark(campus):
             assert again == first
             spot = first["recommendations"][0]["spot"]
             link = urlparse(first["recommendations"][0]["deep_link"])
+            assert link.netloc == 'respite-buddy.vercel.app'
             assert link.scheme == "https" and parse_qs(link.query)["to"] == [spot["id"]]
             onward = payload(await session.call_tool("find_reset_spots", {**arguments, "next_class": "TCC"}))
             assert onward["recommendations"]

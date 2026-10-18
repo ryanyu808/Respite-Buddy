@@ -1,6 +1,6 @@
 # Render and Vercel deployment
 
-The existing projects are already live at `https://neuroroute.onrender.com` and `https://neuro-route-nine.vercel.app`. Update those projects; no new infrastructure or paid plan is needed. The existing health, data, route calculation and production CORS were verified successfully on 2026-10-17 before this feature. For the Respite Buddy update, MCP endpoint, environment values and verification procedure, see the [current handoff](respite-buddy.md#update-the-existing-deployments).
+The existing projects are already live at `https://neuroroute.onrender.com` and `https://respite-buddy.vercel.app`. Update those projects; no new infrastructure or paid plan is needed. The existing health, data, route calculation and production CORS were verified successfully on 2026-10-17 before this feature. For the Respite Buddy update, MCP endpoint, environment values and verification procedure, see the [current handoff](respite-buddy.md#update-the-existing-deployments).
 
 ## Render Free
 
@@ -15,7 +15,9 @@ Plan: Free
 Health Check Path: /api/health
 ```
 
-Set `FRONTEND_URL=https://<vercel-project>.vercel.app`, plus optional `OPENAI_API_KEY`, `OPENAI_MODEL=gpt-4.1-mini`, and `WALKING_SPEED_KPH=4.8`. The backend always preserves localhost development origins. Do not commit dashboard values.
+Set `FRONTEND_URL=https://respite-buddy.vercel.app` and `WEBSITE_URL=https://respite-buddy.vercel.app`, plus optional `OPENAI_API_KEY`, `OPENAI_MODEL=gpt-4.1-mini`, and `WALKING_SPEED_KPH=4.8`. The backend always preserves localhost development origins. Do not commit dashboard values.
+
+After the Vercel rename, update these two public URL settings in the existing Render service and redeploy it so MCP and calendar recommendation links use the canonical frontend. Preserve any existing legacy or preview origins in the comma-separated `FRONTEND_URL` list when still needed; do not remove domain aliases in Vercel. Update Microsoft SPA redirect registration to `https://respite-buddy.vercel.app/oauth-callback.html` and Google authorized JavaScript origins to `https://respite-buddy.vercel.app` if those optional calendar integrations are configured. Existing callbacks/aliases can remain for backward compatibility.
 
 The service loads `backend/data/snapshot/usc.graphml.gz` and companion files from the repository at startup. With Render's root directory set to `backend`, `data/snapshot` resolves correctly. No Overpass request runs during startup.
 
@@ -36,7 +38,7 @@ Framework Preset: Vite
 Build Command: npm run build
 Install Command: npm ci
 Output Directory: dist
-VITE_API_BASE_URL=https://<render-service>.onrender.com
+VITE_API_BASE_URL=https://neuroroute.onrender.com
 ```
 
 Set `VITE_API_BASE_URL` for Production, Preview and Development when needed. `frontend/src/services/api.ts` appends `/api` to it. Blank means the local Vite proxy is used. Vite embeds `VITE_*` values at build time, so redeploy after changing it. Never set `OPENAI_API_KEY` in Vercel.

@@ -207,7 +207,7 @@ class RespiteEngine:
                 query['next'] = f'{next_class.lat},{next_class.lon}'
             if request.demo:
                 query['demo'] = '1'
-            base = os.getenv('WEBSITE_URL', 'https://neuro-route-nine.vercel.app').rstrip('/')
+            base = os.getenv('WEBSITE_URL', 'https://respite-buddy.vercel.app').rstrip('/')
             context = {'deadline':deadline.isoformat(), 'usc_id':request.usc_id,
                        'preferences':request.preferences.model_dump()}
             if request.filters != type(request.filters)():
