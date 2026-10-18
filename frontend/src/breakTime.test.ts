@@ -18,6 +18,9 @@ describe('explicit Pacific break windows', () => {
   it('prefills times using the current break length, not a different hidden duration', () => {
     expect(timeFields(DEMO_TIME)).toMatchObject({ current: '13:00', classStarts: '13:15' })
     expect(timeFields(DEMO_TIME, 105)).toMatchObject({ current: '13:00', classStarts: '14:45' })
+    expect(timeFields('2026-10-19T13:00:30-07:00', 44, '2026-10-19T13:45:00-07:00')).toMatchObject({
+      classStarts: '13:45',
+    })
     expect(timeFields('2026-10-19T23:50:00-07:00', 30)).toMatchObject({
       classStarts: '00:20',
       nextDay: true,

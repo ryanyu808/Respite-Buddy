@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 import { breakWindow, timeFields } from '../breakTime'
 
 export function BreakTimeControls({
@@ -6,18 +7,25 @@ export function BreakTimeControls({
   clock,
   onWindow,
   submitLabel = 'Calculate my break',
+  children,
+  onEdit,
+  deadline,
 }: {
   minutes: number
   clock: string
   onWindow: (window: { minutes: number; now: string; deadline: string }) => void
   submitLabel?: string
+  children?: ReactNode
+  onEdit?: () => void
+  deadline?: string
 }) {
-  const [fields, setFields] = useState(() => timeFields(clock, minutes))
+  const [fields, setFields] = useState(() => timeFields(clock, minutes, deadline))
   const [error, setError] = useState('')
   return (
     <div className="break-time-controls">
       <form
         aria-label="Your break times"
+        onChange={onEdit}
         onSubmit={(event) => {
           event.preventDefault()
           try {
@@ -38,6 +46,7 @@ export function BreakTimeControls({
           }
         }}
       >
+        {children}
         <div className="form-grid">
           <label className="reset-field">
             Start time

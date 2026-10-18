@@ -1,19 +1,29 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, Footprints, Leaf, RotateCcw } from 'lucide-react'
 import type { FeatureCollection } from 'geojson'
 import { DEFAULTS } from '../preferences'
 import { DEMO_TIME, timeLabel, type Need, type Recommendation } from '../respite'
 import { savedDemo } from '../services/respiteApi'
+import { DEMO_LOCATIONS, resolveDemoLocation } from '../services/demoJourney'
+import { readSchedule } from '../calendar/storage'
+import { scheduleContext } from '../smartContext'
 import { MapView } from './MapView'
 import { BreakTimeControls } from './BreakTimeControls'
 import { LocationPhoto, PhotoCredit } from './LocationPhoto'
 import '../demo-home.css'
 
 // Replay the existing engine's saved two-leg routes, not invented campus observations.
-function demoResult(minutes: number, clock: string, deadline: string | undefined, needs: Need[]) {
+function demoResult(
+  minutes: number,
+  clock: string,
+  deadline: string | undefined,
+  needs: Need[],
+  near = 'Leavey Library',
+  nextClass: string | null = 'Tutor Campus Center',
+) {
   return savedDemo({
-    near: 'Leavey',
-    next_class: 'TCC',
+    near,
+    next_class: nextClass,
     minutes,
     needs,
     demo: true,
@@ -54,7 +64,14 @@ export function DemoHome({
   const [clock, setClock] = useState(DEMO_TIME)
   const [deadline, setDeadline] = useState<string | undefined>()
   const [needs, setNeeds] = useState<Need[]>([])
-  const DEMO = demoResult(minutes, clock, deadline, needs)
+  const [near, setNear] = useState('Leavey Library')
+  const [nextClass, setNextClass] = useState<string | null>('Tutor Campus Center')
+  const [nearText, setNearText] = useState('Leavey Library')
+  const [nextText, setNextText] = useState('Tutor Campus Center')
+  const [startingDefault, setStartingDefault] = useState(true)
+  const [fromSchedule, setFromSchedule] = useState(false)
+  const edited = useRef(false)
+  const DEMO = demoResult(minutes, clock, deadline, needs, near, nextClass)
   const [skipped, setSkipped] = useState<string[]>([])
   const [offset, setOffset] = useState(0)
   const [walking, setWalking] = useState<Recommendation | null>(null)
@@ -72,6 +89,31 @@ export function DemoHome({
     route?.routes.find((item) => item.id === routeId) ??
     route?.routes.find((item) => item.id === route.recommended_id)
 
+  useEffect(() => {
+    let active = true
+    void readSchedule()
+      .then((events) => {
+        if (!active || edited.current) return
+        const now = new Date().toISOString()
+        const context = scheduleContext(events, now)
+        if (!context) return
+        const destination = resolveDemoLocation(context.next_class)?.name ?? context.next_class
+        setNextClass(destination)
+        setNextText(destination)
+        setMinutes(context.minutes)
+        setClock(now)
+        setDeadline(context.deadline)
+        setFromSchedule(true)
+        setNotice('Next destination filled from your saved schedule.')
+      })
+      .catch(() => {
+        /* Local schedule is optional; never block the immediate demo. */
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
   function focusOptions() {
     requestAnimationFrame(() => {
       optionsRef.current?.focus({ preventScroll: true })
@@ -79,8 +121,9 @@ export function DemoHome({
     })
   }
   function startWalk(item: Recommendation) {
+    edited.current = true
     setWalking(item)
-    setLeg(item.route_to_spot ? 'spot' : 'class')
+    setLeg(item.route_to_spot || !item.route_to_class ? 'spot' : 'class')
     setRouteId(item.route_to_spot?.recommended_id ?? item.route_to_class?.recommended_id ?? '')
     requestAnimationFrame(() => {
       routeRef.current?.focus({ preventScroll: true })
@@ -88,11 +131,12 @@ export function DemoHome({
     })
   }
   function skip(item: Recommendation) {
+    edited.current = true
     setSkipped([...skipped, item.spot.id])
     setOffset(0)
     setWalking(null)
     setNotice(
-      `${nameOf(item)} is skipped for this demo. ${options.length > 1 ? 'Here’s another option. Your class time stays the same.' : 'You’ve tried all matching sample spots. Restart whenever you like.'}`,
+      `${nameOf(item)} is skipped for this demo. ${options.length > 1 ? 'Here’s another option. Your end time stays the same.' : 'You’ve tried all matching sample spots. Restart whenever you like.'}`,
     )
     focusOptions()
   }
@@ -115,27 +159,145 @@ export function DemoHome({
           aria-label="Sample break, not your actual schedule or location"
         >
           <BreakTimeControls
-            key={`${clock}/${minutes}`}
+            key={`${clock}/${minutes}/${deadline ?? ''}`}
             minutes={minutes}
             clock={clock}
+            deadline={deadline}
             submitLabel="Find me a spot"
+            onEdit={() => {
+              edited.current = true
+            }}
             onWindow={(window) => {
+              const start = resolveDemoLocation(nearText)
+              const destination = nextText.trim() ? resolveDemoLocation(nextText) : null
+              if (!start || destination === undefined)
+                throw new Error(
+                  'Choose a listed campus location, or leave your next destination blank.',
+                )
+              if (
+                !demoResult(
+                  window.minutes,
+                  window.now,
+                  window.deadline,
+                  needs,
+                  start.name,
+                  destination?.name ?? null,
+                )
+              )
+                throw new Error(
+                  'Choose another campus location. No saved walking route connects these buildings.',
+                )
+              edited.current = true
+              setNear(start.name)
+              setNextClass(destination?.name ?? null)
+              setNearText(start.name)
+              setNextText(destination?.name ?? '')
+              setStartingDefault(false)
+              setFromSchedule(false)
               setMinutes(window.minutes)
               setClock(window.now)
               setDeadline(window.deadline)
               setSkipped([])
               setOffset(0)
               setWalking(null)
-              setNotice('Your time is set.')
+              setNotice('Your route and time are set.')
               focusOptions()
             }}
-          />
+          >
+            <div className="demo-location-fields">
+              <label className="reset-field">
+                Starting from
+                <input
+                  list="demo-campus-locations"
+                  required
+                  maxLength={120}
+                  autoComplete="off"
+                  value={nearText}
+                  onChange={(e) => setNearText(e.target.value)}
+                />
+              </label>
+              <label className="reset-field">
+                Next class / destination
+                <input
+                  list="demo-campus-locations"
+                  maxLength={120}
+                  autoComplete="off"
+                  placeholder="Optional — no next destination"
+                  value={nextText}
+                  onChange={(e) => setNextText(e.target.value)}
+                />
+              </label>
+              <datalist id="demo-campus-locations">
+                {DEMO_LOCATIONS.map((location) => (
+                  <option key={location.id} value={location.name}>
+                    {location.aliases?.join(' · ')}
+                  </option>
+                ))}
+              </datalist>
+            </div>
+          </BreakTimeControls>
           <small>
-            Sample route: Leavey Library → Tutor Campus Center. Not your location or calendar.
+            {startingDefault
+              ? 'Default starting point—not your current location. '
+              : 'Selected campus locations, not live GPS. '}
+            {fromSchedule
+              ? 'Next destination from your saved schedule.'
+              : startingDefault
+                ? 'Next destination is a sample default; optional.'
+                : 'Next destination is optional.'}
           </small>
         </aside>
       </section>
 
+      {walking && !route && (
+        <section
+          className="demo-directions"
+          ref={routeRef}
+          tabIndex={-1}
+          aria-labelledby="demo-zero-walk-title"
+        >
+          <h2 id="demo-zero-walk-title">No outdoor walk needed.</h2>
+          <p>
+            {leg === 'spot'
+              ? `You’re already at the approximate building location for ${nameOf(walking)}.`
+              : 'Your spot and next destination share the same approximate building location.'}{' '}
+            Indoor travel is not included.
+          </p>
+          <button
+            className="demo-text-button"
+            onClick={() => {
+              setWalking(null)
+              focusOptions()
+            }}
+          >
+            Back to spots
+          </button>
+          {leg === 'spot' && walking.route_to_class && (
+            <button
+              className="demo-text-button"
+              onClick={() => {
+                setLeg('class')
+                setRouteId('')
+                requestAnimationFrame(() => routeRef.current?.focus())
+              }}
+            >
+              Then to class
+            </button>
+          )}
+          {leg === 'class' && walking.route_to_spot && (
+            <button
+              className="demo-text-button"
+              onClick={() => {
+                setLeg('spot')
+                setRouteId('')
+                requestAnimationFrame(() => routeRef.current?.focus())
+              }}
+            >
+              To your spot
+            </button>
+          )}
+        </section>
+      )}
       {walking && route && (
         <section
           className="demo-directions"
@@ -153,17 +315,20 @@ export function DemoHome({
             <ArrowLeft size={16} aria-hidden="true" /> Back to spots
           </button>
           <h2 id="demo-route-title">
-            {leg === 'spot' ? `Let’s walk to ${nameOf(walking)}.` : 'On to Tutor Campus Center.'}
+            {leg === 'spot'
+              ? `Let’s walk to ${nameOf(walking)}.`
+              : `On to ${DEMO?.next_class?.name ?? nextClass}.`}
           </h2>
           {walking.walk_to_min === 0 && (
             <p>
               You’re already at the approximate building location for {nameOf(walking)}. Indoor
-              travel is not included. The map below shows your next-class walk.
+              travel is not included.
+              {nextClass ? ' The map below shows your next-destination walk.' : ''}
             </p>
           )}
           <p>
             {leg === 'spot'
-              ? `Start at Leavey Library. About ${walking.walk_to_min} minutes on foot.`
+              ? `Start at ${DEMO?.origin.name ?? near}. About ${walking.walk_to_min} minutes on foot.`
               : `Leave by ${timeLabel(walking.leave_by)}. About ${walking.walk_to_class_min} minutes on foot.`}{' '}
             Saved map route · sample break.
           </p>
@@ -177,15 +342,17 @@ export function DemoHome({
             >
               To your spot
             </button>
-            <button
-              aria-pressed={leg === 'class'}
-              onClick={() => {
-                setLeg('class')
-                setRouteId('')
-              }}
-            >
-              Then to class
-            </button>
+            {nextClass && (
+              <button
+                aria-pressed={leg === 'class'}
+                onClick={() => {
+                  setLeg('class')
+                  setRouteId('')
+                }}
+              >
+                Then to class
+              </button>
+            )}
           </div>
           <div className="demo-map">
             <MapView
@@ -254,8 +421,9 @@ export function DemoHome({
               className="demo-text-button"
               onClick={() => {
                 setOffset(offset + 1)
+                edited.current = true
                 setWalking(null)
-                setNotice('Another sample pick is first. Your class time stays the same.')
+                setNotice('Another sample pick is first. Your end time stays the same.')
                 focusOptions()
               }}
             >
@@ -269,6 +437,7 @@ export function DemoHome({
               key={id}
               aria-pressed={id === 'outdoor' ? !needs.includes('indoor') : needs.includes(id)}
               onClick={() => {
+                edited.current = true
                 setNeeds(
                   id === 'indoor' || id === 'outdoor'
                     ? [...needs.filter((need) => need !== 'indoor' && need !== 'outdoor'), id]
@@ -285,6 +454,12 @@ export function DemoHome({
             </button>
           ))}
         </div>
+        <p className="demo-applied-journey">
+          {near}{' '}
+          {nextClass
+            ? `→ ${nextClass}`
+            : '· No next destination. Onward walking time is not included; rest time is provisional.'}
+        </p>
         <p className="demo-status" role="status">
           {notice}
         </p>
@@ -315,7 +490,9 @@ export function DemoHome({
                   </span>
                 </div>
                 <p className="demo-leave">
-                  Leave by <strong>{timeLabel(item.leave_by)}</strong> for your sample class.
+                  {nextClass ? 'Leave by ' : 'Rest until '}
+                  <strong>{timeLabel(item.leave_by)}</strong>
+                  {nextClass ? ' for your next destination.' : ' · provisional'}
                 </p>
                 <button
                   className={index === 0 ? 'primary-button demo-walk' : 'demo-walk demo-secondary'}
@@ -342,7 +519,7 @@ export function DemoHome({
                 ? DEMO.recommendations.length
                   ? 'All matching sample spots have been skipped. You can replay the demo in one tap.'
                   : 'No sample spot fits. Try a daytime break or fewer preferences.'
-                : 'The saved demo is unavailable in this build. The live tools are still available below.'}
+                : 'No saved route for these locations. Choose another campus location or use the live tools below.'}
             </p>
             {DEMO && (
               <button
@@ -350,6 +527,7 @@ export function DemoHome({
                 onClick={() => {
                   setSkipped([])
                   setOffset(0)
+                  edited.current = true
                   if (!DEMO.recommendations.length) {
                     setMinutes(15)
                     setClock(DEMO_TIME)
