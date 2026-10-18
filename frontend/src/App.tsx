@@ -44,6 +44,7 @@ import {
 import { SupportFooter } from './components/SupportFooter'
 import { MySchedule } from './components/MySchedule'
 import { CampusDirectory } from './components/CampusDirectory'
+import { DemoHome } from './components/DemoHome'
 import type { ResetRequest } from './respite'
 import type { CalendarEvent } from './calendar/model'
 import './calendar.css'
@@ -78,8 +79,16 @@ export default function App() {
   const [lastRequest, setLastRequest] = useState<RouteRequest | null>(null)
   const [pickMode, setPickMode] = useState<'origin' | 'destination' | null>(null)
   const [page, setPage] = useState<'about' | 'methodology' | null>(null)
-  const [surface, setSurface] = useState<'reset' | 'walk' | 'schedule' | 'directory'>(() =>
-    window.location.hash === '#walk' ? 'walk' : 'reset',
+  const [surface, setSurface] = useState<'demo' | 'reset' | 'walk' | 'schedule' | 'directory'>(
+    () => {
+      if (window.location.hash === '#walk') return 'walk'
+      if (
+        new URLSearchParams(window.location.search).get('live') === '1' ||
+        parseDeepLink(window.location.search).auto
+      )
+        return 'reset'
+      return 'demo'
+    },
   )
   const [resetContext, setResetContext] = useState<ResetRequest | undefined>()
   const [scheduleSample, setScheduleSample] = useState<CalendarEvent[] | null>(null)
@@ -89,15 +98,7 @@ export default function App() {
     setSurface('reset')
   }
   function openDemo() {
-    openReset({
-      near: 'Leavey',
-      next_class: null,
-      minutes: 15,
-      needs: [],
-      demo: true,
-      usc_id: false,
-      preferences: { ...DEFAULTS },
-    })
+    setSurface('demo')
   }
   const [deviceSettings, setDeviceSettings] = useState(loadDevicePreferences)
   const [campusSource, setCampusSource] = useState<'connecting' | 'live' | 'saved'>('connecting')
@@ -232,7 +233,7 @@ export default function App() {
 
   return (
     <div
-      className={`app-shell ${surface === 'reset' ? 'reset-shell' : surface === 'schedule' || surface === 'directory' ? 'campus-shell' : ''} ${deviceSettings.highContrast ? 'high-contrast' : ''} ${deviceSettings.lowSensory ? 'low-sensory' : ''}`}
+      className={`app-shell ${surface === 'demo' ? 'campus-shell demo-shell' : surface === 'reset' ? 'reset-shell' : surface === 'schedule' || surface === 'directory' ? 'campus-shell' : ''} ${deviceSettings.highContrast ? 'high-contrast' : ''} ${deviceSettings.lowSensory ? 'low-sensory' : ''}`}
     >
       <header className="app-header">
         <a
@@ -260,43 +261,77 @@ export default function App() {
         </a>
         <nav aria-label="Main navigation">
           <button
-            className={`nav-item ${surface === 'reset' ? 'active' : ''}`}
-            aria-current={surface === 'reset' ? 'page' : undefined}
-            onClick={() => {
-              setResetContext(undefined)
-              setSurface('reset')
-            }}
+            className={`nav-item ${surface === 'demo' ? 'active' : ''}`}
+            aria-current={surface === 'demo' ? 'page' : undefined}
+            onClick={openDemo}
           >
-            <HeartHandshake size={16} /> Reset before class
+            <Leaf size={16} /> Find a spot
           </button>
-          <button
-            className={`nav-item ${surface === 'walk' ? 'active' : ''}`}
-            aria-current={surface === 'walk' ? 'page' : undefined}
-            onClick={() => setSurface('walk')}
-          >
-            <Compass size={16} />
-            Plan a walk
-          </button>
-          <button
-            className={`nav-item ${surface === 'schedule' ? 'active' : ''}`}
-            aria-current={surface === 'schedule' ? 'page' : undefined}
-            onClick={() => setSurface('schedule')}
-          >
-            My Schedule
-          </button>
-          <button
-            className={`nav-item ${surface === 'directory' ? 'active' : ''}`}
-            aria-current={surface === 'directory' ? 'page' : undefined}
-            onClick={() => setSurface('directory')}
-          >
-            Campus spaces
-          </button>
-          <button className="nav-item" onClick={() => setPage('about')}>
-            Our approach
-          </button>
-          <button className="nav-item" onClick={() => setPage('methodology')}>
-            Behind the map
-          </button>
+          {surface === 'demo' ? (
+            <>
+              <button className="nav-item" onClick={() => setSurface('schedule')}>
+                My Schedule
+              </button>
+              <details className="demo-tools">
+                <summary className="nav-item">More tools</summary>
+                <div className="demo-tools-menu">
+                  <button
+                    onClick={() => {
+                      setResetContext(undefined)
+                      setSurface('reset')
+                    }}
+                  >
+                    Live reset tools
+                  </button>
+                  <button onClick={() => setSurface('walk')}>Plan a walk</button>
+                  <button onClick={() => setSurface('directory')}>Campus spaces</button>
+                  <button onClick={() => setPage('about')}>Our approach</button>
+                  <button onClick={() => setPage('methodology')}>Behind the map</button>
+                </div>
+              </details>
+            </>
+          ) : (
+            <>
+              <button
+                className={`nav-item ${surface === 'reset' ? 'active' : ''}`}
+                aria-current={surface === 'reset' ? 'page' : undefined}
+                onClick={() => {
+                  setResetContext(undefined)
+                  setSurface('reset')
+                }}
+              >
+                <HeartHandshake size={16} /> Reset before class
+              </button>
+              <button
+                className={`nav-item ${surface === 'walk' ? 'active' : ''}`}
+                aria-current={surface === 'walk' ? 'page' : undefined}
+                onClick={() => setSurface('walk')}
+              >
+                <Compass size={16} />
+                Plan a walk
+              </button>
+              <button
+                className={`nav-item ${surface === 'schedule' ? 'active' : ''}`}
+                aria-current={surface === 'schedule' ? 'page' : undefined}
+                onClick={() => setSurface('schedule')}
+              >
+                My Schedule
+              </button>
+              <button
+                className={`nav-item ${surface === 'directory' ? 'active' : ''}`}
+                aria-current={surface === 'directory' ? 'page' : undefined}
+                onClick={() => setSurface('directory')}
+              >
+                Campus spaces
+              </button>
+              <button className="nav-item" onClick={() => setPage('about')}>
+                Our approach
+              </button>
+              <button className="nav-item" onClick={() => setPage('methodology')}>
+                Behind the map
+              </button>
+            </>
+          )}
         </nav>
         <div className="header-end">
           <span className="campus-tag">
@@ -315,7 +350,15 @@ export default function App() {
           </button>
         </div>
       </header>
-      {surface === 'schedule' ? (
+      {surface === 'demo' ? (
+        <DemoHome
+          features={features}
+          onLive={() => {
+            setResetContext(undefined)
+            setSurface('reset')
+          }}
+        />
+      ) : surface === 'schedule' ? (
         <MySchedule
           onReset={openReset}
           onDirectory={() => setSurface('directory')}
@@ -535,13 +578,19 @@ export default function App() {
       <footer className="app-footer">
         <span>
           <span className={`status-dot ${metadata?.available ? '' : 'offline'}`} />
-          {campusSource === 'live'
-            ? 'Real OpenStreetMap walking network'
-            : campusSource === 'connecting'
-              ? 'Bundled map · connecting to campus services'
-              : 'Saved campus snapshot · offline'}
+          {surface === 'demo'
+            ? 'Presentation demo · saved routes'
+            : campusSource === 'live'
+              ? 'Real OpenStreetMap walking network'
+              : campusSource === 'connecting'
+                ? 'Bundled map · connecting to campus services'
+                : 'Saved campus snapshot · offline'}
         </span>
-        <p>Estimated conditions may differ. Follow posted signs and use your judgment.</p>
+        <p>
+          {surface === 'demo'
+            ? 'Sample conditions, not live observations.'
+            : 'Estimated conditions may differ. Follow posted signs and use your judgment.'}
+        </p>
         <button onClick={() => setPage('methodology')}>
           Data & methodology <Info size={12} />
         </button>

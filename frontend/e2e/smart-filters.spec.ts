@@ -55,7 +55,7 @@ test('one tap yields a best recommendation with no questions or required setup',
   page,
 }) => {
   const calls = await mockRecommendations(page)
-  await page.goto('/')
+  await page.goto('/?live=1')
   const main = page.getByRole('main')
   await expect(main.getByRole('button')).toHaveCount(1)
   await expect(main.getByRole('slider')).toHaveCount(0)
@@ -79,7 +79,7 @@ test('optional outlet filter recalculates immediately; full uses an eligible bac
   page,
 }) => {
   const calls = await mockRecommendations(page)
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Somewhere calm, now', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(1)
   await page.getByText('Adjust · optional filters', { exact: true }).click()
@@ -96,7 +96,7 @@ test('optional outlet filter recalculates immediately; full uses an eligible bac
 test('incomplete context proceeds with a transparent default; empty state has two clear options', async ({
   page,
 }) => {
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Somewhere calm, now', exact: true }).click()
   await expect(
     page.getByText("We're still confirming campus spaces.", { exact: true }),
@@ -116,7 +116,7 @@ test('saved strict filters are reused without questions and can be cleared', asy
     { ...DEFAULT_FILTERS, outlets: true },
   )
   const calls = await mockRecommendations(page)
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Somewhere calm, now', exact: true }).click()
   await expect(page.getByRole('article')).toContainText('TEST ONLY space 2')
   expect(calls[0].filters.outlets).toBe(true)
@@ -129,7 +129,7 @@ test('directory strict outlet and food filters show documented matches without p
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Campus spaces', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(34)
   await page.getByText('Adjust · optional filters', { exact: true }).click()
@@ -154,7 +154,7 @@ test('saved schedule context supplies a deadline without questions or sending pr
 }) => {
   await page.clock.setFixedTime(new Date('2026-10-19T13:00:00-07:00'))
   const calls = await mockRecommendations(page)
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'My Schedule', exact: true }).click()
   await page.getByLabel('Course or event name', { exact: true }).fill('Private saved class')
   await page.getByLabel('First date', { exact: true }).fill('2026-10-19')

@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright'
 test('real cached campus demo, preferences, assistant and map controls', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Plan a walk' }).click()
   await expect(page.getByRole('button', { name: 'Find My Route' })).toBeEnabled()
   await expect(page.locator('.leaflet-tile-loaded').first()).toBeVisible({ timeout: 15000 })
@@ -51,7 +51,7 @@ test('real cached campus demo, preferences, assistant and map controls', async (
 
 test('mobile layout, route results and invalid selection', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Plan a walk' }).click()
   await expect(page.getByRole('button', { name: 'Find My Route' })).toBeEnabled()
   await page.screenshot({ path: '../tmp/mobile-initial.png', fullPage: true })

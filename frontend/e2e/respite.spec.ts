@@ -7,7 +7,7 @@ test('primary recommendation, source labels, swaps, time chips and safety previe
 }) => {
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Somewhere calm, now' }).click()
   await expect(page.getByText('No eligible spots for this break.')).toBeVisible()
   await page.getByRole('button', { name: 'Try the demo' }).click()
@@ -47,7 +47,7 @@ test('cold start can be superseded by an immediate saved demo; unmatched setting
       })
     await route.abort()
   })
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Somewhere calm, now' }).click()
   await expect(page.getByRole('button', { name: 'Finding your pause…' })).toBeVisible()
   await page.getByRole('button', { name: 'Try the demo' }).click()
@@ -89,7 +89,7 @@ test('mobile route action moves focus, preferences persist, and calendar is simu
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.getByText('Change preferences', { exact: false }).click()
   await page.getByRole('button', { name: 'Quiet', exact: true }).click()
   await page.getByRole('button', { name: '12 min', exact: true }).click()
@@ -126,7 +126,7 @@ test('mobile route action moves focus, preferences persist, and calendar is simu
 })
 
 test('keyboard and WCAG checks on initial, results and high contrast views', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/?live=1')
   await page.keyboard.press('Tab')
   await expect(page.getByRole('link', { name: 'Skip to reset controls' })).toBeFocused()
   expect(
