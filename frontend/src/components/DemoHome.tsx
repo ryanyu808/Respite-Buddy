@@ -450,6 +450,18 @@ export function DemoHome({
             The route line and text work without map tiles. No live navigation or verified access
             conditions.
           </p>
+          {route.notes.some((note) => note.includes('not a verified entrance')) && (
+            <details className="demo-route-alternatives">
+              <summary>Building approach &amp; entrance limits</summary>
+              {route.notes
+                .filter((note) => note.includes('not a verified entrance'))
+                .map((note) => (
+                  <p key={note} className="demo-map-note">
+                    {note}
+                  </p>
+                ))}
+            </details>
+          )}
         </section>
       )}
 

@@ -72,6 +72,10 @@ class Router:
         selected = [("fastest", "Fastest route", fastest), ("calmer", "Calmer route", calmer), ("balanced", "Balanced route", balanced)]
         unique = []
         notes = ["Scores are relative geographic estimates, not measured sound or sensory stress.", "Crowd sensitivity is saved but excluded from routing because crowd data is unavailable."]
+        for endpoint in [request.origin, request.destination]:
+            note = self.data.anchor_note(endpoint.lat, endpoint.lon)
+            if note and note not in notes:
+                notes.append(note)
         speed = float(os.getenv("WALKING_SPEED_KPH", "4.8"))
         if not math.isfinite(speed) or not 1 <= speed <= 10:
             speed = 4.8

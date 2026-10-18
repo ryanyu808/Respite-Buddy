@@ -44,6 +44,27 @@ class MapData:
                         edge.setdefault("geometry", LineString([(graph.nodes[u]["x"], graph.nodes[u]["y"]), (graph.nodes[v]["x"], graph.nodes[v]["y"])]))
                         self.graph.add_edge(u, v, **edge)
             self.metadata = {**metadata, "available": True}
+            # Published building positions are representative points, not verified
+            # entrances. Small isolated interior fragments must not strand them.
+            # Match only known campus anchors to the existing connected outdoor
+            # network, retaining the same 120 m limit and all original geometry.
+            from .spot_library import building_library
+            connected = max(nx.connected_components(self.graph), key=len)
+            self._campus_anchors = {}
+            try:
+                anchors = building_library(self)
+            except (OSError, ValueError, TypeError, KeyError):
+                # A malformed optional building registry must not disable the
+                # valid geographic graph or existing map-point walking planner.
+                anchors = self.locations
+                self.metadata.setdefault('notes', []).append('Additional campus building anchors are unavailable; mapped walking points remain usable.')
+            for location in anchors:
+                lat, lon = location['lat'], location['lon']
+                node = min(connected, key=lambda n: (self.graph.nodes[n]['y'] - lat) ** 2 + ((self.graph.nodes[n]['x'] - lon) * .83) ** 2)
+                point = self.graph.nodes[node]
+                distance = meters(lat, lon, point['y'], point['x'])
+                original = min(self.graph.nodes, key=lambda n: (self.graph.nodes[n]['y'] - lat) ** 2 + ((self.graph.nodes[n]['x'] - lon) * .83) ** 2)
+                self._campus_anchors[(lat, lon)] = (node, distance, original != node, location['name'])
         except (OSError, ValueError, KeyError, TypeError, ParseError, GEOSException, nx.NetworkXException) as exc:
             self.graph = None
             self.metadata["setup_error"] += f" ({type(exc).__name__})"
@@ -51,9 +72,18 @@ class MapData:
     def nearest(self, lat, lon):
         if self.graph is None:
             raise ValueError(self.metadata["setup_error"])
-        node = min(self.graph.nodes, key=lambda n: (self.graph.nodes[n]["y"] - lat) ** 2 + ((self.graph.nodes[n]["x"] - lon) * .83) ** 2)
+        anchor = getattr(self, '_campus_anchors', {}).get((lat, lon))
+        node = anchor[0] if anchor else min(self.graph.nodes, key=lambda n: (self.graph.nodes[n]["y"] - lat) ** 2 + ((self.graph.nodes[n]["x"] - lon) * .83) ** 2)
         point = self.graph.nodes[node]
         distance = meters(lat, lon, point["y"], point["x"])
         if distance > 120:
             raise ValueError("Choose a point within 120 meters of a mapped walking path inside the USC coverage area.")
         return node, distance
+
+    def anchor_note(self, lat, lon):
+        anchor = getattr(self, '_campus_anchors', {}).get((lat, lon))
+        if anchor and anchor[2]:
+            return (f"{anchor[3]} uses a nearby connected mapped outdoor walking point "
+                    f"({anchor[1]:.0f} m from the published building position). "
+                    "This is not a verified entrance. The unmatched entrance distance and indoor travel are excluded; follow campus signs.")
+        return None

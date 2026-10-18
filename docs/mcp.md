@@ -74,7 +74,7 @@ Tool argument schemas come directly from the shared Pydantic models, including v
 
 Supported needs are `quiet`, `seated`, `dim`, `few_people`, `indoor`, and `outdoor`. Use timezone-aware ISO 8601 datetimes, for example `2026-10-19T13:00:00-07:00`. `next_class` is a supported building name/code or Point, not a sentence such as “JKP at 2.” The assistant should convert an already-known class start to the available `minutes`. Unsupported building names must not be guessed.
 
-JKP/Popovich Hall lookup is available using coordinates sourced from the official USC Event Calendar and recorded in `backend/data/buildings.json`. Its snapped graph component is disconnected from all current demo spots. The exact JKP navigation demo is therefore blocked pending a verified connected entrance/path; the engine must not invent a connection. Use TCC for a reliable demo of both walking legs. A successful building lookup alone does not establish route connectivity.
+JKP/Popovich Hall uses USC-published coordinates in `backend/data/buildings.json`. Exact registered building pins match nearby nodes on the connected outdoor network (within 120 m), avoiding isolated fragments. JKP and all listed location pairs now support network routes. Returned approach notes disclose the unmatched offset; they do not establish entrance access, an indoor route or a building-to-path connection. Unknown/unlisted points still require proper geographic data, never a guessed path.
 
 The adapter preserves the engine's results, ordering, walking calculations, crowd provenance, caveats, demo labels, and website deep links. It does not invent extra recommendations when fewer than two eligible locations exist. The shared engine owns access, opening-hours, after-dark, ranking, and 45-minute exclusion logic.
 
@@ -152,7 +152,7 @@ Use the public HTTPS URL instead when connecting to Render. Client registration 
 
 Demo sequence:
 
-1. Ask for a clearly labeled demo near Leavey with 30 minutes, a quiet preference, and TCC as the next class. JKP lookup is available, but its disconnected graph component blocks the exact JKP navigation demo pending a verified connected entrance/path.
+1. Ask for a clearly labeled demo near Leavey with 30 minutes, a quiet preference, and TCC or JKP as the next class. Keep any returned building-approach limits explicit; network routes do not verify entrances or actual quietness.
 2. Follow a returned website link and verify that the website resolves the spot, origin, and `next` coordinates and preserves both walking legs.
 3. Say “It's full”; call `swap_spot` with the returned ID and retain exclusions for follow-up calls.
 4. Give two structured classes (for example Leavey 12:00–13:00 and TCC 14:00–15:00 on 2026-10-19, all with `-07:00` offsets) to `plan_day` with `demo=true`.

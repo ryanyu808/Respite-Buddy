@@ -101,8 +101,6 @@ describe('saved campus journeys', () => {
 
   it('never substitutes other endpoints, modified walking preferences or live data', () => {
     for (const update of [
-      { near: 'JKP' },
-      { next_class: 'JKP' },
       { near: 'Imaginary Hall' },
       { demo: false },
       { preferences: { ...DEFAULTS, noise: 1 } },

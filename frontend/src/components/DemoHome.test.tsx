@@ -77,7 +77,7 @@ it('allows a blank next destination and handles already-at-spot without a fake r
   expect(screen.queryByRole('button', { name: 'Then to class' })).not.toBeInTheDocument()
 })
 
-it('rejects unknown or disconnected endpoints without changing the applied route', () => {
+it('rejects unknown endpoints but supports the published JKP building', () => {
   render(<DemoHome features={null} onLive={() => {}} />)
   fireEvent.change(screen.getByLabelText('Starting from'), { target: { value: 'Imaginary Hall' } })
   fireEvent.click(screen.getByRole('button', { name: 'Find me a spot' }))
@@ -85,7 +85,10 @@ it('rejects unknown or disconnected endpoints without changing the applied route
   expect(screen.getByText(/No next destination/)).toBeInTheDocument()
   fireEvent.change(screen.getByLabelText('Starting from'), { target: { value: 'JKP' } })
   fireEvent.click(screen.getByRole('button', { name: 'Find me a spot' }))
-  expect(screen.getByRole('alert')).toHaveTextContent('No saved walking route connects')
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  expect(
+    screen.getByText(/Popovich Hall \(JKP\)/, { selector: '.demo-applied-journey' }),
+  ).toBeInTheDocument()
   expect(screen.getByText(/No next destination/)).toBeInTheDocument()
 })
 
