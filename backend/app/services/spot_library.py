@@ -39,7 +39,7 @@ def load_library(path=SPOT_FILE):
     return validate_library(json.loads(path.read_text(encoding='utf-8')))
 
 
-def demo_library(data):
+def demo_library(data, indoor=False):
     """Synthetic attributes on real OSM coordinates; never a scout observation."""
     by_name = {spot['name']: spot for spot in data.stops}
     spots = []
@@ -56,4 +56,18 @@ def demo_library(data):
                    # No crowd observations, verification, or accessibility fabricated.
                    notes='DEMO ONLY: real OSM position; hours, access, noise, lighting and seating are simulated, not verified campus conditions.')
         spots.append(Spot.model_validate(raw))
+    if indoor:
+        from .campus_directory import candidates
+        for candidate in candidates():
+            if candidate.id not in ['lvl-weingart', 'dml-times', 'kortschak-quiet']:
+                continue
+            raw = {key: None for key in Spot.model_fields}
+            raw.update(id=f'demo-{candidate.id}', name=f'{candidate.building}: {candidate.name} (sample)',
+                       building=candidate.building, building_code=candidate.building_code,
+                       floor=candidate.floor, lat=candidate.lat, lng=candidate.lng,
+                       source_url=candidate.source_url, indoor=True, data_kind='illustrative',
+                       purpose='general', access='open', noise='low', lighting='medium', seating='hard',
+                       hours={day:[{'start':'07:00','end':'19:00'}] for day in ['mon','tue','wed','thu','fri','sat','sun']},
+                       notes='DEMO ONLY: documented indoor place at an approximate building anchor. Access, hours, noise and seating are simulated, not verified conditions. Indoor walking and entrance time are excluded.')
+            spots.append(Spot.model_validate(raw))
     return spots

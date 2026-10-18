@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import records from '../data/campus-candidates.json'
+import submitted from '../data/campus-submitted.json'
 import type { Point } from '../types'
 import { SmartFilterControls } from './SmartFilterControls'
 import {
@@ -63,6 +64,12 @@ export function CampusDirectory({
       `${p.name} ${p.building} ${p.building_code}`.toLowerCase().includes(query.toLowerCase()) &&
       (kind === 'all' || p.indoor === (kind === 'indoor')) &&
       matchesFilters(p, filters, new Date().toISOString(), p.walk_min),
+  )
+  const research = submitted.spots.filter(
+    (entry) =>
+      !entry.existing_ids.length &&
+      `${entry.name} ${entry.reported_location}`.toLowerCase().includes(query.toLowerCase()) &&
+      (kind === 'all' || entry.reported_setting === kind),
   )
   if (filters.activity === 'study')
     filtered.sort(
@@ -244,6 +251,41 @@ export function CampusDirectory({
           </article>
         ))}
       </div>
+      <details className="submitted-research" open={query.trim().length > 0 ? true : undefined}>
+        <summary>More spots from the team’s research ({research.length})</summary>
+        <p>
+          Reported descriptions, not verified observations. These places do not yet have checked
+          routing anchors or confirmed amenity matches, so they are not included in strict filters
+          or reset recommendations. Community-specific and dedicated spaces are for their stated
+          purpose; we do not infer who should use them.
+        </p>
+        <div className="candidate-grid">
+          {research.map((entry) => (
+            <article className="candidate-card" key={entry.id}>
+              <span className="candidate-status">Team-submitted research · not verified</span>
+              <h2>{entry.name}</h2>
+              <p>{entry.reported_location}</p>
+              <p>
+                Reported setting: {entry.reported_setting}. Current access and hours unconfirmed.
+              </p>
+              <details>
+                <summary>Reported description &amp; sources</summary>
+                <p>{entry.description}</p>
+                <p>{entry.reported_access}</p>
+                <p>{entry.caveats}</p>
+                {entry.sources.map((source) => (
+                  <p key={source.id}>
+                    <a href={source.url} target="_blank" rel="noreferrer">
+                      {source.id.replaceAll('_', ' ')}
+                    </a>
+                  </p>
+                ))}
+                <p>No route offered until a real geographic anchor is checked.</p>
+              </details>
+            </article>
+          ))}
+        </div>
+      </details>
       {!filtered.length && (
         <div className="smart-filter-empty">
           <p>

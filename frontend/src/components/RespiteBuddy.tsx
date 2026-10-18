@@ -25,7 +25,6 @@ import {
   parseDeepLink,
   routeDescription,
   saveExclusions,
-  TIME_CHIPS,
   timeLabel,
   type DevicePreferences,
   type Exclusion,
@@ -48,6 +47,7 @@ import {
 } from '../smartContext'
 import { readSchedule } from '../calendar/storage'
 import type { CalendarEvent } from '../calendar/model'
+import { BreakTimeControls } from './BreakTimeControls'
 
 type Props = {
   locations: Location[]
@@ -103,6 +103,7 @@ export function RespiteBuddy({
   const [demo, setDemo] = useState(link.demo)
   const [demoTime, setDemoTime] = useState(link.demo_time ?? DEMO_TIME)
   const [deadline, setDeadline] = useState<string | undefined>(link.deadline)
+  const [planningTime, setPlanningTime] = useState<string | undefined>(context?.now)
   const [result, setResult] = useState<ResetResult | null>(null)
   const [selectedId, setSelectedId] = useState(link.to ?? '')
   const [routeId, setRouteId] = useState('')
@@ -179,6 +180,7 @@ export function RespiteBuddy({
       preferences,
       filters,
       deadline,
+      ...(!demo && planningTime ? { now: planningTime } : {}),
       exclusions: activeExclusions(exclusions),
       ...(demo ? { demo_time: demoTime } : {}),
       ...overrides,
@@ -203,9 +205,10 @@ export function RespiteBuddy({
       setLastRequest({ ...input, deadline: value.response.deadline })
       const requestedSpot = !linkApplied.current ? link.to : null
       linkApplied.current = true
-      const selected =
-        value.response.recommendations.find((item) => item.spot.id === requestedSpot) ??
-        value.response.recommendations[0]
+      const available = value.response.recommendations.length
+        ? value.response.recommendations
+        : (value.response.documented_options ?? [])
+      const selected = available.find((item) => item.spot.id === requestedSpot) ?? available[0]
       attempt.current = selected
         ? { spotId: selected.spot.id, demo: value.response.mode === 'demo', resolved: false }
         : null
@@ -214,8 +217,10 @@ export function RespiteBuddy({
           'The linked spot is not eligible for these settings. Showing the available alternatives.',
         )
       setSelectedId(selected?.spot.id ?? '')
-      setRouteId(selected?.route_to_spot?.recommended_id ?? '')
-      setLeg('spot')
+      setRouteId(
+        selected?.route_to_spot?.recommended_id ?? selected?.route_to_class?.recommended_id ?? '',
+      )
+      setLeg(selected?.route_to_spot ? 'spot' : 'class')
       if (focus) resultRef.current?.focus()
     } catch (e) {
       if (id === sequence.current)
@@ -238,6 +243,7 @@ export function RespiteBuddy({
     setDemoTime(context.demo_time ?? DEMO_TIME)
     setUscId(context.usc_id)
     setDeadline(context.deadline)
+    setPlanningTime(context.now)
     classDeadlineRef.current = context.next_class ? context.deadline : undefined
     if (context.filters || context.demo) setFilters(context.filters ?? { ...DEFAULT_FILTERS })
     setLocationSource(
@@ -260,7 +266,8 @@ export function RespiteBuddy({
   }, [context])
   function quickSearch() {
     setShowDirections(false)
-    const available = !demo && !context && !link.auto ? scheduleContext(scheduleRef.current) : null
+    const available =
+      !demo && !context && !link.auto && !planningTime ? scheduleContext(scheduleRef.current) : null
     if (available) {
       setNextClass(available.next_class)
       setMinutes(available.minutes)
@@ -334,6 +341,7 @@ export function RespiteBuddy({
     setExclusions(demoExclusions)
     saveExclusions(demoExclusions)
     setDemo(true)
+    setPlanningTime(undefined)
     setShowDirections(false)
     setLocationSource('Sample starting point (not your current location)')
     classDeadlineRef.current = undefined
@@ -396,6 +404,9 @@ export function RespiteBuddy({
               recommendations: previous.response.recommendations.filter(
                 (entry) => entry.spot.id !== item.spot.id,
               ),
+              documented_options: previous.response.documented_options?.filter(
+                (entry) => entry.spot.id !== item.spot.id,
+              ),
             },
           }
         : null,
@@ -412,10 +423,12 @@ export function RespiteBuddy({
       setResult(value)
       setDeadline(value.response.deadline)
       setLastRequest({ ...input, deadline: value.response.deadline })
-      const selected = value.response.recommendations[0]
+      const selected = value.response.recommendations[0] ?? value.response.documented_options?.[0]
       setSelectedId(selected?.spot.id ?? '')
-      setRouteId(selected?.route_to_spot?.recommended_id ?? '')
-      setLeg('spot')
+      setRouteId(
+        selected?.route_to_spot?.recommended_id ?? selected?.route_to_class?.recommended_id ?? '',
+      )
+      setLeg(selected?.route_to_spot ? 'spot' : 'class')
       setNotice(
         `That spot is hidden for 45 minutes in this browser session. ${selected ? 'Here is another option.' : 'No eligible backup remains. Try more time or fewer needs.'}`,
       )
@@ -439,7 +452,10 @@ export function RespiteBuddy({
     }
     current.resolved = true
   }
-  const recommendations = result?.response.recommendations ?? []
+  const documented =
+    !result?.response.recommendations.length && !!result?.response.documented_options?.length
+  const recommendations =
+    (documented ? result?.response.documented_options : result?.response.recommendations) ?? []
   const selected = recommendations.find((item) => item.spot.id === selectedId)
   const routeResult = selected
     ? leg === 'class'
@@ -507,23 +523,31 @@ export function RespiteBuddy({
             >
               Change preferences <span>Adjust time, starting point &amp; more</span>
             </summary>
-            <p className="reset-label" id="available-time">
-              Available time
-            </p>
-            <div className="reset-chips" role="group" aria-labelledby="available-time">
-              {[...new Set([...TIME_CHIPS, minutes])]
-                .sort((a, b) => a - b)
-                .map((value) => (
-                  <button
-                    key={value}
-                    aria-pressed={minutes === value}
-                    onClick={() => change({ minutes: value })}
-                  >
-                    {value}
-                    <span> min</span>
-                  </button>
-                ))}
-            </div>
+            <BreakTimeControls
+              key={demo ? 'sample-time' : 'campus-time'}
+              minutes={minutes}
+              clock={demo ? demoTime : (planningTime ?? new Date().toISOString())}
+              onPreset={(value) => {
+                setPlanningTime(undefined)
+                change({ minutes: value, now: undefined })
+              }}
+              onWindow={(window) => {
+                setMinutes(window.minutes)
+                setDeadline(window.deadline)
+                classDeadlineRef.current = window.deadline
+                if (demo) setDemoTime(window.now)
+                else setPlanningTime(window.now)
+                onSettings({ ...settings, minutes: window.minutes, needs })
+                void search(
+                  {
+                    minutes: window.minutes,
+                    deadline: window.deadline,
+                    ...(demo ? { demo_time: window.now } : { now: window.now }),
+                  },
+                  true,
+                )
+              }}
+            />
             <fieldset className="reset-needs">
               <legend>
                 Reset preferences <span>Optional</span>
@@ -643,6 +667,7 @@ export function RespiteBuddy({
                   setUscId(false)
                   setCalendar(false)
                   setDemo(false)
+                  setPlanningTime(undefined)
                   setDemoTime(DEMO_TIME)
                   setDeadline(undefined)
                   setResult(null)
@@ -812,7 +837,7 @@ export function RespiteBuddy({
               {busy
                 ? 'Checking walking time, access and your needs…'
                 : result
-                  ? `${recommendations.length} eligible places. ${result.response.minutes} minutes remain in this break. Evaluated at ${timeLabel(result.response.evaluated_at)} Pacific.${result.saved ? ' Saved demonstration.' : ''}`
+                  ? `${recommendations.length} ${documented ? 'documented options; access unconfirmed' : 'eligible places'}. ${result.response.minutes} minutes remain in this break. Evaluated at ${timeLabel(result.response.evaluated_at)} Pacific.${result.saved ? ' Saved demonstration.' : ''}`
                   : 'Your recommendations will appear here.'}
             </div>
             {result && !recommendations.length && !busy && (
@@ -830,46 +855,62 @@ export function RespiteBuddy({
               </div>
             )}
             {recommendations.length > 0 && (
-              <ol className="reset-spot-list">
-                {[
-                  selected ?? recommendations[0],
-                  ...recommendations.filter(
-                    (r) => r.spot.id !== (selected ?? recommendations[0]).spot.id,
-                  ),
-                ].map((item, index) => (
-                  <li key={item.spot.id} hidden={index > 0 && !showBackups}>
-                    <SpotCard
-                      item={item}
-                      rank={index + 1}
-                      selected={selectedId === item.spot.id}
-                      evaluatedAt={result!.response.evaluated_at}
-                      demo={result!.response.mode === 'demo'}
-                      backupName={
-                        recommendations.find((other) => other.spot.id === item.backup_id)?.spot.name
-                      }
-                      busy={busy}
-                      onSelect={() => {
-                        setShowDirections(true)
-                        setSelectedId(item.spot.id)
-                        setRouteId(item.route_to_spot?.recommended_id ?? '')
-                        setLeg('spot')
-                        requestAnimationFrame(() => {
-                          routeRef.current?.focus({ preventScroll: true })
-                          routeRef.current?.scrollIntoView({
-                            behavior:
-                              settings.lowSensory ||
-                              window.matchMedia('(prefers-reduced-motion: reduce)').matches
-                                ? 'instant'
-                                : 'smooth',
-                            block: 'start',
+              <>
+                {documented && (
+                  <div className="reset-notice">
+                    <strong>Documented indoor options · not scout-verified</strong>
+                    <p>
+                      Opening hours, entry and seating availability need checking. Rest times below
+                      assume you can enter; indoor travel is not included.
+                    </p>
+                  </div>
+                )}
+                <ol className="reset-spot-list">
+                  {[
+                    selected ?? recommendations[0],
+                    ...recommendations.filter(
+                      (r) => r.spot.id !== (selected ?? recommendations[0]).spot.id,
+                    ),
+                  ].map((item, index) => (
+                    <li key={item.spot.id} hidden={index > 0 && !showBackups}>
+                      <SpotCard
+                        item={item}
+                        rank={index + 1}
+                        selected={selectedId === item.spot.id}
+                        evaluatedAt={result!.response.evaluated_at}
+                        demo={result!.response.mode === 'demo'}
+                        backupName={
+                          recommendations.find((other) => other.spot.id === item.backup_id)?.spot
+                            .name
+                        }
+                        busy={busy}
+                        onSelect={() => {
+                          setShowDirections(true)
+                          setSelectedId(item.spot.id)
+                          setRouteId(
+                            item.route_to_spot?.recommended_id ??
+                              item.route_to_class?.recommended_id ??
+                              '',
+                          )
+                          setLeg(item.route_to_spot ? 'spot' : 'class')
+                          requestAnimationFrame(() => {
+                            routeRef.current?.focus({ preventScroll: true })
+                            routeRef.current?.scrollIntoView({
+                              behavior:
+                                settings.lowSensory ||
+                                window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                                  ? 'instant'
+                                  : 'smooth',
+                              block: 'start',
+                            })
                           })
-                        })
-                      }}
-                      onSwap={(reason) => void swap(item, reason)}
-                    />
-                  </li>
-                ))}
-              </ol>
+                        }}
+                        onSwap={(reason) => void swap(item, reason)}
+                      />
+                    </li>
+                  ))}
+                </ol>
+              </>
             )}
             {recommendations.length > 1 && (
               <button
@@ -932,6 +973,21 @@ export function RespiteBuddy({
               <button className="reset-demo-button" onClick={startDemo}>
                 Try the demo <ArrowRight size={15} />
               </button>
+            </section>
+          )}
+          {showDirections && selected && !routeResult && (
+            <section
+              className="reset-route"
+              ref={routeRef}
+              tabIndex={-1}
+              aria-label="Building location"
+            >
+              <h2>At this building’s mapped location</h2>
+              <p>
+                Your selected start is already at {selected.spot.name}’s approximate building
+                anchor. Check the room and current entry rules. Indoor travel is not calculated; no
+                outdoor route is needed for this leg.
+              </p>
             </section>
           )}
           {showDirections && selected && routeResult && route && (

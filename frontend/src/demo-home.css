@@ -5,6 +5,20 @@
   padding: 30px 36px 48px;
   color: #253e36;
 }
+.demo-adjust {
+  margin: 14px 0;
+  padding: 4px 0;
+}
+.demo-adjust > summary {
+  color: #285b48;
+  font-size: 13px;
+  padding: 12px 0;
+  cursor: pointer;
+}
+.demo-adjust > .break-time-controls {
+  max-width: 460px;
+  margin: 14px 0 20px;
+}
 .demo-shell .app-header {
   position: relative;
   top: auto;

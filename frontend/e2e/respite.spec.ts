@@ -24,10 +24,10 @@ test('primary recommendation, source labels, swaps, time chips and safety previe
   await page.getByRole('button', { name: 'It’s locked', exact: true }).first().click()
   await expect(page.getByRole('article')).toHaveCount(1)
   await page.getByText('Change preferences', { exact: false }).click()
-  await page.getByRole('button', { name: '10 min', exact: true }).click()
-  await expect(page.getByText('Tight on time.', { exact: true })).toBeVisible()
-  await page.getByRole('button', { name: '5 min', exact: true }).click()
-  await expect(page.getByRole('article')).toHaveCount(0)
+  await page.getByRole('button', { name: '30 min', exact: true }).click()
+  await expect(page.getByText('Tight on time.', { exact: true })).toHaveCount(0)
+  await page.getByRole('button', { name: '45 min', exact: true }).click()
+  await expect(page.getByRole('article')).toHaveCount(1)
   await page.getByRole('button', { name: '15 min', exact: true }).click()
   await page.getByRole('checkbox', { name: /Preview 9 PM/ }).check()
   await expect(page.getByRole('article')).toHaveCount(0)
@@ -92,7 +92,7 @@ test('mobile route action moves focus, preferences persist, and calendar is simu
   await page.goto('/?live=1')
   await page.getByText('Change preferences', { exact: false }).click()
   await page.getByRole('button', { name: 'Quiet', exact: true }).click()
-  await page.getByRole('button', { name: '12 min', exact: true }).click()
+  await page.getByRole('button', { name: '45 min', exact: true }).click()
   await page.getByRole('button', { name: 'Toggle high contrast' }).click()
   await page.reload()
   await page.getByText('Change preferences', { exact: false }).click()
@@ -100,7 +100,7 @@ test('mobile route action moves focus, preferences persist, and calendar is simu
     'aria-pressed',
     'true',
   )
-  await expect(page.getByRole('button', { name: '12 min', exact: true })).toHaveAttribute(
+  await expect(page.getByRole('button', { name: '45 min', exact: true })).toHaveAttribute(
     'aria-pressed',
     'true',
   )

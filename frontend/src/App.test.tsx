@@ -59,9 +59,9 @@ it('recalculates time and needs, persists display preferences and clears them in
   fireEvent.click(screen.getByText(/Change preferences/, { selector: 'summary' }))
   fireEvent.click(screen.getByRole('button', { name: 'Try the demo' }))
   await screen.findByText('Saved demonstration (works offline)')
-  fireEvent.click(screen.getByRole('button', { name: '10 min' }))
+  fireEvent.click(screen.getByRole('button', { name: '30 min' }))
   await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(3))
-  expect(screen.getAllByText('Tight on time.').length).toBeGreaterThan(0)
+  expect(screen.queryByText('Tight on time.')).not.toBeInTheDocument()
   fireEvent.click(
     within(screen.getByLabelText('Find a reset spot')).getByRole('button', { name: 'Quiet' }),
   )
@@ -72,7 +72,7 @@ it('recalculates time and needs, persists display preferences and clears them in
   )
   fireEvent.click(screen.getByRole('button', { name: 'Toggle high contrast' }))
   expect(JSON.parse(localStorage.getItem('respite-buddy-preferences')!)).toMatchObject({
-    minutes: 10,
+    minutes: 30,
     needs: ['quiet'],
     highContrast: true,
   })
@@ -153,7 +153,7 @@ it('preserves the original deadline across a live swap and displays the remainin
   await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(2))
   const swapCall = fetch.mock.calls.find(([path]) => String(path).endsWith('/reset-spots/swap'))
   expect(JSON.parse(swapCall![1].body).request.deadline).toBe(response.deadline)
-  fireEvent.click(screen.getByRole('button', { name: '20 min' }))
+  fireEvent.click(screen.getByRole('button', { name: '30 min' }))
   await waitFor(() =>
     expect(fetch.mock.calls.filter(([path]) => String(path).endsWith('/reset-spots'))).toHaveLength(
       2,

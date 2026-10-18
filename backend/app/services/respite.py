@@ -66,7 +66,7 @@ class RespiteEngine:
             self.library_error = 'The scouted spot library failed validation. Ask the team to validate the import; existing walking routes and the sample demo remain available.'
 
     def library(self, demo=False):
-        return demo_library(self.data) if demo else self.spots
+        return demo_library(self.data, indoor=True) if demo else self.spots
 
     def resolve(self, value):
         if isinstance(value, Point):
@@ -93,6 +93,9 @@ class RespiteEngine:
 
     def details(self, spot_id, demo=False):
         match = next((s for s in self.library(demo) if s.id == spot_id), None)
+        if match is None and not demo:
+            from .campus_directory import candidates
+            match = next((s for s in candidates() if s.id == spot_id), None)
         if match is None:
             raise ValueError('Spot not found. Refresh the spot library.')
         return match
@@ -134,6 +137,10 @@ class RespiteEngine:
         candidates = []
         unreachable = 0
         for spot in self.library(request.demo):
+            # Keep the familiar outdoor demo default; indoor requests use real
+            # documented building anchors with explicitly simulated conditions.
+            if request.demo and spot.indoor and 'indoor' not in request.needs and not request.filters.indoor:
+                continue
             dedicated = spot.purpose != 'general' or re.search(r'\b(prayer|lactation|breastfeeding|nursing room)\b', spot.name, re.IGNORECASE)
             if spot.id in excluded or dedicated:
                 continue
@@ -216,9 +223,13 @@ class RespiteEngine:
             notes.append('Some spots could not be connected to your selected points on the current walking snapshot. No connecting path or entrance has been invented; try another supported destination.')
         if not candidates:
             notes.append('No eligible spots fit these needs, verified access/hours, safety and time constraints. Try different preferences or check the sample demo.')
+        documented = []
+        if not candidates and not request.demo and remaining > 0 and ('indoor' in request.needs or request.filters.indoor):
+            from .documented_options import indoor_options
+            documented = indoor_options(self, request, at, deadline, origin, next_class, excluded)
         return ResetResponse(mode='demo' if request.demo else 'live', evaluated_at=at, deadline=deadline,
                              minutes=remaining, origin=origin, next_class=next_class,
-                             recommendations=candidates[:3], notes=notes, exclusions=exclusions)
+                             recommendations=candidates[:3], documented_options=documented, notes=notes, exclusions=exclusions)
 
     def swap(self, request):
         if not request.request.demo and request.request.deadline is None:
@@ -246,6 +257,7 @@ class RespiteEngine:
             gaps.append({'start': previous.end.isoformat(), 'end': following.start.isoformat(),
                          'reset_request': reset.model_copy(update={'deadline': result.deadline}).model_dump(mode='json'),
                          'recommendations': [r.model_dump(mode='json') for r in result.recommendations],
+                         'documented_options': [r.model_dump(mode='json') for r in result.documented_options],
                          'recommendation': result.recommendations[0].model_dump(mode='json') if result.recommendations else None,
                          'notes': result.notes})
         return {'gaps': gaps, 'mode': 'demo' if request.demo else 'live', 'support': SUPPORT,

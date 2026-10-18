@@ -44,7 +44,7 @@ export function SpotCard({
             ? 'Illustrative demo'
             : verified
               ? 'Verified by scouts'
-              : 'Mapped · unverified'}
+              : 'Documented · conditions unconfirmed'}
         </span>
       </div>
       <div className="reset-card-times">
@@ -53,7 +53,7 @@ export function SpotCard({
             {Math.floor(item.rest_min)}
             <small> min</small>
           </strong>
-          <span>to rest{item.walk_to_class_min === null ? ' · provisional' : ''}</span>
+          <span>to rest{item.walk_to_class_min === null || spot.data_kind === 'mapped' ? ' · provisional' : ''}</span>
         </div>
         {item.walk_to_class_min !== null && (
           <div>

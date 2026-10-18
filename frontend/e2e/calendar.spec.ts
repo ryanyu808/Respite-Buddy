@@ -110,7 +110,7 @@ test('candidate directory and mobile schedule are accessible, honest, and do not
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/?live=1')
   await page.getByRole('button', { name: 'Campus spaces', exact: true }).click()
-  await expect(page.getByRole('article')).toHaveCount(34)
+  await expect(page.getByRole('article')).toHaveCount(36)
   await page.getByLabel('Search campus spaces', { exact: true }).fill('210A')
   await expect(page.getByRole('article')).toHaveCount(1)
   await expect(page.getByRole('article')).toContainText('Reservation required')
@@ -168,5 +168,5 @@ test('live gap planning transmits only class locations and times and stays hones
     classes: [{ location: 'Leavey Library' }, { location: 'Tutor Campus Center' }],
   })
   await page.getByRole('button', { name: 'Explore documented locations', exact: true }).click()
-  await expect(page.getByRole('article')).toHaveCount(34)
+  await expect(page.getByRole('article')).toHaveCount(36)
 })

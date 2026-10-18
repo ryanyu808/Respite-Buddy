@@ -69,7 +69,7 @@ def test_strict_filter_applied_before_top_three_and_swap_keeps_deadline(data):
 def test_no_filter_promotes_candidates_and_unknowns_stay_null(data):
     engine=RespiteEngine(data,candidates())
     assert engine.recommend(ResetRequest(now=DEMO_TIME,filters=SpotFilters(outlets=True))).recommendations==[]
-    assert len(candidates())==34
+    assert len(candidates())==36
     assert RespiteEngine(data,[scout(data,reservation_required=True)]).recommend(ResetRequest(now=DEMO_TIME)).recommendations==[]
 
 def test_directory_filtered_endpoint_and_invalid_filters():

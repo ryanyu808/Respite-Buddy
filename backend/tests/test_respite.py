@@ -234,7 +234,7 @@ def test_missing_graph_and_api_validation(engine, tmp_path):
     with TestClient(app) as client:
         assert client.get('/api/health').json()['graph_loaded']
         assert client.get('/api/spots').json() == []
-        assert len(client.get('/api/spots?demo=true').json()) == 3
+        assert len(client.get('/api/spots?demo=true').json()) == 6
         assert client.get('/api/spots/no-such-spot').status_code == 404
         assert client.get('/api/buildings').status_code == 200
         assert client.post('/api/reset-spots',json={'demo':True}).json()['recommendations']

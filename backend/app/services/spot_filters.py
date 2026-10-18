@@ -12,7 +12,7 @@ def known(spot, field):
         return False
     # A signed scout record covers its populated fields. Online documentation
     # needs attribute-specific evidence, never an inference from a venue name.
-    return bool(scouted(spot) or (spot.evidence or {}).get(field) or any(
+    return bool(spot.data_kind == 'illustrative' or scouted(spot) or (spot.evidence or {}).get(field) or any(
         field in p.supports and p.source_type != 'USC historical article'
         for p in getattr(spot, 'provenance', [])))
 
