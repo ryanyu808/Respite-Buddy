@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, Footprints, Leaf, RotateCcw } from 'lucide-react'
 import type { FeatureCollection } from 'geojson'
 import { DEFAULTS } from '../preferences'
-import { DEMO_TIME, timeLabel, type Need, type Recommendation } from '../respite'
-import { savedDemo } from '../services/respiteApi'
-import { DEMO_LOCATIONS, resolveDemoLocation } from '../services/demoJourney'
+import { DEMO_TIME, parseDeepLink, timeLabel, type Need, type Recommendation } from '../respite'
+import { homeRecommendations } from '../services/homeRecommendations'
+import { resolveDemoLocation } from '../services/demoJourney'
+import { CampusLocationPicker } from './CampusLocationPicker'
 import { readSchedule } from '../calendar/storage'
 import { scheduleContext } from '../smartContext'
 import { MapView } from './MapView'
@@ -19,24 +20,26 @@ function demoResult(
   deadline: string | undefined,
   needs: Need[],
   near = 'Leavey Library',
-  nextClass: string | null = 'Tutor Campus Center',
+  nextClass: string | null = null,
 ) {
-  return savedDemo({
-    near,
-    next_class: nextClass,
-    minutes,
-    needs,
-    demo: true,
-    demo_time: clock,
-    deadline,
-    usc_id: false,
-    preferences: { ...DEFAULTS },
-  })?.response
+  return (
+    homeRecommendations({
+      near,
+      next_class: nextClass,
+      minutes,
+      needs,
+      demo: true,
+      demo_time: clock,
+      deadline,
+      usc_id: false,
+      preferences: { ...DEFAULTS },
+    }) ?? undefined
+  )
 }
 
 const PREFERENCES: { id: Need; label: string }[] = [
-  { id: 'outdoor', label: 'Outdoors' },
   { id: 'indoor', label: 'Indoors' },
+  { id: 'outdoor', label: 'Outdoors' },
   { id: 'quiet', label: 'Quiet' },
   { id: 'seated', label: 'Place to sit' },
   { id: 'dim', label: 'Lower light' },
@@ -60,17 +63,34 @@ export function DemoHome({
   features: FeatureCollection | null
   onLive: () => void
 }) {
-  const [minutes, setMinutes] = useState(15)
-  const [clock, setClock] = useState(DEMO_TIME)
-  const [deadline, setDeadline] = useState<string | undefined>()
-  const [needs, setNeeds] = useState<Need[]>([])
-  const [near, setNear] = useState('Leavey Library')
-  const [nextClass, setNextClass] = useState<string | null>('Tutor Campus Center')
-  const [nearText, setNearText] = useState('Leavey Library')
-  const [nextText, setNextText] = useState('Tutor Campus Center')
-  const [startingDefault, setStartingDefault] = useState(true)
+  const [linked] = useState(() =>
+    new URLSearchParams(window.location.search).get('home') === '1'
+      ? parseDeepLink(window.location.search)
+      : null,
+  )
+  const [minutes, setMinutes] = useState(linked?.minutes ?? 15)
+  const [clock, setClock] = useState(linked?.demo_time ?? DEMO_TIME)
+  const [deadline, setDeadline] = useState<string | undefined>(linked?.deadline)
+  const [needs, setNeeds] = useState<Need[]>(linked?.needs ?? [])
+  const [near, setNear] = useState(() =>
+    linked?.near
+      ? (resolveDemoLocation(linked.near)?.name ??
+        (typeof linked.near === 'string' ? linked.near : `${linked.near.lat},${linked.near.lon}`))
+      : 'Leavey Library',
+  )
+  const [nextClass, setNextClass] = useState<string | null>(() =>
+    linked?.next
+      ? (resolveDemoLocation(linked.next)?.name ??
+        (typeof linked.next === 'string' ? linked.next : `${linked.next.lat},${linked.next.lon}`))
+      : null,
+  )
+  const [nearText, setNearText] = useState(linked?.near ? near : '')
+  const [nextText, setNextText] = useState(linked?.next ? (nextClass ?? '') : '')
+  const [formRevision, setFormRevision] = useState(0)
+  const [savedClass, setSavedClass] = useState<ReturnType<typeof scheduleContext>>(null)
+  const [startingDefault, setStartingDefault] = useState(!linked?.near)
   const [fromSchedule, setFromSchedule] = useState(false)
-  const edited = useRef(false)
+  const edited = useRef(Boolean(linked))
   const DEMO = demoResult(minutes, clock, deadline, needs, near, nextClass)
   const [skipped, setSkipped] = useState<string[]>([])
   const [offset, setOffset] = useState(0)
@@ -82,12 +102,22 @@ export function DemoHome({
   const routeRef = useRef<HTMLElement>(null)
   const options = (DEMO?.recommendations ?? []).filter((item) => !skipped.includes(item.spot.id))
   const ordered = options.length
-    ? [...options.slice(offset % options.length), ...options.slice(0, offset % options.length)]
+    ? [
+        ...options.slice(offset % options.length),
+        ...options.slice(0, offset % options.length),
+      ].slice(0, 3)
     : []
   const route = walking ? (leg === 'spot' ? walking.route_to_spot : walking.route_to_class) : null
   const selected =
     route?.routes.find((item) => item.id === routeId) ??
     route?.routes.find((item) => item.id === route.recommended_id)
+
+  useEffect(() => {
+    if (!linked?.to) return
+    const item = DEMO?.recommendations.find((candidate) => candidate.spot.id === linked.to)
+    if (item) startWalk(item)
+    // Restore an explicitly shared home route once, not after manual changes.
+  }, [linked])
 
   useEffect(() => {
     let active = true
@@ -97,14 +127,7 @@ export function DemoHome({
         const now = new Date().toISOString()
         const context = scheduleContext(events, now)
         if (!context) return
-        const destination = resolveDemoLocation(context.next_class)?.name ?? context.next_class
-        setNextClass(destination)
-        setNextText(destination)
-        setMinutes(context.minutes)
-        setClock(now)
-        setDeadline(context.deadline)
-        setFromSchedule(true)
-        setNotice('Next destination filled from your saved schedule.')
+        setSavedClass(context)
       })
       .catch(() => {
         /* Local schedule is optional; never block the immediate demo. */
@@ -141,6 +164,51 @@ export function DemoHome({
     focusOptions()
   }
 
+  function applyWindow(window: { minutes: number; now: string; deadline: string }, focus = false) {
+    const start = resolveDemoLocation(nearText.trim() || 'Leavey Library')
+    const destination = nextText.trim() ? resolveDemoLocation(nextText) : null
+    if (!start || destination === undefined)
+      throw new Error(
+        'Choose a listed campus location, or leave the field blank to use the labeled sample starting point.',
+      )
+    if (
+      !demoResult(
+        window.minutes,
+        window.now,
+        window.deadline,
+        needs,
+        start.name,
+        destination?.name ?? null,
+      )
+    )
+      throw new Error(
+        'Choose another campus location. No saved walking route connects these buildings.',
+      )
+    const changed =
+      near !== start.name ||
+      nextClass !== (destination?.name ?? null) ||
+      minutes !== window.minutes ||
+      Date.parse(clock) !== Date.parse(window.now) ||
+      Date.parse(deadline ?? new Date(Date.parse(clock) + minutes * 60000).toISOString()) !==
+        Date.parse(window.deadline)
+    if (!focus && !changed) return
+    edited.current = true
+    setNear(start.name)
+    setNextClass(destination?.name ?? null)
+    setNearText(nearText.trim() ? start.name : '')
+    setNextText(destination?.name ?? '')
+    setStartingDefault(!nearText.trim())
+    setFromSchedule(false)
+    setMinutes(window.minutes)
+    setClock(window.now)
+    setDeadline(window.deadline)
+    setSkipped([])
+    setOffset(0)
+    setWalking(null)
+    setNotice('Options updated for your time window.')
+    if (focus) focusOptions()
+  }
+
   return (
     <main id="campus-content" className="demo-home">
       <section className="demo-hero" aria-labelledby="demo-title">
@@ -159,7 +227,7 @@ export function DemoHome({
           aria-label="Sample break, not your actual schedule or location"
         >
           <BreakTimeControls
-            key={`${clock}/${minutes}/${deadline ?? ''}`}
+            key={formRevision}
             minutes={minutes}
             clock={clock}
             deadline={deadline}
@@ -167,73 +235,55 @@ export function DemoHome({
             onEdit={() => {
               edited.current = true
             }}
-            onWindow={(window) => {
-              const start = resolveDemoLocation(nearText)
-              const destination = nextText.trim() ? resolveDemoLocation(nextText) : null
-              if (!start || destination === undefined)
-                throw new Error(
-                  'Choose a listed campus location, or leave your next destination blank.',
-                )
-              if (
-                !demoResult(
-                  window.minutes,
-                  window.now,
-                  window.deadline,
-                  needs,
-                  start.name,
-                  destination?.name ?? null,
-                )
-              )
-                throw new Error(
-                  'Choose another campus location. No saved walking route connects these buildings.',
-                )
-              edited.current = true
-              setNear(start.name)
-              setNextClass(destination?.name ?? null)
-              setNearText(start.name)
-              setNextText(destination?.name ?? '')
-              setStartingDefault(false)
-              setFromSchedule(false)
-              setMinutes(window.minutes)
-              setClock(window.now)
-              setDeadline(window.deadline)
-              setSkipped([])
-              setOffset(0)
-              setWalking(null)
-              setNotice('Your route and time are set.')
-              focusOptions()
-            }}
+            onPreview={(window) => applyWindow(window)}
+            onWindow={(window) => applyWindow(window, true)}
           >
             <div className="demo-location-fields">
-              <label className="reset-field">
-                Starting from
-                <input
-                  list="demo-campus-locations"
-                  required
-                  maxLength={120}
-                  autoComplete="off"
-                  value={nearText}
-                  onChange={(e) => setNearText(e.target.value)}
-                />
-              </label>
-              <label className="reset-field">
-                Next class / destination
-                <input
-                  list="demo-campus-locations"
-                  maxLength={120}
-                  autoComplete="off"
-                  placeholder="Optional — no next destination"
-                  value={nextText}
-                  onChange={(e) => setNextText(e.target.value)}
-                />
-              </label>
-              <datalist id="demo-campus-locations">
-                {DEMO_LOCATIONS.map((location) => (
-                  <option key={location.id} value={location.name}>
-                    {location.aliases?.join(' · ')}
-                  </option>
-                ))}
-              </datalist>
+              <CampusLocationPicker
+                label="Starting from"
+                value={nearText}
+                onChange={(value) => {
+                  edited.current = true
+                  setNearText(value)
+                }}
+              />
+              <CampusLocationPicker
+                label="Next class / destination"
+                value={nextText}
+                onChange={(value) => {
+                  edited.current = true
+                  setNextText(value)
+                }}
+              />
+              {savedClass && (
+                <button
+                  type="button"
+                  className="demo-text-button"
+                  onClick={() => {
+                    const now = new Date().toISOString()
+                    const remaining = Math.floor(
+                      (Date.parse(savedClass.deadline) - Date.parse(now)) / 60000,
+                    )
+                    if (remaining <= 0) {
+                      setNotice('That class has already started. Choose a new time window.')
+                      return
+                    }
+                    const destination =
+                      resolveDemoLocation(savedClass.next_class)?.name ?? savedClass.next_class
+                    edited.current = true
+                    setNextText(destination)
+                    setNextClass(destination)
+                    setMinutes(remaining)
+                    setClock(now)
+                    setDeadline(savedClass.deadline)
+                    setFromSchedule(true)
+                    setFormRevision((value) => value + 1)
+                    setWalking(null)
+                  }}
+                >
+                  Use saved next class: {savedClass.next_class}
+                </button>
+              )}
             </div>
           </BreakTimeControls>
           <small>
@@ -243,7 +293,7 @@ export function DemoHome({
             {fromSchedule
               ? 'Next destination from your saved schedule.'
               : startingDefault
-                ? 'Next destination is a sample default; optional.'
+                ? 'Sample picks start at Leavey until you choose a location. Next destination is optional.'
                 : 'Next destination is optional.'}
           </small>
         </aside>
@@ -505,6 +555,7 @@ export function DemoHome({
                 </button>
                 <details className="location-more">
                   <summary>More info</summary>
+                  <p>{item.why[0]}</p>
                   <p>{description(item)}</p>
                   <PhotoCredit place={item.spot} />
                 </details>
@@ -533,6 +584,7 @@ export function DemoHome({
                     setClock(DEMO_TIME)
                     setDeadline(undefined)
                     setNeeds([])
+                    setFormRevision((value) => value + 1)
                   }
                   setNotice('Demo restarted. Sample spots are ready.')
                   focusOptions()

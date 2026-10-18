@@ -5,6 +5,9 @@ import { DemoHome } from './DemoHome'
 import { DEFAULT_FILTERS, FILTERS_KEY } from '../smartFilters'
 import { readSchedule } from '../calendar/storage'
 import { manualEvent, type CalendarEvent } from '../calendar/model'
+import { homeRecommendations } from '../services/homeRecommendations'
+import { DEFAULTS } from '../preferences'
+import { DEMO_TIME } from '../respite'
 
 vi.mock('./MapView', () => ({ MapView: () => <div>Saved walking map</div> }))
 vi.mock('../calendar/storage', async (importOriginal) => ({
@@ -79,21 +82,23 @@ it('rejects unknown or disconnected endpoints without changing the applied route
   fireEvent.change(screen.getByLabelText('Starting from'), { target: { value: 'Imaginary Hall' } })
   fireEvent.click(screen.getByRole('button', { name: 'Find me a spot' }))
   expect(screen.getByRole('alert')).toHaveTextContent('Choose a listed campus location')
-  expect(screen.getByText('Leavey Library → Tutor Campus Center')).toBeInTheDocument()
+  expect(screen.getByText(/No next destination/)).toBeInTheDocument()
   fireEvent.change(screen.getByLabelText('Starting from'), { target: { value: 'JKP' } })
   fireEvent.click(screen.getByRole('button', { name: 'Find me a spot' }))
   expect(screen.getByRole('alert')).toHaveTextContent('No saved walking route connects')
-  expect(screen.getByText('Leavey Library → Tutor Campus Center')).toBeInTheDocument()
+  expect(screen.getByText(/No next destination/)).toBeInTheDocument()
 })
 
-it('autofills only the next class and deadline from the on-device schedule', async () => {
+it('keeps fields empty and offers the on-device next class as an optional action', async () => {
   vi.useFakeTimers()
   vi.setSystemTime(new Date('2026-10-19T13:00:00-07:00'))
   vi.mocked(readSchedule).mockResolvedValue([upcomingClass()])
   await act(async () => {
     render(<DemoHome features={null} onLive={() => {}} />)
   })
-  expect(screen.getByLabelText('Starting from')).toHaveValue('Leavey Library')
+  expect(screen.getByLabelText('Starting from')).toHaveValue('')
+  expect(screen.getByLabelText('Next class / destination')).toHaveValue('')
+  fireEvent.click(screen.getByRole('button', { name: /Use saved next class/ }))
   expect(screen.getByLabelText('Next class / destination')).toHaveValue('Doheny Memorial Library')
   expect(screen.getByLabelText('End time')).toHaveValue('13:45')
   expect(screen.getByText(/Next destination from your saved schedule/)).toBeInTheDocument()
@@ -132,8 +137,13 @@ it('opens directly onto three sample recommendations while the server never resp
   expect(screen.getByLabelText('End time')).toBeVisible()
   expect(screen.getByText(/Default starting point—not your current location/)).toBeInTheDocument()
   expect(screen.getAllByRole('combobox')).toHaveLength(2)
-  expect(screen.getByLabelText('Starting from')).toHaveValue('Leavey Library')
-  expect(screen.getByLabelText('Next class / destination')).toHaveValue('Tutor Campus Center')
+  expect(screen.getByLabelText('Starting from')).toHaveValue('')
+  expect(screen.getByLabelText('Next class / destination')).toHaveValue('')
+  const chips = within(screen.getByRole('group', { name: 'Spot preferences' })).getAllByRole(
+    'button',
+  )
+  expect(chips[0]).toHaveTextContent('Indoors')
+  expect(chips[1]).toHaveTextContent('Outdoors')
   expect(screen.queryByRole('slider')).not.toBeInTheDocument()
   expect(screen.queryByText('Verified by scouts', { exact: true })).not.toBeInTheDocument()
 })
@@ -163,11 +173,11 @@ it('uses only the visible start/end window and preserves it across filters and f
     'aria-pressed',
     'false',
   )
-  expect(screen.getAllByRole('article')[0]).toHaveTextContent('Leavey Library')
-  const leave = within(screen.getAllByRole('article')[1]).getByText(/Leave by/).textContent
+  expect(screen.getAllByRole('article')[0]).toHaveTextContent('INDOOR PAUSE')
+  const leave = within(screen.getAllByRole('article')[1]).getByText(/Rest until/).textContent
   fireEvent.click(screen.getAllByRole('button', { name: 'It’s full' })[0])
-  expect(screen.getAllByRole('article')).toHaveLength(2)
-  expect(within(screen.getAllByRole('article')[0]).getByText(/Leave by/).textContent).toBe(leave)
+  expect(screen.getAllByRole('article')).toHaveLength(3)
+  expect(within(screen.getAllByRole('article')[0]).getByText(/Rest until/).textContent).toBe(leave)
   expect(screen.getByLabelText('End time')).toHaveValue('12:00')
   expect(screen.getByText(/crowd levels are simulated/)).toBeInTheDocument()
 })
@@ -197,12 +207,14 @@ it('does not let saved live filters or session exclusions empty the presentation
 
 it('shows both saved route legs and explains when the three engine strategies share a path', () => {
   render(<DemoHome features={null} onLive={() => {}} />)
+  fireEvent.change(screen.getByLabelText('Next class / destination'), { target: { value: 'TCC' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Find me a spot' }))
   fireEvent.click(screen.getAllByRole('button', { name: 'Walk me there' })[0])
-  expect(screen.getByRole('heading', { name: /Let’s walk to Hutton Park/ })).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: /Let’s walk to/ })).toBeInTheDocument()
   expect(screen.getByText('Saved walking map')).toBeInTheDocument()
   fireEvent.click(screen.getByRole('button', { name: 'Then to class' }))
   expect(screen.getByRole('heading', { name: 'On to Tutor Campus Center.' })).toBeInTheDocument()
-  expect(screen.getByText(/Leave by 1:12 PM/)).toBeInTheDocument()
+  expect(screen.getByText(/Leave by.*About/)).toBeInTheDocument()
   fireEvent.click(screen.getByText('Other walking routes', { selector: 'summary' }))
   expect(screen.getByRole('button', { name: /Fastest.*min/ })).toBeInTheDocument()
   expect(
@@ -215,14 +227,15 @@ it('shows both saved route legs and explains when the three engine strategies sh
 it('skips full spots without resetting the sample deadline and can restart after all are full', () => {
   render(<DemoHome features={null} onLive={() => {}} />)
   const second = screen.getAllByRole('article')[1]
-  const leaveBy = within(second).getByText(/Leave by/).textContent
+  const leaveBy = within(second).getByText(/Rest until/).textContent
   fireEvent.click(screen.getAllByRole('button', { name: 'It’s full' })[0])
-  expect(screen.getAllByRole('article')).toHaveLength(2)
-  expect(within(screen.getAllByRole('article')[0]).getByText(/Leave by/).textContent).toBe(leaveBy)
-  expect(screen.queryByRole('heading', { name: 'Hutton Park' })).not.toBeInTheDocument()
+  expect(screen.getAllByRole('article')).toHaveLength(3)
+  expect(within(screen.getAllByRole('article')[0]).getByText(/Rest until/).textContent).toBe(
+    leaveBy,
+  )
   expect(screen.getByRole('status')).toHaveTextContent('Your end time stays the same')
-  fireEvent.click(screen.getAllByRole('button', { name: 'It’s full' })[0])
-  fireEvent.click(screen.getAllByRole('button', { name: 'It’s full' })[0])
+  while (screen.queryAllByRole('article').length)
+    fireEvent.click(screen.getAllByRole('button', { name: 'It’s full' })[0])
   expect(screen.queryByRole('article')).not.toBeInTheDocument()
   fireEvent.click(screen.getByRole('button', { name: 'Restart demo' }))
   expect(screen.getAllByRole('article')).toHaveLength(3)
@@ -248,4 +261,25 @@ it('keeps live tools and calendar available independently of the sample demo', a
     fireEvent.click(screen.getByRole('button', { name: 'My Schedule' }))
   })
   expect(screen.getByRole('heading', { name: 'My Schedule' })).toBeInTheDocument()
+})
+
+it('restores an expanded-pool home walking link without redirecting to legacy demo results', async () => {
+  const response = homeRecommendations({
+    near: 'Leavey',
+    next_class: 'TCC',
+    minutes: 60,
+    needs: [],
+    demo: true,
+    demo_time: DEMO_TIME,
+    usc_id: false,
+    preferences: DEFAULTS,
+  })!
+  const item = response.recommendations.find((r) => r.spot.name.includes('Great Lawn'))!
+  const link = new URL(item.deep_link)
+  window.history.replaceState({}, '', `/${link.search}${link.hash}`)
+  await act(async () => {
+    render(<App />)
+  })
+  expect(screen.getByRole('heading', { name: /Let’s walk to Great Lawn/ })).toBeInTheDocument()
+  expect(screen.getByText('Saved walking map')).toBeInTheDocument()
 })

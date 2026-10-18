@@ -10,6 +10,7 @@ export function BreakTimeControls({
   children,
   onEdit,
   deadline,
+  onPreview,
 }: {
   minutes: number
   clock: string
@@ -18,9 +19,26 @@ export function BreakTimeControls({
   children?: ReactNode
   onEdit?: () => void
   deadline?: string
+  onPreview?: (window: { minutes: number; now: string; deadline: string }) => void
 }) {
   const [fields, setFields] = useState(() => timeFields(clock, minutes, deadline))
   const [error, setError] = useState('')
+  function preview(nextFields = fields) {
+    if (!onPreview) return
+    try {
+      onPreview(
+        breakWindow(
+          nextFields.date,
+          nextFields.current,
+          nextFields.classStarts,
+          nextFields.nextDay,
+        ),
+      )
+      setError('')
+    } catch {
+      /* Incomplete edits keep the last valid results; submit explains invalid input. */
+    }
+  }
   return (
     <div className="break-time-controls">
       <form
@@ -54,7 +72,12 @@ export function BreakTimeControls({
               type="time"
               required
               value={fields.current}
-              onChange={(e) => setFields({ ...fields, current: e.target.value })}
+              onBlur={() => preview()}
+              onChange={(e) => {
+                const next = { ...fields, current: e.target.value }
+                setFields(next)
+                preview(next)
+              }}
             />
           </label>
           <label className="reset-field">
@@ -63,7 +86,12 @@ export function BreakTimeControls({
               type="time"
               required
               value={fields.classStarts}
-              onChange={(e) => setFields({ ...fields, classStarts: e.target.value })}
+              onBlur={() => preview()}
+              onChange={(e) => {
+                const next = { ...fields, classStarts: e.target.value }
+                setFields(next)
+                preview(next)
+              }}
             />
           </label>
         </div>

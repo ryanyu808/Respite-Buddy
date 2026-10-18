@@ -67,6 +67,7 @@ export type Spot = {
   verified_date: string | null
   notes: string | null
   data_kind: 'scouted' | 'mapped' | 'illustrative'
+  purpose?: 'general' | 'prayer' | 'lactation' | 'other_dedicated'
   source_url: string | null
   evidence?: Record<string, { url: string; checked: string }> | null
   food_available?: boolean | null

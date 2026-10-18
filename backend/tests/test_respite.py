@@ -268,13 +268,16 @@ def test_demo_bundle_matches_shared_engine(engine):
 
 def test_saved_campus_legs_match_real_directed_router(engine):
     from app.models import Point, Preferences
-    from app.services.spot_library import building_library
+    from app.services.spot_library import building_library, demo_library
     path = Path(__file__).resolve().parents[2] / 'frontend/src/data/demo-route-legs.json'
     catalog = json.loads(path.read_text(encoding='utf-8'))
     assert catalog['locations'] == building_library(engine.data)
+    expanded = demo_library(engine.data, indoor=True, expanded=True)
+    assert catalog['spots'] == [spot.model_dump(mode='json') for spot in expanded]
+    assert len(expanded) > 6
     for location in catalog['locations']:
         point = Point(lat=location['lat'], lon=location['lon'], name=location['name'])
-        for spot in engine.library(demo=True):
+        for spot in expanded:
             target = Point(lat=spot.lat, lon=spot.lng, name=spot.name)
             pair = catalog['legs'][location['id']][spot.id]
             for key, start, end in [('outward', point, target), ('onward', target, point)]:

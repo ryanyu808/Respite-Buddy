@@ -66,6 +66,66 @@
   width: 100%;
   font-size: 16px;
 }
+.campus-picker {
+  position: relative;
+  min-width: 0;
+}
+.campus-picker > label {
+  margin-bottom: 9px;
+  font-size: 14px;
+}
+.campus-picker-input input::placeholder {
+  color: #52635b;
+  opacity: 1;
+}
+.campus-picker-input {
+  position: relative;
+}
+.campus-picker-input input {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #b7c8ae;
+  border-radius: 9px;
+  background: #fff;
+  color: #253e36;
+  padding: 12px 36px 12px 12px;
+}
+.campus-picker-input > svg {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.campus-picker-list {
+  position: absolute;
+  z-index: 1500;
+  inset: auto 0;
+  margin: 5px 0 0;
+  padding: 5px;
+  max-height: 160px;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid #b7c8ae;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 5px 18px #253e3620;
+}
+.campus-picker-list > li {
+  padding: 12px;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #253e36;
+}
+.campus-picker-list > li:hover,
+.campus-picker-list > li[aria-selected='true'] {
+  background: #e4eddd;
+}
+.campus-picker-list > li[aria-disabled='true'] {
+  cursor: default;
+  color: #59665e;
+}
 .demo-applied-journey {
   font-size: 12px;
   line-height: 1.6;
