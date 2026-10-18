@@ -52,9 +52,10 @@ def demo_library(data, indoor=False):
                    lat=mapped['lat'], lng=mapped['lon'], source_url=mapped['osm_url'],
                    data_kind='illustrative', purpose='general', indoor=False,
                    hours={day: [{'start': '07:00', 'end': '19:00'}] for day in ['mon','tue','wed','thu','fri','sat','sun']},
-                   access='open', noise='low', lighting='medium', seating='hard',
+                   access='open', noise='low', lighting='dim' if name == 'Alumni Park' else 'medium', seating='hard',
+                   typical_crowd='few',
                    # No crowd observations, verification, or accessibility fabricated.
-                   notes='DEMO ONLY: real OSM position; hours, access, noise, lighting and seating are simulated, not verified campus conditions.')
+                   notes='DEMO ONLY: real OSM position; hours, access, noise, lighting, seating and crowd levels are simulated, not verified campus conditions.')
         spots.append(Spot.model_validate(raw))
     if indoor:
         from .campus_directory import candidates
@@ -66,8 +67,8 @@ def demo_library(data, indoor=False):
                        building=candidate.building, building_code=candidate.building_code,
                        floor=candidate.floor, lat=candidate.lat, lng=candidate.lng,
                        source_url=candidate.source_url, indoor=True, data_kind='illustrative',
-                       purpose='general', access='open', noise='low', lighting='medium', seating='hard',
+                       purpose='general', access='open', noise='low', lighting='dim', seating='hard', typical_crowd='few',
                        hours={day:[{'start':'07:00','end':'19:00'}] for day in ['mon','tue','wed','thu','fri','sat','sun']},
-                       notes='DEMO ONLY: documented indoor place at an approximate building anchor. Access, hours, noise and seating are simulated, not verified conditions. Indoor walking and entrance time are excluded.')
+                       notes='DEMO ONLY: documented indoor place at an approximate building anchor. Access, hours, noise, lighting, seating and crowd levels are simulated, not verified conditions. Indoor walking and entrance time are excluded.')
             spots.append(Spot.model_validate(raw))
     return spots

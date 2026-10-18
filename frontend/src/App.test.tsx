@@ -24,7 +24,7 @@ it('opens on reset before class with zero setup and no account', () => {
   render(<App />)
   expect(screen.getByRole('heading', { name: /Reset before class/ })).toBeInTheDocument()
   expect(screen.getByRole('button', { name: 'Somewhere calm, now' })).toBeEnabled()
-  expect(screen.getByRole('button', { name: '15 min' })).toHaveAttribute('aria-pressed', 'true')
+  expect(screen.queryByRole('button', { name: '15 min' })).not.toBeInTheDocument()
   expect(screen.getByRole('link', { name: 'Need more support?' })).toHaveAttribute(
     'href',
     'https://studenthealth.usc.edu/mental-health-and-well-being/',
@@ -59,7 +59,9 @@ it('recalculates time and needs, persists display preferences and clears them in
   fireEvent.click(screen.getByText(/Change preferences/, { selector: 'summary' }))
   fireEvent.click(screen.getByRole('button', { name: 'Try the demo' }))
   await screen.findByText('Saved demonstration (works offline)')
-  fireEvent.click(screen.getByRole('button', { name: '30 min' }))
+  fireEvent.change(screen.getByLabelText('Start time'), { target: { value: '13:00' } })
+  fireEvent.change(screen.getByLabelText('End time'), { target: { value: '13:30' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Calculate my break' }))
   await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(3))
   expect(screen.queryByText('Tight on time.')).not.toBeInTheDocument()
   fireEvent.click(
@@ -78,7 +80,7 @@ it('recalculates time and needs, persists display preferences and clears them in
   })
   fireEvent.click(screen.getByText('Fine-tune', { exact: false, selector: 'summary' }))
   fireEvent.click(screen.getByRole('button', { name: 'Clear saved preferences' }))
-  expect(screen.getByRole('button', { name: '15 min' })).toHaveAttribute('aria-pressed', 'true')
+  expect(screen.getByText(/15 minutes available/)).toBeInTheDocument()
   expect(
     within(screen.getByLabelText('Find a reset spot')).getByRole('button', { name: 'Quiet' }),
   ).toHaveAttribute('aria-pressed', 'false')
@@ -153,7 +155,10 @@ it('preserves the original deadline across a live swap and displays the remainin
   await waitFor(() => expect(screen.getAllByRole('article', { hidden: true })).toHaveLength(2))
   const swapCall = fetch.mock.calls.find(([path]) => String(path).endsWith('/reset-spots/swap'))
   expect(JSON.parse(swapCall![1].body).request.deadline).toBe(response.deadline)
-  fireEvent.click(screen.getByRole('button', { name: '30 min' }))
+  fireEvent.change(screen.getByLabelText('Break date'), { target: { value: '2026-10-19' } })
+  fireEvent.change(screen.getByLabelText('Start time'), { target: { value: '13:00' } })
+  fireEvent.change(screen.getByLabelText('End time'), { target: { value: '13:30' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Calculate my break' }))
   await waitFor(() =>
     expect(fetch.mock.calls.filter(([path]) => String(path).endsWith('/reset-spots'))).toHaveLength(
       2,
@@ -162,7 +167,9 @@ it('preserves the original deadline across a live swap and displays the remainin
   const lastSearch = fetch.mock.calls
     .filter(([path]) => String(path).endsWith('/reset-spots'))
     .at(-1)!
-  expect(JSON.parse(lastSearch[1].body).deadline).toBeUndefined()
+  expect(Date.parse(JSON.parse(lastSearch[1].body).deadline)).toBe(
+    Date.parse('2026-10-19T13:30:00-07:00'),
+  )
 })
 
 it('handles an already-at-spot result without inventing a walking geometry', async () => {

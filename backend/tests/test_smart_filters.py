@@ -42,7 +42,7 @@ def test_food_service_does_not_establish_food_permission_or_opening():
         assert not matches(place,SpotFilters(open_now=True),DEMO_TIME)
 
 def test_seating_noise_setting_opening_and_access(data):
-    spot=scout(data,seating='soft',noise='low',indoor=True,access='usc_id',reservation_required=False)
+    spot=scout(data,seating='soft',noise='low',lighting='medium',indoor=True,access='usc_id',reservation_required=False)
     assert matches(spot,SpotFilters(comfortable_seating=True,quiet=True,indoor=True,open_now=True,access='usc_id',no_reservation=True),DEMO_TIME)
     for f in [SpotFilters(outdoor=True),SpotFilters(access='open'),SpotFilters(dim=True),SpotFilters(evening_access=True)]:assert not matches(spot,f,DEMO_TIME)
     assert not matches(spot,SpotFilters(open_now=True),DEMO_TIME.replace(hour=22))

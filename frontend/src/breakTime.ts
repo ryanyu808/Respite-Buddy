@@ -12,19 +12,17 @@ export function breakWindow(date: string, current: string, classStarts: string, 
   const deadline = localInstant(endDate, classStarts)
   const minutes = Math.floor((Date.parse(deadline) - Date.parse(start)) / 60000)
   if (minutes <= 0)
-    throw new Error(
-      'Class must start after the selected current time. For midnight, choose next day.',
-    )
+    throw new Error('End time must be after start time. For midnight, choose next day.')
   if (minutes > 240) throw new Error('Choose a break of 4 hours or less.')
   return { minutes, now: start, deadline }
 }
 
-export function timeFields(clock: string) {
+export function timeFields(clock: string, minutes = 15) {
   const at = inZone(clock)
   return {
     date: at.toPlainDate().toString(),
     current: at.toPlainTime().toString().slice(0, 5),
-    classStarts: at.add({ minutes: 30 }).toPlainTime().toString().slice(0, 5),
-    nextDay: at.add({ minutes: 30 }).day !== at.day,
+    classStarts: at.add({ minutes }).toPlainTime().toString().slice(0, 5),
+    nextDay: at.add({ minutes }).day !== at.day,
   }
 }

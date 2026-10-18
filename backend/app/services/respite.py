@@ -155,7 +155,11 @@ class RespiteEngine:
             if after_dark and spot.safe_after_dark is not True:
                 continue
             eligible = {'quiet': spot.noise == 'low', 'seated': spot.seating in ('hard','soft'),
-                        'dim': spot.lighting == 'dim', 'few_people': bool(spot.verified_by and spot.verified_date and spot.typical_crowd == 'few'),
+                        'dim': spot.lighting == 'dim',
+                        # Illustrative demo preferences never become dated crowd observations.
+                        'few_people': bool(spot.typical_crowd == 'few' and
+                                           ((request.demo and spot.data_kind == 'illustrative') or
+                                            (spot.verified_by and spot.verified_date))),
                         'indoor': spot.indoor is True, 'outdoor': spot.indoor is False}
             if any(not eligible[n] for n in request.needs):
                 continue

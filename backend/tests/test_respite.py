@@ -111,6 +111,22 @@ def test_unknown_next_class_provisional_and_tight_time(engine):
     assert not engine.recommend(ResetRequest(demo=True,minutes=1)).recommendations
 
 
+def test_visible_demo_preferences_never_claim_verified_crowd_observations(engine):
+    for setting in ['indoor', 'outdoor']:
+        result = engine.recommend(ResetRequest(demo=True, next_class='TCC', minutes=105,
+                                               needs=[setting,'quiet','seated','dim','few_people']))
+        assert result.recommendations
+        for item in result.recommendations:
+            assert item.spot.data_kind == 'illustrative'
+            assert item.spot.lighting == 'dim' and item.spot.typical_crowd == 'few'
+            assert item.spot.verified_by is None and item.spot.verified_date is None
+            assert item.crowd.category is None and item.crowd.observed_at is None
+            assert item.rest_min == 105 - item.walk_to_min - item.walk_to_class_min
+    # The same sample attributes cannot qualify as real scouted recommendations.
+    local = RespiteEngine(engine.data, engine.library(demo=True))
+    assert not local.recommend(ResetRequest(now=DEMO_TIME, needs=['few_people'])).recommendations
+
+
 def test_needs_and_access_filter(engine):
     spot = scouted(engine, access='usc_id', indoor=True, lighting='dim', typical_crowd='few')
     local = RespiteEngine(engine.data, [spot])

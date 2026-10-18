@@ -524,13 +524,9 @@ export function RespiteBuddy({
               Change preferences <span>Adjust time, starting point &amp; more</span>
             </summary>
             <BreakTimeControls
-              key={demo ? 'sample-time' : 'campus-time'}
+              key={`${demo ? 'sample' : 'campus'}-${minutes}-${demo ? demoTime : (planningTime ?? 'now')}`}
               minutes={minutes}
               clock={demo ? demoTime : (planningTime ?? new Date().toISOString())}
-              onPreset={(value) => {
-                setPlanningTime(undefined)
-                change({ minutes: value, now: undefined })
-              }}
               onWindow={(window) => {
                 setMinutes(window.minutes)
                 setDeadline(window.deadline)

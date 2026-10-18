@@ -1,17 +1,22 @@
 /* The reset experience shares the walking planner's calm palette and controls. */
-.break-exact-time {
+.break-date-options {
   margin: 16px 0;
 }
-.break-exact-time > summary {
+.break-date-options > summary {
   padding: 10px 0;
   cursor: pointer;
   font-size: 13px;
   color: #285b48;
 }
-.break-exact-time form {
+.break-time-controls form {
   margin-top: 12px;
 }
-.break-exact-time input {
+.break-time-controls .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+.break-time-controls input {
   max-width: 100%;
   min-width: 0;
 }

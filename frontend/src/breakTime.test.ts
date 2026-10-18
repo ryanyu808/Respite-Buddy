@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BREAK_INTERVALS, breakLabel, breakWindow } from './breakTime'
+import { BREAK_INTERVALS, breakWindow, timeFields } from './breakTime'
 import { savedDemo } from './services/respiteApi'
 import { DEFAULTS } from './preferences'
 import { DEMO_TIME, type ResetRequest } from './respite'
@@ -14,16 +14,40 @@ const request: ResetRequest = {
   usc_id: false,
   preferences: { ...DEFAULTS },
 }
-describe('break presets and explicit Pacific clocks', () => {
-  it('offers only the four requested presets', () => {
-    expect(BREAK_INTERVALS.map(breakLabel)).toEqual(['15 min', '30 min', '45 min', '1 hour'])
+describe('explicit Pacific break windows', () => {
+  it('prefills times using the current break length, not a different hidden duration', () => {
+    expect(timeFields(DEMO_TIME)).toMatchObject({ current: '13:00', classStarts: '13:15' })
+    expect(timeFields(DEMO_TIME, 105)).toMatchObject({ current: '13:00', classStarts: '14:45' })
+    expect(timeFields('2026-10-19T23:50:00-07:00', 30)).toMatchObject({
+      classStarts: '00:20',
+      nextDay: true,
+    })
   })
   it('calculates actual time before class and requires explicit next-day intent', () => {
     expect(breakWindow('2026-10-19', '13:10', '13:47').minutes).toBe(37)
-    expect(() => breakWindow('2026-10-19', '23:50', '00:20')).toThrow('Class must start after')
+    expect(() => breakWindow('2026-10-19', '23:50', '00:20')).toThrow('End time must be after')
     expect(breakWindow('2026-10-19', '23:50', '00:20', true).minutes).toBe(30)
     expect(() => breakWindow('2026-10-19', '13:00', '13:00')).toThrow()
     expect(() => breakWindow('2026-10-19', '13:00', '18:00')).toThrow('4 hours')
+  })
+  it('supports every compatible combination of the six visible preferences offline', () => {
+    const optional: ResetRequest['needs'] = ['quiet', 'seated', 'dim', 'few_people']
+    for (let mask = 0; mask < 16; mask++) {
+      for (const setting of [[], ['indoor'], ['outdoor']] as ResetRequest['needs'][]) {
+        const needs = [...optional.filter((_, index) => mask & (1 << index)), ...setting]
+        const result = savedDemo({ ...request, minutes: 105, needs })!
+        expect(result).not.toBeNull()
+        expect(result.response.recommendations.length).toBeGreaterThan(0)
+        for (const item of result.response.recommendations) {
+          expect(item.spot.data_kind).toBe('illustrative')
+          expect(item.spot.verified_by).toBeNull()
+          expect(item.crowd.category).toBeNull()
+          expect(item.rest_min).toBe(105 - item.walk_to_min - item.walk_to_class_min!)
+          if (needs.includes('dim')) expect(item.spot.lighting).toBe('dim')
+          if (needs.includes('few_people')) expect(item.spot.typical_crowd).toBe('few')
+        }
+      }
+    }
   })
   it('rejects nonexistent/ambiguous daylight saving times, not silently shifting a class', () => {
     expect(() => breakWindow('2026-03-08', '02:10', '03:20')).toThrow()

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import bundle from '../src/data/respite-demo.json' with { type: 'json' }
 
-test('primary recommendation, source labels, swaps, time chips and safety preview', async ({
+test('primary recommendation, source labels, swaps, time window and safety preview', async ({
   page,
 }) => {
   const errors: string[] = []
@@ -24,11 +24,15 @@ test('primary recommendation, source labels, swaps, time chips and safety previe
   await page.getByRole('button', { name: 'It’s locked', exact: true }).first().click()
   await expect(page.getByRole('article')).toHaveCount(1)
   await page.getByText('Change preferences', { exact: false }).click()
-  await page.getByRole('button', { name: '30 min', exact: true }).click()
+  await page.getByLabel('Start time', { exact: true }).fill('13:00')
+  await page.getByLabel('End time', { exact: true }).fill('13:30')
+  await page.getByRole('button', { name: 'Calculate my break', exact: true }).click()
   await expect(page.getByText('Tight on time.', { exact: true })).toHaveCount(0)
-  await page.getByRole('button', { name: '45 min', exact: true }).click()
+  await page.getByLabel('End time', { exact: true }).fill('13:45')
+  await page.getByRole('button', { name: 'Calculate my break', exact: true }).click()
   await expect(page.getByRole('article')).toHaveCount(1)
-  await page.getByRole('button', { name: '15 min', exact: true }).click()
+  await page.getByLabel('End time', { exact: true }).fill('13:15')
+  await page.getByRole('button', { name: 'Calculate my break', exact: true }).click()
   await page.getByRole('checkbox', { name: /Preview 9 PM/ }).check()
   await expect(page.getByRole('article')).toHaveCount(0)
   await page.getByText('Data notes & limitations', { exact: true }).click()
@@ -92,7 +96,9 @@ test('mobile route action moves focus, preferences persist, and calendar is simu
   await page.goto('/?live=1')
   await page.getByText('Change preferences', { exact: false }).click()
   await page.getByRole('button', { name: 'Quiet', exact: true }).click()
-  await page.getByRole('button', { name: '45 min', exact: true }).click()
+  await page.getByLabel('Start time', { exact: true }).fill('13:00')
+  await page.getByLabel('End time', { exact: true }).fill('13:45')
+  await page.getByRole('button', { name: 'Calculate my break', exact: true }).click()
   await page.getByRole('button', { name: 'Toggle high contrast' }).click()
   await page.reload()
   await page.getByText('Change preferences', { exact: false }).click()
@@ -100,10 +106,7 @@ test('mobile route action moves focus, preferences persist, and calendar is simu
     'aria-pressed',
     'true',
   )
-  await expect(page.getByRole('button', { name: '45 min', exact: true })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  )
+  await expect(page.getByText(/45 minutes available/)).toBeVisible()
   await expect(page.getByRole('button', { name: 'Toggle high contrast' })).toHaveAttribute(
     'aria-pressed',
     'true',
