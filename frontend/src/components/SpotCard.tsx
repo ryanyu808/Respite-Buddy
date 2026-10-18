@@ -1,5 +1,6 @@
 import { ArrowRight, Check, Footprints, RotateCcw } from 'lucide-react'
 import { crowdLabel, timeLabel, type Recommendation } from '../respite'
+import { LocationPhoto, PhotoCredit } from './LocationPhoto'
 
 export function SpotCard({
   item,
@@ -29,6 +30,7 @@ export function SpotCard({
       className={`reset-spot-card ${selected ? 'selected' : ''}`}
       aria-label={`${rank}. ${spot.name}`}
     >
+      <LocationPhoto place={spot} />
       <div className="reset-card-heading">
         <span className="reset-rank">{String(rank).padStart(2, '0')}</span>
         <div>
@@ -44,7 +46,7 @@ export function SpotCard({
             ? 'Illustrative demo'
             : verified
               ? 'Verified by scouts'
-              : 'Documented · conditions unconfirmed'}
+              : 'Check access'}
         </span>
       </div>
       <div className="reset-card-times">
@@ -53,7 +55,10 @@ export function SpotCard({
             {Math.floor(item.rest_min)}
             <small> min</small>
           </strong>
-          <span>to rest{item.walk_to_class_min === null || spot.data_kind === 'mapped' ? ' · provisional' : ''}</span>
+          <span>
+            to rest
+            {item.walk_to_class_min === null || spot.data_kind === 'mapped' ? ' · provisional' : ''}
+          </span>
         </div>
         {item.walk_to_class_min !== null && (
           <div>
@@ -64,23 +69,23 @@ export function SpotCard({
       </div>
       {item.tight_on_time && <p className="reset-tight">Tight on time.</p>}
       <p className="reset-walk-time">
-        <Footprints size={15} />
+        <Footprints size={15} aria-hidden="true" />
         {Math.ceil(item.walk_to_min)} min to spot
         {item.walk_to_class_min !== null
           ? ` · ${Math.ceil(item.walk_to_class_min)} min to class`
           : ' · next-class walk not included'}
       </p>
-      <ul className="reset-why">
-        {item.why.map((value) => (
-          <li key={value}>
-            <Check size={13} />
-            {value}
-          </li>
-        ))}
-      </ul>
-      <p className="reset-crowd">{crowdLabel(item.crowd, evaluatedAt)}</p>
-      <details className="reset-spot-details">
-        <summary>Access, amenities & source</summary>
+      <details className="reset-spot-details location-more">
+        <summary>More info</summary>
+        <ul className="reset-why">
+          {item.why.map((value) => (
+            <li key={value}>
+              <Check size={13} aria-hidden="true" />
+              {value}
+            </li>
+          ))}
+        </ul>
+        <p className="reset-crowd">{crowdLabel(item.crowd, evaluatedAt)}</p>
         <p>
           Food for purchase:{' '}
           {spot.food_available == null
@@ -139,6 +144,7 @@ export function SpotCard({
             View mapped source
           </a>
         )}
+        <PhotoCredit place={spot} />
       </details>
       <div className="reset-card-actions">
         <button
@@ -147,7 +153,7 @@ export function SpotCard({
           disabled={busy}
           onClick={onSelect}
         >
-          Walk me there <ArrowRight size={15} />
+          Walk me there <ArrowRight size={15} aria-hidden="true" />
         </button>
         <button disabled={busy} onClick={() => onSwap('full')}>
           It’s full
@@ -162,7 +168,7 @@ export function SpotCard({
             onClick={() => onSwap('another')}
             aria-label={`Find another spot instead of ${spot.name}`}
           >
-            <RotateCcw size={15} />
+            <RotateCcw size={15} aria-hidden="true" />
           </button>
         </details>
       </div>

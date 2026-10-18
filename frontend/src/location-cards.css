@@ -1,0 +1,152 @@
+.location-photo {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: #e9ede4;
+}
+.location-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.location-photo figcaption {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: #fffffff2;
+  color: #344c3c;
+  font-size: 10px;
+}
+.location-photo-empty {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #4c6047;
+  font-size: 12px;
+}
+.photo-credit {
+  font-size: 11px;
+  line-height: 1.7;
+  margin: 12px 0 0;
+  color: #596654;
+}
+.location-one-line {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #52624f;
+}
+.location-important {
+  font-size: 12px;
+  font-weight: 600;
+  color: #705424;
+}
+.directory-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #596654;
+  font-size: 13px;
+  margin: 20px 0;
+}
+.directory-note button {
+  min-height: 44px;
+  color: #285b48;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.campus-page .candidate-card {
+  padding: 0 0 6px;
+  gap: 8px;
+  overflow: hidden;
+}
+.campus-page .candidate-card > .location-photo {
+  margin-bottom: 10px;
+}
+.campus-page .candidate-card > :not(.location-photo) {
+  margin-inline: 20px;
+}
+.candidate-card h2 {
+  font-size: 19px;
+  font-weight: 600;
+}
+.candidate-card .location-more {
+  margin-block: 0;
+  padding-top: 0;
+  border: none;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.candidate-card .location-more > summary {
+  min-height: 44px;
+  padding: 11px 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #53644e;
+}
+.candidate-card > .location-walk {
+  background: #285f4c;
+  color: #fff;
+  margin-top: 10px;
+  min-height: 44px;
+  border: 1px solid #285f4c;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.reset-spot-card > .location-photo {
+  width: calc(100% + 40px);
+  margin: -20px -20px 20px;
+  border-radius: 11px 11px 0 0;
+  aspect-ratio: 16/8;
+}
+.location-more summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: list-item;
+  padding: 12px 0;
+  font-size: 12px;
+  color: #53644e;
+}
+.location-more p {
+  line-height: 1.7;
+}
+.demo-photo-wrap {
+  position: relative;
+}
+.demo-photo-wrap .location-photo {
+  aspect-ratio: 16/9;
+}
+.demo-photo-pick {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 5px 10px;
+  border-radius: 14px;
+  background: #fffffff2;
+  color: #36513e;
+  font-size: 11px;
+}
+.demo-spot .location-more {
+  font-size: 12px;
+  color: #596654;
+}
+.high-contrast .location-one-line,
+.high-contrast .location-more,
+.high-contrast .photo-credit {
+  color: #183b25;
+}
+@media (max-width: 650px) {
+  .directory-note {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+}

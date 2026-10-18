@@ -858,11 +858,7 @@ export function RespiteBuddy({
               <>
                 {documented && (
                   <div className="reset-notice">
-                    <strong>Documented indoor options · not scout-verified</strong>
-                    <p>
-                      Opening hours, entry and seating availability need checking. Rest times below
-                      assume you can enter; indoor travel is not included.
-                    </p>
+                    <p>Indoor options. Check entry; times are provisional.</p>
                   </div>
                 )}
                 <ol className="reset-spot-list">
