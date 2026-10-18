@@ -23,6 +23,17 @@ export function BreakTimeControls({
 }) {
   const [fields, setFields] = useState(() => timeFields(clock, minutes, deadline))
   const [error, setError] = useState('')
+  let selectedMinutes = minutes
+  try {
+    selectedMinutes = breakWindow(
+      fields.date,
+      fields.current,
+      fields.classStarts,
+      fields.nextDay,
+    ).minutes
+  } catch {
+    /* Keep the last valid summary for incomplete time edits. */
+  }
   function preview(nextFields = fields) {
     if (!onPreview) return
     try {
@@ -115,7 +126,7 @@ export function BreakTimeControls({
             End time is the next day
           </label>
         </details>
-        <p className="reset-small">Pacific time · {minutes} minutes available</p>
+        <p className="reset-small">Pacific time · {selectedMinutes} minutes available</p>
         {error && (
           <p role="alert" className="reset-time-error">
             {error}

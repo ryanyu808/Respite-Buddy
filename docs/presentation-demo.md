@@ -12,7 +12,7 @@ The next destination may be blank. Then only the outward walk is subtracted, res
 
 The optional **Use saved next class** action fills its destination, deadline and current window on request. It never supplies an assumed current location. Existing schedule safeguards still reject overlapping classes, classes in progress and distant/all-day events. User edits and navigation take priority over a late schedule read. No event titles, notes or schedule are sent to a server or serialized in walking links.
 
-`demo-route-legs.json` contains each directed location ↔ sample-spot leg calculated by the unchanged router, plus 13 explicitly illustrative records on existing mapped park or documented room anchors. The full live/REST/MCP demo library remains unchanged; the expanded pool is used only by the presentation home. Missing paths are not zero-minute walks. Unknown points and disconnected JKP are rejected, never silently replaced with another selected location.
+`demo-route-legs.json` contains each directed location ↔ sample-spot leg calculated from the real graph, plus 13 explicitly illustrative records on existing mapped park or documented room anchors. The live/REST/MCP demo library remains unchanged; the expanded spot pool is presentation-only. Published building pins now match nearby connected outdoor nodes within the existing 120 m limit. This fixes JKP, Taper Hall and McCarthy Quad without changing their published coordinates or drawing invented connectors. All 13 listed locations and 169 origin/destination combinations are audited; unknown points are not silently substituted. Entrance access and unmatched building-to-path distance remain unverified/excluded, with approach notes available in directions.
 
 ## Time-aware picks
 
@@ -20,7 +20,7 @@ The previous six-entry demo had only three records per setting, and its seeds we
 
 Valid time edits update results immediately without another Find click or focus jump. Partial/invalid edits preserve the last valid results and explain errors on submit. Preferences stay selected; time edits do not silently toggle them. Full-spot swaps refill cards from the remaining eligible pool without extending the deadline. Map alternatives and both legs remain available. Presentation links use `home=1` and restore their selected sample route; existing REST/MCP links are unchanged.
 
-Regenerate both demo files with `python backend/scripts/export_respite_demo.py` after changing the snapshot, building library or routing defaults. Backend tests compare every saved directed leg with a fresh router calculation. This update needs the existing Vercel frontend deployment only; there are no backend runtime, environment-variable, dependency or paid-service changes.
+Regenerate both demo files with `python backend/scripts/export_respite_demo.py` after changing the snapshot, building library or routing defaults. Export fails if any listed origin/destination has no Indoor or Outdoor demo coverage. Backend tests compare every saved directed leg with a fresh router calculation; frontend tests evaluate all 169 pairs in both settings. Deploy both Render and Vercel for the updated building-point matching and browser cache. No environment-variable, dependency or paid-service changes are needed.
 
 ## Quick demo
 
@@ -41,4 +41,4 @@ The route line and route summary are available if map tiles fail, but a complete
 
 ## Deployment
 
-Deploy the feature branch through the existing Vercel project, or merge its reviewed PR into the production branch. No backend runtime, environment-variable, dependency or hosting-plan changes are needed. The home uses its committed route bundle without Render. Pushing a feature branch does not by itself change the production website when production tracks `main`.
+Deploy the reviewed revision to Render and Vercel using their existing settings. Render must restart to load the building-point matching update; Vercel must rebuild to publish the regenerated browser routes. The home still uses its committed route bundle without Render. Pushing a feature branch does not by itself change production when production tracks `main`.

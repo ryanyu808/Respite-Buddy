@@ -194,11 +194,11 @@ def test_bad_scout_import_preserves_routes_and_demo(engine, monkeypatch):
     assert local.recommend(ResetRequest(demo=True)).recommendations
 
 
-def test_jkp_lookup_does_not_invent_connected_entrance(engine):
+def test_jkp_uses_connected_outdoor_path_without_claiming_an_entrance(engine):
     result = engine.recommend(ResetRequest(demo=True,next_class='JKP',minutes=20))
     assert result.next_class.name == 'Popovich Hall (JKP)'
-    assert not result.recommendations
-    assert any('connected' in n for n in result.notes)
+    assert result.recommendations
+    assert any('not a verified entrance' in note for r in result.recommendations for note in r.route_to_class.notes)
 
 
 def test_swap_and_delayed_navigation_keep_original_deadline(engine):

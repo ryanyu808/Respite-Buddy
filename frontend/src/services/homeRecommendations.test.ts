@@ -61,7 +61,7 @@ it('accounts for closing, class walks, no destination, exclusions and unconnecte
   expect(
     homeRecommendations({ ...base, demo_time: '2026-10-19T21:00:00-07:00' })?.recommendations,
   ).toHaveLength(0)
-  expect(homeRecommendations({ ...base, near: 'JKP' })).toBeNull()
+  expect(homeRecommendations({ ...base, near: 'JKP' })?.origin.name).toBe('Popovich Hall (JKP)')
   expect(homeRecommendations({ ...base, near: 'Imaginary Hall' })).toBeNull()
   expect(homeRecommendations({ ...base, demo: false })).toBeNull()
   const first = noClass.recommendations[0]

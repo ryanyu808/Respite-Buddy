@@ -79,7 +79,9 @@ test('saved local schedule fills the next destination and exact class time, not 
   await expect(page.getByText('Private destination class')).toHaveCount(0)
 })
 
-test('unknown and disconnected locations never silently use default routes', async ({ page }) => {
+test('unknown locations stay explicit while JKP gets its actual selected route', async ({
+  page,
+}) => {
   await page.route('**/api/**', (route) => route.abort())
   await page.goto('/')
   await page.getByLabel('Starting from', { exact: true }).fill('Imaginary Hall')
@@ -88,6 +90,7 @@ test('unknown and disconnected locations never silently use default routes', asy
   await expect(page.locator('.demo-applied-journey')).toContainText('No next destination')
   await page.getByLabel('Starting from', { exact: true }).fill('JKP')
   await page.getByRole('button', { name: 'Find me a spot', exact: true }).click()
-  await expect(page.getByRole('alert')).toContainText('No saved walking route connects')
+  await expect(page.getByRole('alert')).toHaveCount(0)
+  await expect(page.locator('.demo-applied-journey')).toContainText('Popovich Hall (JKP)')
   await expect(page.locator('.demo-applied-journey')).toContainText('No next destination')
 })

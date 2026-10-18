@@ -33,7 +33,18 @@ def build_legs(engine):
                     # Missing path is distinct from a genuine zero-distance leg.
                     continue
             legs[location['id']][spot.id] = paths
+    # Never ship a selectable location that has no presentation route. Check
+    # both settings and every origin/destination pair before writing bundles.
+    for start in locations:
+        for end in locations:
+            for indoor in [False, True]:
+                usable = [s for s in spots if s.indoor is indoor and
+                          'outward' in legs[start['id']][s.id] and
+                          'onward' in legs[end['id']][s.id]]
+                if not usable:
+                    raise ValueError(f"No {'indoor' if indoor else 'outdoor'} demo coverage: {start['name']} -> {end['name']}")
     return {'locations': locations, 'legs': legs, 'spots': [spot.model_dump(mode='json') for spot in spots],
+            'coverage': {'locations':len(locations), 'pairs':len(locations)**2, 'settings':['indoor','outdoor']},
             'provenance': 'Directed walking legs from the real snapshot and unchanged router, with default walking preferences. Missing legs are not routable. Null legs mean exactly coincident building anchors, not indoor directions.'}
 
 
@@ -61,7 +72,8 @@ def build(engine=None):
 if __name__ == '__main__':
     engine = RespiteEngine(MapData())
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(build(engine), separators=(',',':')) + '\n', encoding='utf-8')
-    LEGS_OUT.write_text(json.dumps(build_legs(engine), separators=(',',':')) + '\n', encoding='utf-8')
+    bundle, legs = build(engine), build_legs(engine)
+    OUT.write_text(json.dumps(bundle, separators=(',',':')) + '\n', encoding='utf-8')
+    LEGS_OUT.write_text(json.dumps(legs, separators=(',',':')) + '\n', encoding='utf-8')
     print(f'Wrote {OUT} ({OUT.stat().st_size // 1024} KB)')
     print(f'Wrote {LEGS_OUT} ({LEGS_OUT.stat().st_size // 1024} KB)')

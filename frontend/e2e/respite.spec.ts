@@ -59,7 +59,7 @@ test('cold start can be superseded by an immediate saved demo; unmatched setting
   release()
   await page.getByText('Change preferences', { exact: false }).click()
   await page.getByText('Fine-tune', { exact: false }).first().click()
-  await page.getByRole('combobox', { name: 'Starting near', exact: true }).fill('JKP')
+  await page.getByRole('combobox', { name: 'Starting near', exact: true }).fill('Imaginary Hall')
   await expect(page.getByRole('alert')).toContainText('No saved demo matches these settings')
   await expect(page.getByRole('article')).toHaveCount(0)
   await page.getByRole('button', { name: 'Restart sample demo', exact: true }).click()

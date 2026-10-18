@@ -166,8 +166,8 @@ describe('saved demos and session exclusions', () => {
   it('never substitutes a saved route for unmatched, live, or modified inputs', () => {
     for (const input of [
       { demo: false },
-      { near: 'JKP' },
-      { next_class: 'JKP' },
+      { near: 'Imaginary Hall' },
+      { next_class: 'Imaginary Hall' },
       { usc_id: true },
       { preferences: { ...DEFAULTS, noise: 1 } },
     ])
@@ -177,7 +177,9 @@ describe('saved demos and session exclusions', () => {
     const deadline = savedDemo(base)!.response.deadline
     expect(savedDemo({ ...base, deadline })).not.toBeNull()
     expect(savedDemo({ ...base, deadline: '2026-10-19T13:10:00-07:00' })?.response.minutes).toBe(10)
-    expect(savedDemo({ ...base, deadline: '2026-10-19T12:00:00-07:00' })?.response.recommendations).toHaveLength(0)
+    expect(
+      savedDemo({ ...base, deadline: '2026-10-19T12:00:00-07:00' })?.response.recommendations,
+    ).toHaveLength(0)
   })
   it('swaps locally, updates backups and restores spots when the exclusion expires', async () => {
     const id = savedDemo(base)!.response.recommendations[0].spot.id

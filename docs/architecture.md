@@ -12,7 +12,7 @@ GeoPandas projects geometries into UTM zone 11N for meter-based spatial calculat
 
 FastAPI loads the snapshot once at startup. The multigraph is reduced to a simple undirected walking graph, retaining the shortest permitted edge for each node pair and its actual geometry. This makes bounded candidate generation inexpensive; it can omit a longer parallel edge with better sensory properties. Restricted edges are filtered again at load time. Missing cache produces a setup-required health state and HTTP 503 for routes, never fictional data.
 
-Start/end points snap to walking nodes within 120 m. The route response discloses both offsets; they are not validated entrance paths and are excluded from distance/time. Same-node, disconnected and distant selections return helpful HTTP 422 responses.
+Start/end points snap to walking nodes within 120 m. Published campus building representative points use the nearest node on the connected outdoor network, rather than an isolated interior fragment. This applies only to exact registered coordinates; arbitrary GPS/map points retain ordinary nearest-node behavior. The route response discloses offsets and any adjusted building approach. These are not verified entrance paths and are excluded from distance/time. No connecting edges or entrances are invented. Truly disconnected, distant or same-node arbitrary selections still return helpful HTTP 422 responses. Run `python backend/scripts/audit_building_routes.py` to check every listed pair.
 
 ## Candidate routes
 
