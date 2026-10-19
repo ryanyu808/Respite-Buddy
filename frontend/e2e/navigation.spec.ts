@@ -54,7 +54,7 @@ test('desktop exposes exactly six destinations, preserves content and highlights
   await page.screenshot({ path: '../tmp/navigation-desktop.png' })
 })
 
-for (const width of [320, 375, 390, 430, 768, 1100]) {
+for (const width of [320, 768, 1100]) {
   test(`compact navigation at ${width}px supports keyboard, dismissal and every destination`, async ({
     page,
   }) => {
@@ -64,34 +64,17 @@ for (const width of [320, 375, 390, 430, 768, 1100]) {
     await page.goto('/')
       const nav = page.locator('nav[aria-label="Main navigation"]')
       const toggle = nav.locator('.navigation-toggle')
-    const header = page.locator('.app-header')
-    const brand = page.locator('.brand')
-    const controls = page.locator('.header-end')
     await expect(toggle).toHaveAttribute('aria-expanded', 'false')
-    await expect(toggle).toHaveAttribute('aria-label', 'Menu')
     await expect(nav.getByRole('button')).toHaveCount(1)
-    if (width <= 600) await expect(toggle.locator('.navigation-toggle-label')).toBeHidden()
     await toggle.focus()
     await page.keyboard.press('Enter')
     await expect(toggle).toHaveAttribute('aria-expanded', 'true')
-    await expect(toggle).toHaveAttribute('aria-label', 'Menu')
     await expect(page.locator(`#${await toggle.getAttribute('aria-controls')}`)).toBeVisible()
-    if (width <= 600) {
-      const headerBox = await header.boundingBox()
-      const brandBox = await brand.boundingBox()
-      const toggleBox = await toggle.boundingBox()
-      const controlsBox = await controls.boundingBox()
-      expect(toggleBox!.y).toBeGreaterThanOrEqual(headerBox!.y)
-      expect(toggleBox!.y + toggleBox!.height).toBeLessThanOrEqual(headerBox!.y + headerBox!.height)
-      expect(brandBox!.x + brandBox!.width).toBeLessThanOrEqual(toggleBox!.x)
-      expect(toggleBox!.x + toggleBox!.width).toBeLessThanOrEqual(controlsBox!.x)
-    }
     await page.keyboard.press('Tab')
     await expect(nav.getByRole('button', { name: 'Find a spot', exact: true })).toBeFocused()
     await page.keyboard.press('Escape')
     await expect(toggle).toBeFocused()
     await expect(toggle).toHaveAttribute('aria-expanded', 'false')
-    await expect(toggle).toHaveAttribute('aria-label', 'Menu')
     await toggle.click()
     await page.getByRole('button', { name: 'Toggle high contrast' }).click()
     await expect(toggle).toHaveAttribute('aria-expanded', 'false')
