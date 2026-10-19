@@ -1,24 +1,29 @@
 /* Shared header layout across the demo, schedule, directory and walking tools. */
 .app-shell .app-header {
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
   height: 83px;
   min-height: 83px;
   padding: 0 24px;
   gap: 24px;
 }
 .app-header .brand {
+  grid-column: 1;
+  justify-self: start;
   min-width: 0;
   flex-shrink: 0;
 }
 .app-header .primary-navigation {
+  grid-column: 2;
+  justify-self: center;
   display: flex;
   flex-wrap: nowrap;
   align-items: stretch;
   height: 100%;
   width: auto;
   overflow: visible;
-  margin: 0 0 0 auto;
+  margin: 0;
   padding: 0;
   gap: 0;
 }
@@ -38,6 +43,8 @@
   display: none;
 }
 .app-header .header-end {
+  grid-column: 3;
+  justify-self: end;
   flex-shrink: 0;
   gap: 12px;
 }
@@ -48,6 +55,7 @@
 }
 @media (max-width: 1100px) {
   .app-shell .app-header {
+    display: flex;
     height: 76px;
     min-height: 76px;
     padding: 0 16px;
@@ -116,5 +124,19 @@
     gap: 4px;
     padding: 6px;
     font-size: 13px;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-shell .app-header .brand {
+    grid-column: 1;
+  }
+  .app-shell .app-header .primary-navigation {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .app-shell .app-header .header-end {
+    grid-column: 2;
+    grid-row: 1;
   }
 }

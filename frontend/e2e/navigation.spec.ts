@@ -46,6 +46,7 @@ test('desktop exposes exactly six destinations, preserves content and highlights
     const brand = await page.locator('.brand').boundingBox()
     const navigation = await nav.boundingBox()
     const controls = await page.locator('.header-end').boundingBox()
+    expect(Math.abs(navigation!.x + navigation!.width / 2 - width / 2)).toBeLessThanOrEqual(1)
     expect(brand!.x + brand!.width).toBeLessThanOrEqual(navigation!.x)
     expect(navigation!.x + navigation!.width).toBeLessThanOrEqual(controls!.x)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
