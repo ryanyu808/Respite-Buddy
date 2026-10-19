@@ -48,12 +48,13 @@ export function HeaderNavigation({
       <button
         ref={toggleRef}
         className="navigation-toggle"
+        aria-label="Menu"
         aria-expanded={open}
         aria-controls="primary-destinations"
         onClick={() => setOpen(!open)}
       >
         {open ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
-        Menu
+        <span className="navigation-toggle-label">Menu</span>
       </button>
       <div id="primary-destinations" className={`navigation-destinations ${open ? 'is-open' : ''}`}>
         {destinations.map(({ id, label }) => (
